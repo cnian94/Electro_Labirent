@@ -1,24 +1,24 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Maze : MonoBehaviour
 {
-
     [System.Serializable]
     public class Cell
     {
         public bool visited;
-        public GameObject east; // 1
-        public GameObject north; // 2
+        public GameObject north; // 1
+        public GameObject east; // 2
         public GameObject west; // 3
         public GameObject south; // 4 
     }
 
     public GameObject Wall;
     public float wallLength;
-    public int xSize = 5;
-    public int ySize = 5;
+    public int xSize;
+    public int ySize;
 
     private Vector3 initialPos;
     private GameObject WallHolder;
@@ -32,6 +32,8 @@ public class Maze : MonoBehaviour
     private int backingUp = 0;
     private int wallToBreak = 0;
 
+    public GameObject Player;
+
     // Use this for initialization
     void Start()
     {
@@ -40,7 +42,6 @@ public class Maze : MonoBehaviour
 
     void CreateWalls()
     {
-        Debug.Log("wall length: " + wallLength);
         WallHolder = new GameObject();
         WallHolder.name = "Maze";
         initialPos = new Vector3((-xSize / 2) + wallLength / 2, 0.0f, (-ySize / 2) + wallLength / 2);
@@ -52,10 +53,8 @@ public class Maze : MonoBehaviour
         {
             for (int j = 0; j <= xSize; j++)
             {
-                Debug.Log("X: " + initialPos.x);
-                Debug.Log((j * wallLength) - wallLength);
-                myPos = new Vector3(initialPos.x + (j * wallLength) - wallLength, initialPos.z + (i * wallLength), 0.0f);
-                tempWall = Instantiate(Wall, myPos, Quaternion.identity);
+                myPos = new Vector3(initialPos.x + (j * wallLength) - wallLength / 2, 0.0f, initialPos.z + (i * wallLength) - wallLength / 2);
+                tempWall = Instantiate(Wall, myPos, Quaternion.identity) as GameObject;
                 //Vector3 newScale = tempWall.transform.localScale;
                 //newScale.y = newScale.y * wallLength;
                 //tempWall.transform.localScale = newScale;
@@ -64,23 +63,21 @@ public class Maze : MonoBehaviour
         }
 
         //For y axis 
-        /*for (int i = 0; i <= ySize; i++)
+        for (int i = 0; i <= ySize; i++)
         {
             for (int j = 0; j < xSize; j++)
             {
-                Debug.Log("X: " + initialPos.x);
-                Debug.Log(((j - 0.5f) * wallLength));
-                myPos = new Vector3(initialPos.x + (j * wallLength), initialPos.z + (i * wallLength) - wallLength, 0.0f);
-                tempWall = Instantiate(Wall, myPos, Quaternion.Euler(0.0f, 0.0f, 90.0f)) as GameObject;
-                Vector3 newScale = tempWall.transform.localScale;
-                newScale.y = newScale.y * wallLength;
-                tempWall.transform.localScale = newScale;
+                myPos = new Vector3(initialPos.x + (j * wallLength), 0.0f, initialPos.z + (i * wallLength) - wallLength);
+                tempWall = Instantiate(Wall, myPos, Quaternion.Euler(0.0f, 90.0f, 0.0f)) as GameObject;
+                //Vector3 newScale = tempWall.transform.localScale;
+                //newScale.y = newScale.y * wallLength;
+                //tempWall.transform.localScale = newScale;
                 tempWall.transform.parent = WallHolder.transform;
 
             }
-        }*/
+        }
 
-        //CreateCells();
+        CreateCells();
 
     }
 
@@ -104,7 +101,7 @@ public class Maze : MonoBehaviour
         for (int cellProcess = 0; cellProcess < cells.Length; cellProcess++)
         {
             cells[cellProcess] = new Cell();
-            cells[cellProcess].west = allWalls[eastWestProcess];
+            cells[cellProcess].east = allWalls[eastWestProcess];
             cells[cellProcess].south = allWalls[childProcess + (xSize + 1) * ySize];
             if (termCount == xSize)
             {
@@ -117,11 +114,12 @@ public class Maze : MonoBehaviour
             }
             termCount++;
             childProcess++;
-            cells[cellProcess].east = allWalls[eastWestProcess];
+            cells[cellProcess].west = allWalls[eastWestProcess];
             cells[cellProcess].north = allWalls[(childProcess + (xSize + 1) * ySize) + xSize - 1];
         }
         //GiveMeNeighbour();
         CreateMaze();
+        SpawnPlayer(allWalls);
     }
 
     void CreateMaze()
@@ -154,7 +152,6 @@ public class Maze : MonoBehaviour
             }
             //Invoke("CreateMaze", 0.0f);
         }
-        Debug.Log("Finished !!");
     }
 
     void BreakWall()
@@ -162,11 +159,11 @@ public class Maze : MonoBehaviour
         switch (wallToBreak)
         {
             case 1:
-                Destroy(cells[CurrentCell].east);
+                Destroy(cells[CurrentCell].north);
                 break;
 
             case 2:
-                Destroy(cells[CurrentCell].north);
+                Destroy(cells[CurrentCell].east);
                 break;
 
             case 3:
@@ -192,24 +189,24 @@ public class Maze : MonoBehaviour
         check *= xSize;
         check += xSize;
 
-        //east
+        //west
         if (CurrentCell + 1 < TotalCells && (CurrentCell + 1) != check)
         {
             if (!cells[CurrentCell + 1].visited)
             {
                 neighbours[length] = CurrentCell + 1;
-                connectingWall[length] = 1;
+                connectingWall[length] = 3;
                 length++;
             }
         }
 
-        //west
+        //east 
         if (CurrentCell - 1 >= 0 && CurrentCell != check)
         {
             if (!cells[CurrentCell - 1].visited)
             {
                 neighbours[length] = CurrentCell - 1;
-                connectingWall[length] = 3;
+                connectingWall[length] = 2;
                 length++;
             }
         }
@@ -220,7 +217,7 @@ public class Maze : MonoBehaviour
             if (!cells[CurrentCell + xSize].visited)
             {
                 neighbours[length] = CurrentCell + xSize;
-                connectingWall[length] = 2;
+                connectingWall[length] = 1;
                 length++;
             }
         }
@@ -249,11 +246,23 @@ public class Maze : MonoBehaviour
                 backingUp--;
             }
         }
+    }
 
-        //Debug.Log(neighbours[0]);
-        //Debug.Log(neighbours[1]);
-        //Debug.Log(neighbours[2]);
-        //Debug.Log(neighbours[3]);
+    void SpawnPlayer(GameObject[] allWalls) 
+    {
+        Destroy(allWalls[0].gameObject);
+        Vector3 playerPos = Vector3.zero;
+        playerPos.x = allWalls[allWalls.Length - 1].transform.position.x;
+        playerPos.z = allWalls[allWalls.Length - 1].transform.position.z - 0.5f;
+        Vector3 newScale = new Vector3(0.4f, 0.4f, 0.4f);
+
+        Player = Instantiate(Player, playerPos, Quaternion.identity) as GameObject;
+        Player.transform.localScale = newScale;
+        Player.name = "Player";
+
+        GameManager.Instance.FindPlayer.Invoke();
+         
+
 
     }
 
