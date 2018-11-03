@@ -2,19 +2,24 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraScript : MonoBehaviour {
+public class CameraScript : MonoBehaviour
+{
 
     public int max_size;
     public GameObject MazeGenerator;
     public GameObject Player;
 
+    //private Vector3 offset;
+    public bool isCameraAdjusted = false;
+
     private void Awake()
     {
-        
+
     }
 
     // Use this for initialization
-    void Start () {
+    void Start()
+    {
         max_size = Mathf.Max(MazeGenerator.GetComponent<Maze>().xSize, MazeGenerator.GetComponent<Maze>().ySize);
         gameObject.GetComponent<Camera>().orthographicSize = max_size;
         Vector3 newPosition = transform.position;
@@ -29,7 +34,7 @@ public class CameraScript : MonoBehaviour {
 
         if (MazeGenerator.GetComponent<Maze>().ySize % 2 == 0)
         {
-     
+
             newPosition.z = -0.5f;
         }
         else
@@ -41,7 +46,7 @@ public class CameraScript : MonoBehaviour {
         transform.position = newPosition;
         transform.rotation = Quaternion.Euler(-90, 0, 0);
 
-       //GameManager.Instance.FindPlayer.AddListener(FindPlayer);
+        GameManager.Instance.FindPlayer.AddListener(FindPlayer);
 
     }
 
@@ -50,13 +55,14 @@ public class CameraScript : MonoBehaviour {
         Player = GameObject.FindGameObjectWithTag("Player");
         Vector3 endPos = Player.transform.position;
         endPos.y = transform.position.y;
+        Debug.Log("POSS: " + Player.transform.position);
+        //offset = transform.position - Player.transform.position;
         StartCoroutine(ZoomToPlayer(endPos, 2));
-        
+
     }
 
     IEnumerator ZoomToPlayer(Vector3 end, float seconds)
     {
-        Debug.Log("End Pos: " + end);
         float elapsedTime = 0;
         float x = (gameObject.GetComponent<Camera>().orthographicSize - 4) / seconds;
         Vector3 startingPos = transform.position;
@@ -68,25 +74,17 @@ public class CameraScript : MonoBehaviour {
             yield return new WaitForEndOfFrame();
         }
         gameObject.transform.position = end;
+        isCameraAdjusted = true;
     }
 
-    IEnumerator ZoomToPlayer2()
+    private void LateUpdate()
     {
-        float t = 0;
-        float x = (gameObject.GetComponent<Camera>().orthographicSize - 5) / 3;
-        Debug.Log("X: " + x);
-
-        while (t <=3)
+        if (isCameraAdjusted)
         {
-            gameObject.GetComponent<Camera>().orthographicSize -= x;
-            t++;
-            yield return null;
+            Vector3 newPos = transform.position;
+            newPos.x = Player.transform.position.x;
+            newPos.z = Player.transform.position.z;
+            transform.position = newPos;
         }
-
     }
-
-    // Update is called once per frame
-    void Update () {
-		
-	}
 }
