@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
 
 public class Maze : MonoBehaviour
 {
@@ -34,9 +35,16 @@ public class Maze : MonoBehaviour
 
     public GameObject Player;
 
+    public GameObject Bulb;
+    public GameObject Battery;
+    public GameObject Resistor;
+
     // Use this for initialization
     void Start()
     {
+        GameManager.Instance.inventory.Add(Bulb);
+        GameManager.Instance.inventory.Add(Battery);
+        GameManager.Instance.inventory.Add(Resistor);
         CreateWalls();
     }
 
@@ -261,9 +269,6 @@ public class Maze : MonoBehaviour
         Player.name = "Player";
 
         GameManager.Instance.FindPlayer.Invoke();
-         
-
-
     }
 
     // Update is called once per frame

@@ -86,7 +86,7 @@ public class PlayerController : MonoBehaviour
         //enemies = GameObject.FindGameObjectsWithTag("Enemy");
         //playerCurrentPos = gameObject.transform.position;
 
-        Vector3 position = gameObject.transform.position;
+        //Vector3 position = gameObject.transform.position;
 
 
         //_InputDir = FixAcceleration(Input.acceleration); //tilt control açar
@@ -94,152 +94,41 @@ public class PlayerController : MonoBehaviour
 
 
 
-        if (isMoving) //dokunmatik oynamak için 
-        {
-            currentDistanceToTouchPos = (touchPosition - transform.position).magnitude;
-        }
+            if (isMoving) //dokunmatik oynamak için 
+            {
+                currentDistanceToTouchPos = (touchPosition - transform.position).magnitude;
+            }
 
-        if (Input.touchCount > 0)
-        {
-            touch = Input.GetTouch(0);
 
-            if (touch.phase == TouchPhase.Began)
+            if (Input.GetMouseButtonDown(0))
             {
                 previousDistanceToTouchPos = 0;
                 currentDistanceToTouchPos = 0;
                 isMoving = true;
-                touchPosition = Camera.main.ScreenToWorldPoint(touch.position);
+                touchPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 touchPosition.y = 0;
                 whereToMove = (touchPosition - transform.position).normalized;
                 rb.velocity = new Vector3(whereToMove.x * moveSpeed, 0.0f, whereToMove.z * moveSpeed);
             }
 
-            if (touch.phase == TouchPhase.Ended)
+            if (currentDistanceToTouchPos > previousDistanceToTouchPos)
             {
                 isMoving = false;
                 rb.velocity = Vector2.zero;
             }
 
-        }
-
-        if (Input.GetMouseButtonDown(0))
-        {
-            previousDistanceToTouchPos = 0;
-            currentDistanceToTouchPos = 0;
-            isMoving = true;
-            touchPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            touchPosition.y = 0;
-            whereToMove = (touchPosition - transform.position).normalized;
-            rb.velocity = new Vector3(whereToMove.x * moveSpeed, 0.0f, whereToMove.z * moveSpeed);
-        }
-
-        if (currentDistanceToTouchPos > previousDistanceToTouchPos)
-        {
-            isMoving = false;
-            rb.velocity = Vector2.zero;
-        }
-
-        if (Input.GetMouseButtonUp(0)) //yeni hareket için
-        {
-            isMoving = false;
-            rb.velocity = Vector2.zero;
-        }
-
-        if (isMoving)
-        {
-            previousDistanceToTouchPos = (touchPosition - transform.position).magnitude;
-        }  //buraya kadar dokunmatik oynamak için
-
-
-    }
-
-
-    void StartWaneEffect(string tag)  //Joker yediği zaman küçülme süresi
-    {
-        StartCoroutine(LerpScale(0.3f, tag));
-    }
-
-    void StartGetFatEffect(Vector3[] scales)  // Monster yediği zaman küçülme süresi
-    {
-        StartCoroutine(LerpScaleMonster(0.3f, scales));
-    }
-
-
-
-    IEnumerator LerpScaleMonster(float time, Vector3[] scales)
-    {
-
-        float originalTime = time;
-        //Debug.Log("scales: " + scales[0] + " - " + scales[1]);
-
-        while (time > 0f)
-        {
-            time -= Time.deltaTime;
-            transform.localScale = Vector3.Lerp(scales[1], scales[0], time / originalTime);
-            //Debug.Log("Timer: " + time);
-            yield return null;
-        }
-    }
-
-    IEnumerator LerpScale(float time, string jokerTag)
-    {
-
-        Vector3 originalScale = transform.localScale;
-        float originalTime = time;
-        Vector3 bubbleScale = new Vector3();
-        Vector3 bubbleTargetScale = new Vector3();
-        GameObject bubble = GameObject.Find("Bubble");
-
-        if (jokerTag == "BroccoliJoker")
-        {
-
-            Vector3 targetScale = new Vector3(gameObject.transform.localScale.x / 2, gameObject.transform.localScale.y / 2, gameObject.transform.localScale.z);
-
-            if (bubble)
+            if (Input.GetMouseButtonUp(0) || GameManager.Instance.isCircuitPanelActive) //yeni hareket için
             {
-                bubbleScale = bubble.transform.localScale;
-                bubbleTargetScale = new Vector3(bubbleScale.x / 2, bubbleScale.y / 2, bubbleScale.z);
+                isMoving = false;
+                rb.velocity = Vector2.zero;
             }
 
-            while (time > 0f)
+            if (isMoving)
             {
-                time -= Time.deltaTime;
+                previousDistanceToTouchPos = (touchPosition - transform.position).magnitude;
+            }  //buraya kadar dokunmatik oynamak için
 
-                transform.localScale = Vector3.Lerp(targetScale, originalScale, time / originalTime);
-
-                if (bubble != null)
-                {
-                    bubble.transform.localScale = Vector3.Lerp(bubbleTargetScale, bubbleScale, time / originalTime);
-                }
-                yield return null;
-            }
-        }
-
-        else
-        {
-            Vector3 targetScale = new Vector3(gameObject.transform.localScale.x - gameObject.transform.localScale.x / jokerDivider, gameObject.transform.localScale.y - gameObject.transform.localScale.y / jokerDivider, gameObject.transform.localScale.z);
-            if (bubble)
-            {
-                bubbleScale = bubble.transform.localScale;
-                bubbleTargetScale = new Vector3(bubbleScale.x - bubbleScale.x / (jokerDivider / 2), bubbleScale.y - bubbleScale.y / (jokerDivider / 2), bubbleScale.z);
-            }
-
-            while (time > 0f)
-            {
-                time -= Time.deltaTime;
-
-                transform.localScale = Vector3.Lerp(targetScale, originalScale, time / originalTime);
-
-                if (bubble != null)
-                {
-                    bubble.transform.localScale = Vector3.Lerp(bubbleTargetScale, bubbleScale, time / originalTime);
-                }
-                yield return null;
-            }
-
-        }
     }
-
 
 
     void OnTriggerEnter2D(Collider2D col)

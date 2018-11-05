@@ -2,11 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
 
     public UnityEvent FindPlayer;
+
+    public bool isCircuitPanelActive = false;
+
+    public List<GameObject> inventory = new List<GameObject>();
 
     public static GameManager Instance
     {
@@ -31,6 +36,5 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-
     }
 }
