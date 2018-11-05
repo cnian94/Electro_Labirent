@@ -6,6 +6,9 @@ using UnityEngine.UI;
 public class CircuitUIController : MonoBehaviour
 {
 
+    public Camera MainCamera;
+    public Camera UICamera;
+
     public GameObject panelOpenButton;
     public GameObject circuitPanel;
 
@@ -47,7 +50,11 @@ public class CircuitUIController : MonoBehaviour
 
     void OpenCircuitPanel()
     {
+        MainCamera.gameObject.SetActive(false);
+        UICamera.gameObject.SetActive(true);
+        gameObject.GetComponent<Canvas>().worldCamera = UICamera;
         GameManager.Instance.isCircuitPanelActive = true;
+        panelOpenButton.transform.SetParent(circuitPanel.transform);
         circuitPanel.gameObject.SetActive(true);
         panelOpenButton.transform.Rotate(new Vector3(0, 0, 180));
 
@@ -57,7 +64,11 @@ public class CircuitUIController : MonoBehaviour
 
     void CloseCircuitPanel()
     {
+        UICamera.gameObject.SetActive(false);
+        MainCamera.gameObject.SetActive(true);
+        gameObject.GetComponent<Canvas>().worldCamera = MainCamera;
         GameManager.Instance.isCircuitPanelActive = false;
+        panelOpenButton.transform.SetParent(gameObject.transform);
         circuitPanel.gameObject.SetActive(false);
         panelOpenButton.transform.Rotate(new Vector3(0, 0, 180));
 

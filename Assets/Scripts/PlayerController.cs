@@ -100,7 +100,7 @@ public class PlayerController : MonoBehaviour
             }
 
 
-            if (Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButtonDown(0) && !GameManager.Instance.isCircuitPanelActive)
             {
                 previousDistanceToTouchPos = 0;
                 currentDistanceToTouchPos = 0;
