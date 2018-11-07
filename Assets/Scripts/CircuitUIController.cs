@@ -23,9 +23,9 @@ public class CircuitUIController : MonoBehaviour
         for (int i = 0; i < GameManager.Instance.inventory.Count; i++)
         {
             GameObject desk = Instantiate(inventoryDesk, inventoryContent.transform);
-            desk.name = i.ToString();
             GameObject item =  Instantiate(GameManager.Instance.inventory[i], desk.transform);
-            item.name = i.ToString();
+            desk.name = GameManager.Instance.inventory[i].name;
+            item.name = GameManager.Instance.inventory[i].name;
         }
     }
 
