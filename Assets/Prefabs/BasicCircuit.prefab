@@ -130,7 +130,7 @@ GameObject:
   - component: {fileID: 4331251871263620}
   m_Layer: 5
   m_Name: BasicCircuit
-  m_TagString: Untagged
+  m_TagString: BasicCircuit
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

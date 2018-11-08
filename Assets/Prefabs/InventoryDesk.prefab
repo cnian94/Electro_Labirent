@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 114739055213550640}
   m_Layer: 5
   m_Name: InventoryDesk
-  m_TagString: Untagged
+  m_TagString: Desk
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

@@ -38,6 +38,7 @@ public class Maze : MonoBehaviour
     public GameObject Bulb;
     public GameObject Battery;
     public GameObject Resistor;
+    public GameObject Cable;
 
     // Use this for initialization
     void Start()
@@ -45,6 +46,7 @@ public class Maze : MonoBehaviour
         GameManager.Instance.inventory.Add(Bulb);
         GameManager.Instance.inventory.Add(Battery);
         GameManager.Instance.inventory.Add(Resistor);
+        //GameManager.Instance.inventory.Add(Cable);
         CreateWalls();
     }
 

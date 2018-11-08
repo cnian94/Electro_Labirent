@@ -13,6 +13,14 @@ public class GameManager : MonoBehaviour
 
     public List<GameObject> inventory = new List<GameObject>();
 
+
+    [System.Serializable]
+    public class DrawEvent : UnityEngine.Events.UnityEvent<bool> { }
+    public DrawEvent drawEvent;
+
+    public bool isDrawingAllowed = false;
+    public int maxLines = 50;
+
     public static GameManager Instance
     {
         get { return _instance ?? (_instance = new GameObject("GM").AddComponent<GameManager>()); }
@@ -36,5 +44,20 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+    }
+
+    public void Draw()
+    {
+        if (isDrawingAllowed)
+        {
+            isDrawingAllowed = false;
+            drawEvent.Invoke(false);
+        }
+        else
+        {
+            isDrawingAllowed = true;
+            drawEvent.Invoke(true);
+        }
+
     }
 }

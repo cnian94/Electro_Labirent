@@ -19,6 +19,8 @@ public class Dragger : MonoBehaviour
     public GameObject draggingObject;
     public GameObject target;
 
+    public GameObject InventoryContent;
+
     public EventSystem m_EventSystem;
     GraphicRaycaster m_Raycaster;
     PointerEventData m_PointerEventData;
@@ -66,15 +68,7 @@ public class Dragger : MonoBehaviour
 
     void Update()
     {
-
-        /*ray = cam.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out hit))
-        {
-            print("NAMEEEE : " + hit.collider.name);
-        }*/
-
-        //mousePosition = cam.ScreenToWorldPoint(Input.mousePosition);
-
+   
         //If we've pressed down on the mouse (or touched on the iphone)
         if (Input.GetMouseButtonDown(0))
         {
@@ -87,31 +81,24 @@ public class Dragger : MonoBehaviour
             List<RaycastResult> results = new List<RaycastResult>();
             EventSystem.current.RaycastAll(pointerData, results);
 
+
             /*
             //For every result returned, output the name of the GameObject on the Canvas hit by the Ray
             foreach (RaycastResult result in results)
             {
                 Debug.Log("Hit " + result.gameObject.name);
-            }*/
+            }
+            */
 
-
-
-
-            /*if (hit.collider != null)
+            //Debug.Log("PARENT TAG: " + results[0].gameObject.transform.parent.tag);
+            if (results[0].gameObject.transform.parent.CompareTag("Desk") || results[0].gameObject.transform.parent.CompareTag("InventoryViewport"))
             {
-                Debug.Log(hit.collider.name);
+                draggingObject = results[0].gameObject.transform.GetChild(0).gameObject;
+                startPos = draggingObject.transform.position;
+                Debug.Log("Dragging Pbject: " + draggingObject.gameObject.name);
                 beingDragged = true;
-            }*/
-
-            draggingObject = results[0].gameObject.transform.GetChild(0).gameObject;
-            startPos = draggingObject.transform.position;
-            Debug.Log("Dragging Item " + draggingObject.gameObject.name);
-            beingDragged = true;
-
+            }
         }
-
-
-
 
 
         if (beingDragged)
@@ -122,14 +109,14 @@ public class Dragger : MonoBehaviour
                                              0.0f);
         }
 
-        if (Input.GetMouseButtonUp(0))
+        if (Input.GetMouseButtonUp(0) && draggingObject)
         {
-           PointerEventData pointerData = new PointerEventData(EventSystem.current);
+            PointerEventData pointerData = new PointerEventData(EventSystem.current);
 
-            Debug.Log("MOUSE POS: " + Input.mousePosition);
-            Debug.Log("Cam POS: " + cam.transform.position);
-            Debug.Log("Cam Pos 2: " + cam.ScreenToWorldPoint(cam.transform.position));
-            Debug.Log("Object POS: " + draggingObject.transform.position);
+            //Debug.Log("MOUSE POS: " + Input.mousePosition);
+            //Debug.Log("Cam POS: " + cam.transform.position);
+            //Debug.Log("Cam Pos 2: " + cam.ScreenToWorldPoint(cam.transform.position));
+            //Debug.Log("Object POS: " + draggingObject.transform.position);
 
             pointerData.position = Input.mousePosition; // use the position from controller as start of raycast instead of mousePosition.
             beingDragged = false;

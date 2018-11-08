@@ -6,6 +6,12 @@ TagManager:
   tags:
   - MazeGenerator
   - UICamera
+  - InventoryViewport
+  - BasicCircuit
+  - Desk
+  - Battery
+  - Bulb
+  - Resistor
   layers:
   - Default
   - TransparentFX
