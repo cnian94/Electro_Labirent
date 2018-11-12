@@ -12,6 +12,7 @@ TagManager:
   - Battery
   - Bulb
   - Resistor
+  - Line
   layers:
   - Default
   - TransparentFX

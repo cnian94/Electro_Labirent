@@ -21,22 +21,13 @@ public class Dragger : MonoBehaviour
 
     public GameObject InventoryContent;
 
-    public EventSystem m_EventSystem;
-    GraphicRaycaster m_Raycaster;
-    PointerEventData m_PointerEventData;
-
-    PhysicsRaycaster physicRaycaster;
-    Physics2DRaycaster physic2DRaycaster;
-
-
+    public float rayLength = 300.0f;
+    public LayerMask layermask;
 
 
     void Start()
     {
         cam = GameObject.FindGameObjectWithTag("UICamera").GetComponent<Camera>();
-        m_Raycaster = cam.GetComponent<GraphicRaycaster>();
-        physic2DRaycaster = cam.GetComponent<Physics2DRaycaster>();
-        physicRaycaster = cam.GetComponent<PhysicsRaycaster>();
         beingDragged = false;
     }
 
@@ -65,37 +56,32 @@ public class Dragger : MonoBehaviour
         }
     }*/
 
+    private void FixedUpdate()
+    {
+
+    }
 
     void Update()
     {
-   
+
         //If we've pressed down on the mouse (or touched on the iphone)
+        //&& !EventSystem.current.IsPointerOverGameObject()
         if (Input.GetMouseButtonDown(0))
         {
+            Vector3 mousePosFar = new Vector3(Input.mousePosition.x, Input.mousePosition.y, cam.farClipPlane);
+            Vector3 mousePosNear = new Vector3(Input.mousePosition.x, Input.mousePosition.y, cam.nearClipPlane);
 
+            Vector3 mousePosF = cam.ScreenToWorldPoint(mousePosFar);
+            Vector3 mousePosN = cam.ScreenToWorldPoint(mousePosNear);
+            Debug.DrawRay(mousePosN, mousePosF - mousePosN, Color.green);
 
-            PointerEventData pointerData = new PointerEventData(EventSystem.current);
+            RaycastHit2D hit = Physics2D.Raycast(mousePosN, mousePosF - mousePosN);
 
-            pointerData.position = Input.mousePosition; // use the position from controller as start of raycast instead of mousePosition.
-
-            List<RaycastResult> results = new List<RaycastResult>();
-            EventSystem.current.RaycastAll(pointerData, results);
-
-
-            /*
-            //For every result returned, output the name of the GameObject on the Canvas hit by the Ray
-            foreach (RaycastResult result in results)
+            if (hit.collider != null)
             {
-                Debug.Log("Hit " + result.gameObject.name);
-            }
-            */
-
-            //Debug.Log("PARENT TAG: " + results[0].gameObject.transform.parent.tag);
-            if (results[0].gameObject.transform.parent.CompareTag("Desk") || results[0].gameObject.transform.parent.CompareTag("InventoryViewport"))
-            {
-                draggingObject = results[0].gameObject.transform.GetChild(0).gameObject;
+                Debug.Log("Press Name: " + hit.collider.name);
+                draggingObject = hit.collider.gameObject;
                 startPos = draggingObject.transform.position;
-                Debug.Log("Dragging Pbject: " + draggingObject.gameObject.name);
                 beingDragged = true;
             }
         }
@@ -111,40 +97,88 @@ public class Dragger : MonoBehaviour
 
         if (Input.GetMouseButtonUp(0) && draggingObject)
         {
-            PointerEventData pointerData = new PointerEventData(EventSystem.current);
 
-            //Debug.Log("MOUSE POS: " + Input.mousePosition);
-            //Debug.Log("Cam POS: " + cam.transform.position);
-            //Debug.Log("Cam Pos 2: " + cam.ScreenToWorldPoint(cam.transform.position));
-            //Debug.Log("Object POS: " + draggingObject.transform.position);
-
-            pointerData.position = Input.mousePosition; // use the position from controller as start of raycast instead of mousePosition.
             beingDragged = false;
-            draggingObject.transform.position = startPos;
 
+            Vector3 mousePosFar = new Vector3(Input.mousePosition.x, Input.mousePosition.y, cam.farClipPlane);
+            Vector3 mousePosNear = new Vector3(Input.mousePosition.x, Input.mousePosition.y, cam.nearClipPlane);
 
-            List<RaycastResult> results = new List<RaycastResult>();
-            //EventSystem.current.RaycastAll(pointerData, results);
-            physicRaycaster.Raycast(pointerData, results);
+            Vector3 mousePosF = cam.ScreenToWorldPoint(mousePosFar);
+            Vector3 mousePosN = cam.ScreenToWorldPoint(mousePosNear);
+            Debug.DrawRay(mousePosN, mousePosF - mousePosN, Color.green);
 
+            RaycastHit2D hit = Physics2D.Raycast(mousePosN, mousePosF - mousePosN);
 
-            //For every result returned, output the name of the GameObject on the Canvas hit by the Ray
-            foreach (RaycastResult result in results)
+            if (hit.collider != null)
             {
-                Debug.Log("Hit " + result.gameObject.name);
+                Debug.Log("cam world: " + cam.ScreenToWorldPoint(Input.mousePosition));
+                Debug.Log("Release: " + hit.collider.gameObject.name);
+                if (hit.collider.gameObject.CompareTag("Line"))
+                {
+                    Debug.Log("hit world: " + cam.ScreenToWorldPoint(hit.collider.gameObject.transform.localPosition));
+                    Vector3 newPos = cam.ScreenToWorldPoint(Input.mousePosition);
+                    Debug.Log("ROTATION: " + hit.collider.transform.rotation);
+                    Debug.Log("Dragging parent: " + draggingObject.transform.parent.name);
+                    Debug.Log("hit object: " + hit.collider.gameObject.name);
+                    if (hit.collider.transform.rotation.z != 0)
+                    {
+
+                        if (draggingObject.transform.parent.name != hit.collider.gameObject.name)
+                        {
+
+                            Debug.Log("Vertical Line !!");
+                            Debug.Log("NEW POS: " + newPos);
+                            //float temp_x = newPos.x;
+                            if (newPos.x <= 0)
+                            {
+                                newPos.x = newPos.x / -5;
+                            }
+                            else
+                            {
+                                newPos.x = newPos.x / 5;
+                            }
+
+                            newPos.y = 0;
+                            newPos.z = -1.0f;
+                            draggingObject.transform.parent = hit.collider.gameObject.transform;
+                            draggingObject.transform.localPosition = newPos;
+                            draggingObject.transform.Rotate(new Vector3(0, 0, -90));
+
+                            Debug.Log("ROTATION OF " + hit.collider.gameObject.name + ": " + hit.collider.gameObject.transform.localRotation);
+                            Debug.Log("local scale: " + draggingObject.transform.localScale);
+                            Vector3 newObjectScale = draggingObject.transform.localScale;
+                            float tempScale_X = newObjectScale.x;
+                            newObjectScale.x = newObjectScale.y;
+                            newObjectScale.y = tempScale_X;
+                            draggingObject.transform.localScale = newObjectScale;
+                            //draggingObject.transform.Rotate(new Vector3(0, 0, -90));
+
+                        }
+                        else
+                        {
+                            if (newPos.x <= 0)
+                            {
+                                newPos.x = newPos.x / -5;
+                            }
+                            else
+                            {
+                                newPos.x = newPos.x / 5;
+                            }
+
+                            newPos.y = 0;
+                            newPos.z = -1.0f;
+                            draggingObject.transform.localPosition = newPos;
+                            //draggingObject.transform.Rotate(new Vector3(0, 0, -90));
+                        }
+                    }
+                }
+                else
+                {
+                    Debug.Log("RETURN TO START POS !!");
+                    draggingObject.transform.localPosition = startPos;
+                }
             }
-
-            //target = results[0].gameObject;
-
-            //Debug.Log("Target: " + target.name);
-
-            /*
-            RaycastHit hit;
-            Ray forwardRay = new Ray(cam.transform.position, cam.WorldToScreenPoint(cam.transform.position));
-            if (Physics.Raycast(forwardRay, out hit))
-            {
-                Debug.Log("Hit: " + hit.collider.gameObject.name);
-            }*/
+            draggingObject = null;
         }
 
     }

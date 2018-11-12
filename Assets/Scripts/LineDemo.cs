@@ -12,6 +12,8 @@ public class LineDemo : MonoBehaviour
 	private Vector2 start;
 	private Line drawnLine;
 
+    public GameObject craftPanel;
+
     private void Start()
     {
         UICamera = GameObject.FindGameObjectWithTag("UICamera").GetComponent<Camera>();
@@ -21,9 +23,9 @@ public class LineDemo : MonoBehaviour
 	{
 
 		if (Input.GetMouseButtonDown (0) && GameManager.Instance.isDrawingAllowed && Input.mousePosition.y < Screen.height / 2) {
-            Debug.Log("POS: " + Input.mousePosition);
+            //Debug.Log("POS: " + Input.mousePosition);
             var pos = UICamera.ScreenToWorldPoint (Input.mousePosition); // Start line drawing
-			drawnLine = lineFactory.GetLine (pos, pos, 0.05f, Color.black);
+			drawnLine = lineFactory.GetLine (pos, pos, 0.05f, Color.black, craftPanel.transform);
 		} else if (Input.GetMouseButtonUp (0)) {
 			drawnLine = null; // End line drawing
 		}

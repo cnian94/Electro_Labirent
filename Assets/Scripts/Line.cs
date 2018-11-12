@@ -66,6 +66,8 @@ public class Line : MonoBehaviour
 	private Color lineColor;
 	private SpriteRenderer lineRenderer;
 
+    public bool isDraggable = true;
+
 	void Awake ()
 	{
 		lineRenderer = GetComponent<SpriteRenderer> ();
@@ -96,13 +98,19 @@ public class Line : MonoBehaviour
 		var distance = heading.magnitude;
 		var direction = heading / distance;
 
-		Vector3 centerPos = new Vector3 (startPosition.x + endPosition.x, startPosition.y + endPosition.y) / 2;
-		lineRenderer.transform.position = centerPos;
+        //Debug.Log("distance: " + distance);
+        Vector3 centerPos = new Vector3 (startPosition.x + endPosition.x, startPosition.y + endPosition.y , -2) / 2;
+        //Debug.Log("CENTER POS: " + centerPos);
 
-		float angle = Mathf.Atan2 (direction.y, direction.x) * Mathf.Rad2Deg;
-		lineRenderer.transform.rotation = Quaternion.AngleAxis (angle, Vector3.forward);
+        lineRenderer.transform.localPosition = centerPos;
 
-		var objectWidthSize = 10f / 5f; // 10 = pixels of line sprite, 5f = pixels per units of line sprite.
+
+        float angle = Mathf.Atan2 (direction.y, direction.x) * Mathf.Rad2Deg;
+        //lineRenderer.transform.localRotation = Quaternion.AngleAxis (angle, Vector3.forward);
+        Debug.Log("ANGLE: " + angle);
+        lineRenderer.transform.Rotate(new Vector3(0 , 0 , angle));
+
+        var objectWidthSize = 10f / 5f; // 10 = pixels of line sprite, 5f = pixels per units of line sprite.
 		lineRenderer.transform.localScale = new Vector3 (distance / objectWidthSize, width, lineRenderer.transform.localScale.z);
 	}
 
