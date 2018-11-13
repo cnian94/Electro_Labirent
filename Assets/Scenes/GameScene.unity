@@ -842,6 +842,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cam: {fileID: 0}
+  lineFactory: {fileID: 2059697103}
   draggingObject: {fileID: 0}
   target: {fileID: 0}
   InventoryContent: {fileID: 2092210596}

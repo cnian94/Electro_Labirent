@@ -26,6 +26,7 @@ public class Dragger : MonoBehaviour
 
     Vector3 tempScale;
 
+    GameObject beforeParent;
 
     void Start()
     {
@@ -93,7 +94,6 @@ public class Dragger : MonoBehaviour
 
         if (beingDragged)
         {
-            Debug.Log("Draggin !!");
             //Set the position to the mouse position
             draggingObject.transform.position = new Vector3(cam.ScreenToWorldPoint(Input.mousePosition).x,
                                              cam.ScreenToWorldPoint(Input.mousePosition).y,
@@ -116,59 +116,173 @@ public class Dragger : MonoBehaviour
 
             if (hit.collider != null)
             {
-                Debug.Log("cam world: " + cam.ScreenToWorldPoint(Input.mousePosition));
-                Debug.Log("dragging object: " + draggingObject.transform.localPosition);
-                Debug.Log("dragging object world: " + cam.ScreenToWorldPoint(draggingObject.transform.localPosition));
-                Debug.Log("Hit: " + hit.collider.gameObject.name);
+                //Debug.Log("cam world: " + cam.ScreenToWorldPoint(Input.mousePosition));
+                //Debug.Log("dragging object: " + draggingObject.transform.localPosition);
+                //Debug.Log("dragging object world: " + cam.ScreenToWorldPoint(draggingObject.transform.localPosition));
+                Debug.Log("Hit: " + hit.collider.gameObject.name + " --- " + hit.collider.gameObject.transform.rotation.eulerAngles);
 
-                //collided with wire
-                if (hit.collider.gameObject.CompareTag("Line"))
+
+                beforeParent = draggingObject.transform.parent.gameObject;
+                Debug.Log("Before Parent: " + beforeParent.name);
+
+
+                if (draggingObject.gameObject == hit.collider.gameObject)
                 {
-
-                    if (hit.collider.transform.rotation.z != 0)
-                    {
-                        // drop to an another vertical wire
-                        if (draggingObject.transform.parent.name != hit.collider.gameObject.name)
-                        {
-
-
-                            Debug.Log("Vertical Line !!");
-   
-                            draggingObject.transform.Rotate(new Vector3(0, 0, -90), Space.Self);
-
-                            Debug.Log("ROTATION OF " + hit.collider.gameObject.name + ": " + hit.collider.gameObject.transform.localRotation);
-                            Debug.Log("local scale: " + draggingObject.transform.localScale);
-                            float temp_x = tempScale.x;
-                            tempScale.x = tempScale.y;
-                            tempScale.y = temp_x;
-                            draggingObject.gameObject.transform.localScale = tempScale;
-                            draggingObject.transform.parent = hit.collider.gameObject.transform;
-
-                            Vector3 newPos = draggingObject.transform.localPosition;
-                            newPos.z = -1;
-                            draggingObject.transform.localPosition = newPos;
-                        }
-
-                        // drop to the same vertical wire
-                        else
-                        {
-                            Vector3 newPos = draggingObject.transform.localPosition;
-                            newPos.z = -1;
-                            draggingObject.transform.localPosition = newPos;
-                        }
-                    }
+                    Vector3 newPos = draggingObject.transform.localPosition;
+                    newPos.z = -1;
+                    draggingObject.transform.localPosition = newPos;
                 }
 
-                //collided with an another object
                 else
                 {
-                    Debug.Log("RETURN TO START POS !!");
-                    draggingObject.transform.localPosition = startPos;
+                    //collided with wire
+                    if (hit.collider.gameObject.CompareTag("Line"))
+                    {
+
+                        // wire top 0
+                        if (hit.collider.transform.rotation.eulerAngles.z == 0.0)
+                        {
+                            //Debug.Log("Before Wire Rotation: " + beforeParent.gameObject.transform.rotation.eulerAngles);
+                            //Debug.Log("Dragging Object Rotation : " + draggingObject.gameObject.transform.rotation);
+                            //Debug.Log("Wire Rotation: " + hit.collider.gameObject.transform.rotation.eulerAngles);
+
+                            draggingObject.gameObject.transform.SetParent(hit.collider.gameObject.transform);
+
+                            // coming from right/left wire
+                            if (beforeParent.gameObject.transform.rotation.eulerAngles.z == 270.0 || beforeParent.gameObject.transform.rotation.eulerAngles.z == 90.0 && draggingObject.gameObject.transform.parent.CompareTag("Line"))
+                            {
+                                if (beforeParent.CompareTag("Line"))
+                                {
+                                    Debug.Log("Coming from right/left wire !!");
+                                    draggingObject.gameObject.transform.localScale = tempScale;
+                                }
+
+                                else
+                                {
+                                    Debug.Log("Coming from inventory !!");
+                                    draggingObject.gameObject.transform.localScale = SetItemScale(draggingObject);
+                                }
+                            }
+
+                            draggingObject.gameObject.transform.rotation = hit.collider.gameObject.transform.rotation;
+                        }
+
+                        // wire right 270
+                        if (hit.collider.transform.rotation.eulerAngles.z == 270.0)
+                        {
+                            draggingObject.gameObject.transform.SetParent(hit.collider.gameObject.transform);
+
+
+                            // coming from top/bottom wire
+                            if (beforeParent.gameObject.transform.rotation.eulerAngles.z == 0.0 || beforeParent.gameObject.transform.rotation.eulerAngles.z == 180.0 && draggingObject.gameObject.transform.parent.CompareTag("Line"))
+                            {
+                                if (beforeParent.CompareTag("Line"))
+                                {
+                                    Debug.Log("Coming from top/bottom wire !!");
+                                    draggingObject.gameObject.transform.localScale = tempScale;
+                                }
+
+                                else
+                                {
+                                    Debug.Log("Coming from inventory !!");
+                                    draggingObject.gameObject.transform.localScale = SetItemScale(draggingObject);
+                                }
+                            }
+
+                            draggingObject.gameObject.transform.rotation = hit.collider.transform.rotation;
+
+                        }
+
+                        // wire bottom 180
+                        if (hit.collider.transform.rotation.eulerAngles.z == 180)
+                        {
+
+                            draggingObject.gameObject.transform.SetParent(hit.collider.gameObject.transform);
+
+                            // coming from right/left wire
+                            if (beforeParent.gameObject.transform.rotation.eulerAngles.z == 270.0 || beforeParent.gameObject.transform.rotation.eulerAngles.z == 90.0 && draggingObject.gameObject.transform.parent.CompareTag("Line"))
+                            {
+                                if (beforeParent.CompareTag("Line"))
+                                {
+                                    Debug.Log("Coming from right/left wire !!");
+                                    draggingObject.gameObject.transform.localScale = tempScale;
+                                }
+
+                                else
+                                {
+                                    Debug.Log("Coming from inventory !!");
+                                    draggingObject.gameObject.transform.localScale = SetItemScale(draggingObject);
+                                }
+                            }
+
+                            draggingObject.gameObject.transform.rotation = hit.collider.gameObject.transform.rotation;
+                        }
+
+
+                        // wire left 90
+                        if (hit.collider.transform.rotation.eulerAngles.z == 90.0)
+                        {
+                            Debug.Log("Before Parent Rotation: " + beforeParent.gameObject.transform.rotation.eulerAngles);
+                            draggingObject.gameObject.transform.SetParent(hit.collider.gameObject.transform);
+
+
+                            // coming from top/bottom wire
+                            if (beforeParent.gameObject.transform.rotation.eulerAngles.z == 0.0 || beforeParent.gameObject.transform.rotation.eulerAngles.z == 180.0)
+                            {
+                                if (beforeParent.CompareTag("Line"))
+                                {
+                                    Debug.Log("Coming from top/bottom wire !!");
+                                    draggingObject.gameObject.transform.localScale = tempScale;
+                                }
+
+                                else
+                                {
+                                    Debug.Log("Coming from inventory !!");
+                                    draggingObject.gameObject.transform.localScale = SetItemScale(draggingObject);
+                                }
+
+
+                            }
+
+                            draggingObject.gameObject.transform.rotation = hit.collider.transform.rotation;
+                        }
+                    }
+
+
+                    //collided with an another object
+                    else
+                    {
+                        Debug.Log("RETURN TO START POS !!");
+                        draggingObject.transform.localPosition = startPos;
+                    }
                 }
             }
             draggingObject = null;
         }
 
+    }
+
+    Vector3 SetItemScale(GameObject item)
+    {
+        Vector3 newScale = item.transform.localScale;
+        if (item.CompareTag("Battery"))
+        {
+            newScale.x = 0.3f;
+            newScale.y = 5f;
+        }
+
+        if (item.CompareTag("Bulb"))
+        {
+            newScale.x = 0.2f;
+            newScale.y = 3f;
+        }
+
+        if (item.CompareTag("Resistor"))
+        {
+            newScale.x = 0.4f;
+            newScale.y = 9f;
+        }
+        return newScale;
     }
 }
 
