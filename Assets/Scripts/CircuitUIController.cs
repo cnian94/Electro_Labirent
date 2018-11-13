@@ -37,6 +37,7 @@ public class CircuitUIController : MonoBehaviour
         }
         //CreateBasicCircuit();
         GameManager.Instance.drawEvent.AddListener(DrawEnabled);
+        Debug.Log("Craft Panel World Pos : " + UICamera.ScreenToWorldPoint(craftPanel.transform.position));
     }
 
 
