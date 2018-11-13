@@ -85,7 +85,7 @@ public class Dragger : MonoBehaviour
                 draggingObject = hit.collider.gameObject;
                 tempScale = draggingObject.gameObject.transform.localScale;
                 Debug.Log("Temp Scale: " + tempScale);
-                startPos = draggingObject.transform.position;
+                startPos = draggingObject.transform.localPosition;
                 beingDragged = true;
             }
         }

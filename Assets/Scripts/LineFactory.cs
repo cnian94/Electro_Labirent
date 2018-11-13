@@ -151,13 +151,14 @@ public class LineFactory : MonoBehaviour
                 drawnLine = GetLine(point1, point2, 10f, Color.black, gameObject.transform.parent.transform);
                 drawnLine.name = "WireRight";
             }
-            /*
+            
             if (i == 2)
             {
                 point1 = point2;
-                point2.x = point2.x - 250f;
+                point2.x = point2.x - Screen.width / 2.0f;
                 drawnLine = GetLine(point1, point2, 10f, Color.black, gameObject.transform.parent.transform);
                 drawnLine.name = "WireBottom";
+                
                 GameObject battery = Instantiate(GameManager.Instance.inventory[1], drawnLine.transform);
                 Vector3 newPos = battery.transform.localPosition;
                 newPos.z = -1;
@@ -165,15 +166,15 @@ public class LineFactory : MonoBehaviour
                 battery.transform.Rotate(180, 180, 0);
                 battery.name = GameManager.Instance.inventory[1].name;
             }
-
+            
             if (i == 3)
             {
                 point1 = point2;
-                point2.y = point2.y + 125f;
+                point2.y = point2.y + Screen.width/2;
                 drawnLine = GetLine(point1, point2, 10f, Color.black, gameObject.transform.parent.transform);
                 drawnLine.name = "WireLeft";
 
-            }*/
+            }
 
         }
 
