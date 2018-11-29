@@ -16,6 +16,8 @@ public class Maze : MonoBehaviour
         public GameObject south; // 4 
     }
 
+    GameObject[] allWalls;
+
     public GameObject Wall;
     public float wallLength;
     public int xSize;
@@ -40,14 +42,69 @@ public class Maze : MonoBehaviour
     public GameObject Resistor;
     public GameObject Cable;
 
+    private void Awake()
+    {
+        GameManager.Instance.items.Add(Bulb);
+        GameManager.Instance.items.Add(Battery);
+        GameManager.Instance.items.Add(Resistor);
+    }
+
     // Use this for initialization
     void Start()
     {
-        GameManager.Instance.inventory.Add(Bulb);
-        GameManager.Instance.inventory.Add(Battery);
-        GameManager.Instance.inventory.Add(Resistor);
+        xSize = GameManager.Instance.xSize;
+        ySize = GameManager.Instance.ySize;
         //GameManager.Instance.inventory.Add(Cable);
         CreateWalls();
+        //Physics.IgnoreLayerCollision(8, 11);
+    }
+
+    void GenerateRandomItems()
+    {
+        Vector3 endPos = allWalls[0].transform.position;
+        for (int i = 0; i < 4; i++)
+        {
+            //int randomIndex = Random.Range(0, allWalls.Length - 1);
+            int randomIndex = Random.Range(allWalls.Length * 3 / 4, allWalls.Length - 1);
+            Vector3 itemPos = allWalls[randomIndex].gameObject.transform.position;
+            Debug.Log("SELECTED WALL POS: " + itemPos);
+            if(itemPos.z < 0)
+            {
+                itemPos.z += 0.5f;
+            }
+            else
+            {
+                itemPos.z -= 0.5f;
+            }
+
+
+            GameObject randomItem = Instantiate(GameManager.Instance.items[Random.Range(0, GameManager.Instance.items.Count)], itemPos, Quaternion.identity);
+            Vector3 newScale = randomItem.gameObject.transform.localScale;
+            newScale.x = 0.4f;
+            newScale.y = 0.4f;
+            randomItem.gameObject.transform.localScale = newScale;
+
+
+            randomItem.transform.Rotate(new Vector3(-90, 0, 0));
+        }
+
+    }
+
+    void SpawnPlayer(GameObject[] allWalls)
+    {
+        Destroy(allWalls[0].gameObject);
+        GenerateRandomItems();
+        Vector3 playerPos = Vector3.zero;
+        playerPos.x = allWalls[allWalls.Length - 1].transform.position.x;
+        playerPos.z = allWalls[allWalls.Length - 1].transform.position.z - 0.5f;
+        Vector3 newScale = new Vector3(0.4f, 0.4f, 0.4f);
+
+        Player = Instantiate(Player, playerPos, Quaternion.identity) as GameObject;
+        Player.transform.localScale = newScale;
+        Player.name = "Player";
+
+
+        GameManager.Instance.FindPlayer.Invoke();
     }
 
     void CreateWalls()
@@ -69,6 +126,7 @@ public class Maze : MonoBehaviour
                 //newScale.y = newScale.y * wallLength;
                 //tempWall.transform.localScale = newScale;
                 tempWall.transform.parent = WallHolder.transform;
+                //Physics.IgnoreCollision(Player.GetComponent<Collider>(), tempWall.GetComponent<Collider>());
             }
         }
 
@@ -83,6 +141,7 @@ public class Maze : MonoBehaviour
                 //newScale.y = newScale.y * wallLength;
                 //tempWall.transform.localScale = newScale;
                 tempWall.transform.parent = WallHolder.transform;
+                //Physics.IgnoreCollision(Player.GetComponent<Collider>(), tempWall.GetComponent<Collider>());
 
             }
         }
@@ -96,7 +155,6 @@ public class Maze : MonoBehaviour
         lastCells = new List<int>();
         lastCells.Clear();
         TotalCells = xSize * ySize;
-        GameObject[] allWalls;
         int children = WallHolder.transform.childCount;
         allWalls = new GameObject[children];
         cells = new Cell[xSize * ySize];
@@ -256,21 +314,6 @@ public class Maze : MonoBehaviour
                 backingUp--;
             }
         }
-    }
-
-    void SpawnPlayer(GameObject[] allWalls) 
-    {
-        Destroy(allWalls[0].gameObject);
-        Vector3 playerPos = Vector3.zero;
-        playerPos.x = allWalls[allWalls.Length - 1].transform.position.x;
-        playerPos.z = allWalls[allWalls.Length - 1].transform.position.z - 0.5f;
-        Vector3 newScale = new Vector3(0.4f, 0.4f, 0.4f);
-
-        Player = Instantiate(Player, playerPos, Quaternion.identity) as GameObject;
-        Player.transform.localScale = newScale;
-        Player.name = "Player";
-
-        GameManager.Instance.FindPlayer.Invoke();
     }
 
     // Update is called once per frame

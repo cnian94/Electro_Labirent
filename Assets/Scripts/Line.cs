@@ -98,16 +98,12 @@ public class Line : MonoBehaviour
 		var distance = heading.magnitude;
 		var direction = heading / distance;
 
-        //Debug.Log("distance: " + distance);
-        Vector3 centerPos = new Vector3 (startPosition.x + endPosition.x, startPosition.y + endPosition.y , -2) / 2;
-        //Debug.Log("CENTER POS: " + centerPos);
+        Vector3 centerPos = new Vector3 (startPosition.x + endPosition.x, startPosition.y + endPosition.y , 0) / 2;
 
         lineRenderer.transform.localPosition = centerPos;
 
 
         float angle = Mathf.Atan2 (direction.y, direction.x) * Mathf.Rad2Deg;
-        //lineRenderer.transform.localRotation = Quaternion.AngleAxis (angle, Vector3.forward);
-        Debug.Log("ANGLE: " + angle);
         lineRenderer.transform.Rotate(new Vector3(0 , 0 , angle));
 
         var objectWidthSize = 10f / 5f; // 10 = pixels of line sprite, 5f = pixels per units of line sprite.

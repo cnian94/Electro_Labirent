@@ -11,6 +11,7 @@ public class CameraScript : MonoBehaviour
 
     //private Vector3 offset;
     public bool isCameraAdjusted = false;
+    public GameObject panelButton;
 
 
     private void Awake()
@@ -98,6 +99,7 @@ public class CameraScript : MonoBehaviour
             newPos.x = Player.transform.position.x;
             newPos.z = Player.transform.position.z;
             transform.position = newPos;
+            panelButton.gameObject.SetActive(true);
         }
     }
 }

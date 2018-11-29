@@ -94,74 +94,48 @@ public class PlayerController : MonoBehaviour
 
 
 
-            if (isMoving) //dokunmatik oynamak için 
-            {
-                currentDistanceToTouchPos = (touchPosition - transform.position).magnitude;
-            }
-
-
-            if (Input.GetMouseButtonDown(0) && !GameManager.Instance.isCircuitPanelActive)
-            {
-                previousDistanceToTouchPos = 0;
-                currentDistanceToTouchPos = 0;
-                isMoving = true;
-                touchPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                touchPosition.y = 0;
-                whereToMove = (touchPosition - transform.position).normalized;
-                rb.velocity = new Vector3(whereToMove.x * moveSpeed, 0.0f, whereToMove.z * moveSpeed);
-            }
-
-            if (currentDistanceToTouchPos > previousDistanceToTouchPos)
-            {
-                isMoving = false;
-                rb.velocity = Vector2.zero;
-            }
-
-            if (Input.GetMouseButtonUp(0) || GameManager.Instance.isCircuitPanelActive) //yeni hareket için
-            {
-                isMoving = false;
-                rb.velocity = Vector2.zero;
-            }
-
-            if (isMoving)
-            {
-                previousDistanceToTouchPos = (touchPosition - transform.position).magnitude;
-            }  //buraya kadar dokunmatik oynamak için
-
-    }
-
-
-    void OnTriggerEnter2D(Collider2D col)
-    {
-
-        /*if (!GameMaster.gm.isBubbleCatched)
+        if (isMoving) //dokunmatik oynamak için 
         {
-            switch (col.gameObject.tag)
-            {
+            currentDistanceToTouchPos = (touchPosition - transform.position).magnitude;
+        }
 
-                case "Spike":
-                    if (!isColliding)
-                    {
-                        isColliding = true;
-                        Handheld.Vibrate();
-                        GameMaster.gm.KillPlayer(gameObject);
-                        //GameMaster.gm.FinishEvent.Invoke();
-                        //GameObject.Find("Timer").SendMessage("Finish");
-                        //Explosion = Instantiate(Explosion, transform.position, Quaternion.identity);
-                        //Explosion.transform.localScale = new Vector3(gameObject.transform.localScale.x, gameObject.transform.localScale.y, gameObject.transform.localScale.z);
-                        //Destroy(Explosion, 3);
-                    }
-                    break;
 
-            }
-        }*/
+        if (Input.GetMouseButtonDown(0) && !GameManager.Instance.isCircuitPanelActive)
+        {
+            previousDistanceToTouchPos = 0;
+            currentDistanceToTouchPos = 0;
+            isMoving = true;
+            touchPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            touchPosition.y = 0;
+            whereToMove = (touchPosition - transform.position).normalized;
+            rb.velocity = new Vector3(whereToMove.x * moveSpeed, 0.0f, whereToMove.z * moveSpeed);
+        }
+
+        if (currentDistanceToTouchPos > previousDistanceToTouchPos)
+        {
+            isMoving = false;
+            rb.velocity = Vector2.zero;
+        }
+
+        if (Input.GetMouseButtonUp(0) || GameManager.Instance.isCircuitPanelActive) //yeni hareket için
+        {
+            isMoving = false;
+            rb.velocity = Vector2.zero;
+        }
+
+        if (isMoving)
+        {
+            previousDistanceToTouchPos = (touchPosition - transform.position).magnitude;
+        }  //buraya kadar dokunmatik oynamak için
+
     }
 
+    /*
     void OnTriggerExit()
     {
         if (isColliding)
         {
             isColliding = false; //Allows for another object to be struck by this one
         }
-    }
+    }*/
 }

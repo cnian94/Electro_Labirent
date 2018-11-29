@@ -11,7 +11,32 @@ public class GameManager : MonoBehaviour
 
     public bool isCircuitPanelActive = false;
 
+    public List<GameObject> items = new List<GameObject>();
     public List<GameObject> inventory = new List<GameObject>();
+    //public List<Transform> stations = new List<Transform>();
+    public List<Transform> batteries = new List<Transform>();
+    public List<Transform> wires = new List<Transform>();
+
+    public GameObject MazeGenerator;
+    public int xSize;
+    public int ySize;
+
+    public Camera MainCamera;
+    public Camera UICamera;
+
+    public GameObject CircuitCanvas;
+    public GameObject panelOpenButton;
+    public GameObject circuitPanel;
+    public GameObject craftPanel;
+
+    public UnityEvent panelButtonEvent;
+
+    public GameObject CurrentRunner;
+
+
+    [System.Serializable]
+    public class ItemCollectedEvent : UnityEngine.Events.UnityEvent<GameObject> { }
+    public ItemCollectedEvent itemCollected;
 
 
     [System.Serializable]
@@ -20,6 +45,8 @@ public class GameManager : MonoBehaviour
 
     public bool isDrawingAllowed = false;
     public int maxLines = 50;
+
+    public int level;
 
     public static GameManager Instance
     {
@@ -44,6 +71,21 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        CalcMazeSize();
+        _instance.panelButtonEvent.AddListener(revealPanelButton);
+    }
+
+    void revealPanelButton()
+    {
+        panelOpenButton.GetComponent<Animator>().SetTrigger("Reveal");
+    }
+
+    void CalcMazeSize()
+    {
+        int dif = LevelSelector.instance.levelName;
+        xSize = LevelSelector.instance.base_size + dif;
+        ySize = LevelSelector.instance.base_size + dif;
+        MazeGenerator.gameObject.SetActive(true);
     }
 
     public void Draw()
@@ -59,5 +101,52 @@ public class GameManager : MonoBehaviour
             drawEvent.Invoke(true);
         }
 
+    }
+
+    public void SetCircuitPanel()
+    {
+        if (!GameManager.Instance.isCircuitPanelActive)
+        {
+            OpenCircuitPanel();
+        }
+        else
+        {
+            CloseCircuitPanel();
+        }
+    }
+
+    void OpenCircuitPanel()
+    {
+        panelOpenButton.GetComponent<Image>().color = Color.black;
+        MainCamera.gameObject.SetActive(false);
+        UICamera.gameObject.SetActive(true);
+        CircuitCanvas.gameObject.GetComponent<Canvas>().worldCamera = UICamera;
+        GameManager.Instance.isCircuitPanelActive = true;
+        panelOpenButton.transform.SetParent(circuitPanel.transform);
+        circuitPanel.gameObject.SetActive(true);
+        panelOpenButton.transform.Rotate(new Vector3(0, 0, 180));
+    }
+
+
+    void CloseCircuitPanel()
+    {
+        panelOpenButton.GetComponent<Image>().color = Color.white;
+        if (!panelOpenButton.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("Base"))
+        {
+            panelOpenButton.GetComponent<Animator>().SetTrigger("Reveal");
+        }
+        UICamera.gameObject.SetActive(false);
+        MainCamera.gameObject.SetActive(true);
+        CircuitCanvas.gameObject.GetComponent<Canvas>().worldCamera = MainCamera;
+        GameManager.Instance.isCircuitPanelActive = false;
+        panelOpenButton.transform.SetParent(CircuitCanvas.gameObject.transform);
+        circuitPanel.gameObject.SetActive(false);
+        panelOpenButton.transform.Rotate(new Vector3(0, 0, 180));
+        CurrentRunner.gameObject.SetActive(false);
+    }
+
+    public void RunCurrent()
+    {
+        CurrentRunner.gameObject.SetActive(true);
     }
 }
