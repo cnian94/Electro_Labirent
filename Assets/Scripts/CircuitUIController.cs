@@ -17,6 +17,9 @@ public class CircuitUIController : MonoBehaviour
     public GameObject inventoryContent;
     public GameObject inventoryDesk;
 
+    public GameObject scrollbar;
+
+
     public GameObject CableDesk;
     public Color offColor = new Color(0.38f, 0.42f, 0.35f, 1.0f);
 
@@ -31,7 +34,7 @@ public class CircuitUIController : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        Debug.Log("inventory length: " + GameManager.Instance.inventory.Count);
+        //Debug.Log("inventory length: " + GameManager.Instance.inventory.Count);
         /*for (int i = 0; i < GameManager.Instance.inventory.Count; i++)
         {
             GameObject desk = Instantiate(inventoryDesk, inventoryContent.transform);
@@ -47,12 +50,13 @@ public class CircuitUIController : MonoBehaviour
     void AddItem(GameObject item)
     {
         GameObject desk = Instantiate(inventoryDesk, inventoryContent.transform);
+        item.GetComponent<SpriteRenderer>().maskInteraction = SpriteMaskInteraction.VisibleInsideMask;
+        desk.name = item.name;
         item.transform.SetParent(desk.transform);
         Vector3 newPos = Vector3.zero;
         item.transform.localPosition = newPos;
-        //desk.name = GameManager.Instance.inventory[i].name;
-        //item.name = GameManager.Instance.inventory[i].name;
-    }
+        scrollbar.GetComponent<Scrollbar>().value = 1.0f;
+}
 
 
     public void DrawEnabled(bool val)

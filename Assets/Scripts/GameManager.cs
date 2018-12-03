@@ -24,6 +24,8 @@ public class GameManager : MonoBehaviour
     public Camera MainCamera;
     public Camera UICamera;
 
+    public GameObject Maze;
+
     public GameObject CircuitCanvas;
     public GameObject panelOpenButton;
     public GameObject circuitPanel;
@@ -72,12 +74,17 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         CalcMazeSize();
-        _instance.panelButtonEvent.AddListener(revealPanelButton);
+        _instance.panelButtonEvent.AddListener(RevealPanelButton);
     }
 
-    void revealPanelButton()
+    void RevealPanelButton()
     {
-        panelOpenButton.GetComponent<Animator>().SetTrigger("Reveal");
+        //Debug.Log("Anim state info: " + panelOpenButton.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("Reveal"));
+        if (!panelOpenButton.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("Reveal"))
+        {
+            panelOpenButton.GetComponent<Animator>().SetTrigger("Reveal");
+        }
+
     }
 
     void CalcMazeSize()
@@ -117,19 +124,27 @@ public class GameManager : MonoBehaviour
 
     void OpenCircuitPanel()
     {
+        Maze.gameObject.SetActive(false);
         panelOpenButton.GetComponent<Image>().color = Color.black;
         MainCamera.gameObject.SetActive(false);
         UICamera.gameObject.SetActive(true);
         CircuitCanvas.gameObject.GetComponent<Canvas>().worldCamera = UICamera;
         GameManager.Instance.isCircuitPanelActive = true;
-        panelOpenButton.transform.SetParent(circuitPanel.transform);
         circuitPanel.gameObject.SetActive(true);
         panelOpenButton.transform.Rotate(new Vector3(0, 0, 180));
+        Debug.Log("Anim state info: " + panelOpenButton.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("Reveal"));
+        if (panelOpenButton.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("Reveal"))
+        {
+            Debug.Log("Returning to base state !!");
+            panelOpenButton.GetComponent<Animator>().SetTrigger("Reveal");
+        }
+        panelOpenButton.transform.SetParent(circuitPanel.transform);
     }
 
 
     void CloseCircuitPanel()
     {
+        Maze.gameObject.SetActive(true);
         panelOpenButton.GetComponent<Image>().color = Color.white;
         if (!panelOpenButton.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("Base"))
         {

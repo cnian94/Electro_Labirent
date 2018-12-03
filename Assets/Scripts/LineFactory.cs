@@ -103,7 +103,7 @@ public class LineFactory : MonoBehaviour
         if (item.CompareTag("Bulb"))
         {
             newScale.x = 0.4f;
-            newScale.y = 10f;
+            newScale.y = 8f;
             float tmpRadius = item.GetComponent<SphereCollider>().radius;
             DestroyImmediate(item.GetComponent<SphereCollider>(), true);
             item.AddComponent<SphereCollider>();
@@ -209,11 +209,21 @@ public class LineFactory : MonoBehaviour
                 resistor.transform.localScale = SetItemScale(resistor);
                 resistor.name = GameManager.Instance.items[2].name;
 
+                /*GameObject text = new GameObject();
+                TextMesh t = text.AddComponent<TextMesh>();
+                t.text = "10";
+                t.fontSize = 30;
+
+                text.transform.SetParent(resistor.transform);
+
+                //t.transform.localEulerAngles += new Vector3(90, 0, 0);
+                t.transform.localPosition = Vector3.zero;**/
+
 
                 GameObject bulb = Instantiate(GameManager.Instance.items[0], drawnLine.transform);
                 newPos = bulb.transform.localPosition;
                 newPos.x += 0.6f;
-                newPos.y += 5.0f;
+                newPos.y += 4f;
                 bulb.transform.localPosition = newPos;
                 bulb.transform.localScale = SetItemScale(bulb);
                 bulb.name = GameManager.Instance.items[0].name;

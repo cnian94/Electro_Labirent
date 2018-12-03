@@ -56,18 +56,19 @@ public class Maze : MonoBehaviour
         ySize = GameManager.Instance.ySize;
         //GameManager.Instance.inventory.Add(Cable);
         CreateWalls();
+        GameManager.Instance.Maze = WallHolder.gameObject;
         //Physics.IgnoreLayerCollision(8, 11);
     }
 
     void GenerateRandomItems()
     {
         Vector3 endPos = allWalls[0].transform.position;
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < 15; i++)
         {
             //int randomIndex = Random.Range(0, allWalls.Length - 1);
             int randomIndex = Random.Range(allWalls.Length * 3 / 4, allWalls.Length - 1);
             Vector3 itemPos = allWalls[randomIndex].gameObject.transform.position;
-            Debug.Log("SELECTED WALL POS: " + itemPos);
+            //Debug.Log("SELECTED WALL POS: " + itemPos);
             if(itemPos.z < 0)
             {
                 itemPos.z += 0.5f;
@@ -77,8 +78,9 @@ public class Maze : MonoBehaviour
                 itemPos.z -= 0.5f;
             }
 
-
-            GameObject randomItem = Instantiate(GameManager.Instance.items[Random.Range(0, GameManager.Instance.items.Count)], itemPos, Quaternion.identity);
+            int index = Random.Range(0, GameManager.Instance.items.Count);
+            GameObject randomItem = Instantiate(GameManager.Instance.items[index], itemPos, Quaternion.identity);
+            randomItem.name = GameManager.Instance.items[index].name;
             Vector3 newScale = randomItem.gameObject.transform.localScale;
             newScale.x = 0.4f;
             newScale.y = 0.4f;
@@ -86,8 +88,14 @@ public class Maze : MonoBehaviour
 
 
             randomItem.transform.Rotate(new Vector3(-90, 0, 0));
+            StartCoroutine(SetRandomItemParent(randomItem.transform));
         }
+    }
 
+    IEnumerator SetRandomItemParent(Transform item)
+    {
+        yield return new WaitForSeconds(0.5f);
+        item.SetParent(GameManager.Instance.Maze.transform);
     }
 
     void SpawnPlayer(GameObject[] allWalls)
@@ -102,6 +110,7 @@ public class Maze : MonoBehaviour
         Player = Instantiate(Player, playerPos, Quaternion.identity) as GameObject;
         Player.transform.localScale = newScale;
         Player.name = "Player";
+        Player.transform.SetParent(WallHolder.transform);
 
 
         GameManager.Instance.FindPlayer.Invoke();
@@ -111,6 +120,7 @@ public class Maze : MonoBehaviour
     {
         WallHolder = new GameObject();
         WallHolder.name = "Maze";
+        WallHolder.tag = "Maze";
         initialPos = new Vector3((-xSize / 2) + wallLength / 2, 0.0f, (-ySize / 2) + wallLength / 2);
         Vector3 myPos = initialPos;
         GameObject tempWall;

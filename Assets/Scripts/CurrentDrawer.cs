@@ -153,21 +153,12 @@ public class CurrentDrawer : MonoBehaviour
 
     Transform GetClosestWire()
     {
-        //Debug.Log("COND 1: " + (currentWire != startWire));
-        //Debug.Log("COND 2: " + (stationIndex == 0));
-        //Debug.Log("COND 3: " + (stationIndex <= GameManager.Instance.wires.Count - 1));
-        Debug.Log("Count: " + GameManager.Instance.wires.Count);
-        Debug.Log("Station Index: " + stationIndex);
+        //Debug.Log("Count: " + GameManager.Instance.wires.Count);
+        //Debug.Log("Station Index: " + stationIndex);
         //(currentWire != startWire || stationIndex == 1) && (stationIndex <= GameManager.Instance.wires.Count - 1)
         //stationIndex < GameManager.Instance.wires.Count - 1
         if (stationIndex < GameManager.Instance.wires.Count - 1)
         {
-            /*if(stationIndex == GameManager.Instance.wires.Count - 1)
-            {
-                Debug.Log("No More Wire !!");
-                return null;
-            }*/
-
             Transform tMin = null;
             float minDist = Mathf.Infinity;
             Vector3 currentPos = transform.position;
@@ -175,13 +166,13 @@ public class CurrentDrawer : MonoBehaviour
             for (int i = 0; i < GameManager.Instance.wires.Count; i++)
             {
                 float dist = Vector3.Distance(GameManager.Instance.wires[i].position, currentPos);
-                Debug.Log("Comparing: " + GameManager.Instance.wires[i].name);
-                Debug.Log(GameManager.Instance.wires[i].name != currentWire.name);
+                //Debug.Log("Comparing: " + GameManager.Instance.wires[i].name);
+                //Debug.Log(GameManager.Instance.wires[i].name != currentWire.name);
                 if (dist < minDist && GameManager.Instance.wires[i].name != currentWire.name)
                 {
                     //Debug.Log("GİRDİİİİİİİ !!!");
                     tMin = GameManager.Instance.wires[i];
-                    Debug.Log("Current TMin: " + tMin.gameObject.name);
+                    //Debug.Log("Current TMin: " + tMin.gameObject.name);
                     minDist = dist;
                 }
             }
@@ -209,7 +200,9 @@ public class CurrentDrawer : MonoBehaviour
             Vector3 mousePosFar = new Vector3(pointAlongLine.x, pointAlongLine.y, cam.farClipPlane);
             Vector3 mousePosNear = new Vector3(pointAlongLine.x, pointAlongLine.y, cam.nearClipPlane);
 
-            RaycastHit2D hit = Physics2D.Raycast(mousePosNear, mousePosFar - mousePosNear);
+            //RaycastHit2D hit = Physics2D.Raycast(mousePosNear, mousePosFar - mousePosNear);
+            RaycastHit hit;
+            Physics.Raycast(mousePosNear, mousePosFar - mousePosNear, out hit, Mathf.Infinity);
             //Debug.Log("HİTTTT !!!");
             if (hit.collider != null)
             {

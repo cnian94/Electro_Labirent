@@ -22,13 +22,15 @@ public class Dragger : MonoBehaviour
     public GameObject target;
 
     public float rayLength = 300.0f;
-    public LayerMask layermask;
+    public LayerMask dragLayerMask;
+    public LayerMask dropLayermask;
 
     Vector3 tempScale;
 
     GameObject beforeParent;
 
     public GameObject CraftPanel;
+    public GameObject InventoryPanel;
     public GameObject inventoryContent;
     public GameObject inventoryDesk;
 
@@ -40,42 +42,13 @@ void Start()
         beingDragged = false;
     }
 
-    /*
-    void Update()
-    {
-        //Check if the left Mouse button is clicked
-        if (Input.GetKey(KeyCode.Mouse0))
-        {
-            //Set up the new Pointer Event
-            m_PointerEventData = new PointerEventData(m_EventSystem);
-            //Set the Pointer Event Position to that of the mouse position
-            m_PointerEventData.position = Input.mousePosition;
-
-            //Create a list of Raycast Results
-            List<RaycastResult> results = new List<RaycastResult>();
-
-            //Raycast using the Graphics Raycaster and mouse click position
-            m_Raycaster.Raycast(m_PointerEventData, results);
-
-            //For every result returned, output the name of the GameObject on the Canvas hit by the Ray
-            foreach (RaycastResult result in results)
-            {
-                Debug.Log("Hit " + result.gameObject.name);
-            }
-        }
-    }*/
-
-    private void FixedUpdate()
-    {
-
-    }
-
     void Update()
     {
 
         //If we've pressed down on the mouse (or touched on the iphone)
         if (Input.GetMouseButtonDown(0))
         {
+
             Vector3 mousePosFar = new Vector3(Input.mousePosition.x, Input.mousePosition.y, cam.farClipPlane);
             Vector3 mousePosNear = new Vector3(Input.mousePosition.x, Input.mousePosition.y, cam.nearClipPlane);
 
@@ -85,15 +58,19 @@ void Start()
 
             //RaycastHit hit = Physics.Raycast(mousePosN, mousePosF - mousePosN);
             RaycastHit hit;
-            Physics.Raycast(mousePosN, mousePosF - mousePosN, out hit, Mathf.Infinity);
+            Physics.Raycast(mousePosN, mousePosF - mousePosN, out hit, Mathf.Infinity, dragLayerMask);
 
             if (hit.collider != null)
             {
                 // trying to drag another item
                 if (!hit.collider.gameObject.CompareTag("Line"))
                 {
+                    InventoryPanel.GetComponent<ScrollRect>().StopMovement();
+                    InventoryPanel.GetComponent<ScrollRect>().enabled = false;
                     Debug.Log("Press Name: " + hit.collider.name);
+                    Debug.Log("Press Local Scale: " + hit.transform.lossyScale);
                     draggingObject = hit.collider.gameObject;
+                    draggingObject.GetComponent<SpriteRenderer>().maskInteraction = SpriteMaskInteraction.None;
                     draggingObject.GetComponent<SpriteRenderer>().sortingOrder = 1;
                     tempScale = draggingObject.gameObject.transform.localScale;
                     //Debug.Log("Temp Scale: " + tempScale);
@@ -125,7 +102,7 @@ void Start()
         {
 
             beingDragged = false;
-
+            InventoryPanel.GetComponent<ScrollRect>().enabled = true;
             Vector3 mousePosFar = new Vector3(Input.mousePosition.x, Input.mousePosition.y, cam.farClipPlane);
             Vector3 mousePosNear = new Vector3(Input.mousePosition.x, Input.mousePosition.y, cam.nearClipPlane);
 
@@ -141,9 +118,9 @@ void Start()
             //Debug.Log("Start: " + mousePosNear);
             //Debug.Log("Direction: " + (mousePosFar - mousePosNear));
             RaycastHit hit;
-            Physics.Raycast(mousePosN, mousePosF - mousePosN, out hit, Mathf.Infinity);
+            Physics.Raycast(mousePosN, mousePosF - mousePosN, out hit, Mathf.Infinity, dropLayermask);
 
-            draggingObject.GetComponent<SpriteRenderer>().sortingOrder = 2;
+            //draggingObject.GetComponent<SpriteRenderer>().sortingOrder = 2;
 
             if (hit.collider != null)
             {
@@ -162,8 +139,20 @@ void Start()
                     {
                         draggingObject.gameObject.transform.SetParent(hit.collider.gameObject.transform);
 
-                        // coming from right/left wire
-                        if (beforeParent.gameObject.transform.rotation.eulerAngles.z == 270.0 || beforeParent.gameObject.transform.rotation.eulerAngles.z == 90.0 && draggingObject.gameObject.transform.parent.CompareTag("Line"))
+                        Vector3 newPos = draggingObject.transform.localPosition;
+                        if (draggingObject.CompareTag("Bulb"))
+                        {
+                            newPos.y = 4;
+                        }
+
+                        else
+                        {
+                            newPos.y = 0;
+                        }
+                        draggingObject.transform.localPosition = newPos;
+
+                        // coming from right/left wire,  && draggingObject.gameObject.transform.parent.CompareTag("Line")
+                        if (beforeParent.gameObject.transform.rotation.eulerAngles.z == 270.0 || beforeParent.gameObject.transform.rotation.eulerAngles.z == 90.0)
                         {
                             if (beforeParent.CompareTag("Line"))
                             {
@@ -215,12 +204,20 @@ void Start()
                     {
                         draggingObject.gameObject.transform.SetParent(hit.collider.gameObject.transform);
                         Vector3 newPos = draggingObject.transform.localPosition;
-                        newPos.y = 0;
+                        if (draggingObject.CompareTag("Bulb"))
+                        {
+                            newPos.y = 4;
+                        }
+
+                        else
+                        {
+                            newPos.y = 0;
+                        }
                         draggingObject.transform.localPosition = newPos;
 
 
-                        // coming from top/bottom wire
-                        if (beforeParent.gameObject.transform.rotation.eulerAngles.z == 0.0 || beforeParent.gameObject.transform.rotation.eulerAngles.z == 180.0 && draggingObject.gameObject.transform.parent.CompareTag("Line"))
+                        // coming from top/bottom wire,  draggingObject.gameObject.transform.parent.CompareTag("Line")
+                        if (beforeParent.gameObject.transform.rotation.eulerAngles.z == 0.0 || beforeParent.gameObject.transform.rotation.eulerAngles.z == 180.0)
                         {
                             if (beforeParent.CompareTag("Line"))
                             {
@@ -276,17 +273,25 @@ void Start()
 
                         draggingObject.gameObject.transform.SetParent(hit.collider.gameObject.transform);
 
-                        // coming from right/left wire
-                        if (beforeParent.gameObject.transform.rotation.eulerAngles.z == 270.0 || beforeParent.gameObject.transform.rotation.eulerAngles.z == 90.0 && draggingObject.gameObject.transform.parent.CompareTag("Line"))
+                        Vector3 newPos = draggingObject.transform.localPosition;
+                        if (draggingObject.CompareTag("Bulb"))
+                        {
+                            newPos.y = 4;
+                        }
+
+                        else
+                        {
+                            newPos.y = 0;
+                        }
+                        draggingObject.transform.localPosition = newPos;
+
+                        // coming from right/left wire,  && draggingObject.gameObject.transform.parent.CompareTag("Line")
+                        if (beforeParent.gameObject.transform.rotation.eulerAngles.z == 270.0 || beforeParent.gameObject.transform.rotation.eulerAngles.z == 90.0)
                         {
                             if (beforeParent.CompareTag("Line"))
                             {
                                 Debug.Log("Coming from right/left wire !!");
                                 draggingObject.gameObject.transform.localScale = tempScale;
-                                if (draggingObject.CompareTag("Battery"))
-                                {
-
-                                }
                             }
 
                             else
@@ -297,8 +302,7 @@ void Start()
                         }
                         Debug.Log("Hit euler: " + hit.collider.gameObject.transform.rotation.eulerAngles);
                         Debug.Log("Hit local euler: " + hit.collider.gameObject.transform.localRotation.eulerAngles);
-                        //draggingObject.gameObject.transform.rotation = hit.collider.gameObject.transform.rotation;
-                        //draggingObject.gameObject.transform.Rotate(hit.collider.gameObject.transform.rotation.eulerAngles);
+
                         if (draggingObject.CompareTag("Battery"))
                         {
                             Debug.Log("Battery dropped !!");
@@ -341,7 +345,16 @@ void Start()
                         Debug.Log("Hit euler: " + hit.collider.gameObject.transform.rotation.eulerAngles);
                         Debug.Log("Hit local euler: " + hit.collider.gameObject.transform.localRotation.eulerAngles);
                         Vector3 newPos = draggingObject.transform.localPosition;
-                        newPos.y = 0;
+                        if (draggingObject.CompareTag("Bulb"))
+                        {
+                            newPos.y = 4;
+                        }
+
+                        else
+                        {
+                            newPos.y = 0;
+                        }
+
                         draggingObject.transform.localPosition = newPos;
 
                         // coming from top/bottom wire
@@ -411,9 +424,10 @@ void Start()
                 {
                     Debug.Log("drop to craft panel !!");
                     draggingObject.gameObject.transform.SetParent(CraftPanel.gameObject.transform);
-                    Vector3 newPos = draggingObject.transform.localPosition;
+                    draggingObject.gameObject.transform.rotation = new Quaternion(0, 0, 0, 0);
+                    //Vector3 newPos = draggingObject.transform.localPosition;
                     //newPos.z = -1;
-                    draggingObject.transform.localPosition = newPos;
+                    //draggingObject.transform.localPosition = newPos;
 
                 }
                 else
@@ -432,6 +446,7 @@ void Start()
             {
                 Destroy(beforeParent);
             }
+            draggingObject.GetComponent<SpriteRenderer>().sortingOrder = 2;
             draggingObject = null;
         }
 
@@ -443,64 +458,75 @@ void Start()
         return r < 0 ? r + m : r;
     }
 
+
     Vector3 SetItemScale(GameObject item)
     {
         Vector3 newScale = item.transform.localScale;
         if (item.CompareTag("Battery"))
         {
-            newScale.x = 0.25f;
-            newScale.y = 6f;
+            newScale.x = 0.4f;
+            newScale.y = 10f;
+            Vector3 tmpSize = item.GetComponent<BoxCollider>().size;
+            DestroyImmediate(item.GetComponent<BoxCollider>(), true);
+            item.AddComponent<BoxCollider>();
+            item.GetComponent<BoxCollider>().size = tmpSize;
         }
 
         if (item.CompareTag("Bulb"))
         {
-            newScale.x = 0.15f;
-            newScale.y = 2.5f;
+            newScale.x = 0.4f;
+            newScale.y = 8f;
+            float tmpRadius = item.GetComponent<SphereCollider>().radius;
+            DestroyImmediate(item.GetComponent<SphereCollider>(), true);
+            item.AddComponent<SphereCollider>();
+            item.GetComponent<SphereCollider>().radius = tmpRadius;
         }
 
         if (item.CompareTag("Resistor"))
         {
-            newScale.x = 0.25f;
+            newScale.x = 0.4f;
             newScale.y = 10f;
+            Vector3 tmpSize = item.GetComponent<BoxCollider>().size;
+            DestroyImmediate(item.GetComponent<BoxCollider>(), true);
+            item.AddComponent<BoxCollider>();
+            item.GetComponent<BoxCollider>().size = tmpSize;
         }
 
-        DestroyImmediate(item.GetComponent<PolygonCollider2D>(), true);
-        item.AddComponent<PolygonCollider2D>();
+
         return newScale;
     }
 
-    public void Shift(int sourceIndex, int destinationIndex)
+    /*
+    Vector3 SetItemScale(GameObject item)
     {
-        Debug.Log("Shifting !!");
-        Transform[] arr = GameManager.Instance.wires.ToArray<Transform>();
-        Transform[] temp = new Transform[arr.Length];
-        temp[arr.Length - (sourceIndex - destinationIndex)] = arr[destinationIndex];
-        Debug.Log("TEMP[1]: " + temp[1]);
-        //temp[sourceIndex] = arr[destinationIndex];
-        Array.Copy(arr, sourceIndex, temp, destinationIndex, arr.Length - 1);
-        arr = temp;
-        Debug.Log("arr[0] : " + arr[0]);
-        Debug.Log("arr[1] : " + arr[1]);
-        Debug.Log("arr[2] : " + arr[2]);
-        Debug.Log("arr[3] : " + arr[3]);
-        GameManager.Instance.wires = arr.OfType<Transform>().ToList<Transform>();
-    }
-
-
-
-    public void Shift2()
-    {
-        Transform[] source = GameManager.Instance.wires.ToArray<Transform>();
-        Transform[] destination = new Transform[source.Length];
-
-        for (int i = 0; i < source.Length - 1; i++)
+        Vector3 newScale = item.transform.localScale;
+        if (item.CompareTag("Battery"))
         {
-            Array.Copy(source, 1, destination, 0, source.Length - 1);
+            newScale.x = item.transform.lossyScale.x;
+            newScale.y = item.transform.lossyScale.y;
+            DestroyImmediate(item.GetComponent<BoxCollider>(), true);
+            item.AddComponent<BoxCollider>();
         }
 
-        Debug.Log("SOURCE[0] : " + source[0]);
-        Debug.Log("SOURCE[3] : " + source[3]);
-    }
+        if (item.CompareTag("Bulb"))
+        {
+            newScale.x = item.transform.lossyScale.x;
+            newScale.y = item.transform.lossyScale.y;
+            DestroyImmediate(item.GetComponent<SphereCollider>(), true);
+            item.AddComponent<SphereCollider>();
+        }
+
+        if (item.CompareTag("Resistor"))
+        {
+            newScale.x = item.transform.lossyScale.x;
+            newScale.y = item.transform.lossyScale.y;
+            DestroyImmediate(item.GetComponent<BoxCollider>(), true);
+            item.AddComponent<BoxCollider>();
+        }
+
+        return newScale;
+    }*/
+
 
 }
 

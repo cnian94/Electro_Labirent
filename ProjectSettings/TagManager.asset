@@ -15,6 +15,7 @@ TagManager:
   - Line
   - Runner
   - Wall
+  - Maze
   layers:
   - Default
   - TransparentFX
