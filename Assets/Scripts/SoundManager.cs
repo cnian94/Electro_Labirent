@@ -28,7 +28,6 @@ public class SoundManager : MonoBehaviour
     // Initialize the singleton instance.
     private void Awake()
     {
-        Debug.Log("İMDAAAT");
         // If there is not already an instance of SoundManager, set it to this.
         if (Instance == null)
         {
@@ -54,7 +53,6 @@ public class SoundManager : MonoBehaviour
             case "Button":
                 EffectsSource.clip = ButtonSound;
                 EffectsSource.Play();
-                Debug.Log("Ses deneme 1 2 ?");
                 break;
                 /*
                 case "Explosion": //explosion'un bir kere oynaması için.
