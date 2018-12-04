@@ -19,7 +19,8 @@ public class MenuCtrl : MonoBehaviour
 
     public void loadScene(string sceneName)
     {
-        if (sceneName.Equals("GameScene"))
+        SoundManager.Instance.Play("Button");
+        if (sceneName.Equals("LevelScene"))
         {
             //SoundManager.Instance.MusicSource.Stop();
             SceneManager.LoadScene(sceneName);

@@ -10,7 +10,11 @@ public class SoundManager : MonoBehaviour
 
     /*public AudioClip GameSound, StartSound, ExplosionSound, EnemySound, GrapeFruitJokerSound, RadishJokerSound, BroccoliJokerSound, BeerJokerSound, ResetSound, 
         ButtonSound, CoinSound, AlertSound;*/
+
+    public AudioClip ButtonSound;
     public bool isMuted = false;
+    
+
 
 
     // Audio players components.
@@ -24,6 +28,7 @@ public class SoundManager : MonoBehaviour
     // Initialize the singleton instance.
     private void Awake()
     {
+        Debug.Log("İMDAAAT");
         // If there is not already an instance of SoundManager, set it to this.
         if (Instance == null)
         {
@@ -46,52 +51,54 @@ public class SoundManager : MonoBehaviour
 
         switch (clip)
         {
-            /*
-            case "Explosion": //explosion'un bir kere oynaması için.
-                EffectsSource.clip = ExplosionSound;
-                EffectsSource.Play();
-                break;
-
-            case "Enemy":
-                EffectsSource.clip = EnemySound;
-                EffectsSource.Play();
-                break;
-
-            case "GrapeFruitJoker":
-                EffectsSource.clip = GrapeFruitJokerSound;
-                EffectsSource.Play();
-                break;
-
-            case "BeerJoker":
-                EffectsSource.clip = BeerJokerSound;
-                EffectsSource.Play();
-                break;
-
-            case "BroccoliJoker":
-                EffectsSource.clip = BroccoliJokerSound;
-                EffectsSource.Play();
-                break;
-
-            case "Start":
-                EffectsSource.clip = StartSound;
-                EffectsSource.Play();
-                break;
-
-            case "Reset": 
-                EffectsSource.clip = ResetSound;
-                EffectsSource.Play();
-                break;
-
-            case "Button": 
+            case "Button":
                 EffectsSource.clip = ButtonSound;
                 EffectsSource.Play();
+                Debug.Log("Ses deneme 1 2 ?");
                 break;
+                /*
+                case "Explosion": //explosion'un bir kere oynaması için.
+                    EffectsSource.clip = ExplosionSound;
+                    EffectsSource.Play();
+                    break;
 
-            case "Alert":
-                EffectsSource.clip = AlertSound;
-                EffectsSource.Play();
-                break;
-                */
+                case "Enemy":
+                    EffectsSource.clip = EnemySound;
+                    EffectsSource.Play();
+                    break;
+
+                case "GrapeFruitJoker":
+                    EffectsSource.clip = GrapeFruitJokerSound;
+                    EffectsSource.Play();
+                    break;
+
+                case "BeerJoker":
+                    EffectsSource.clip = BeerJokerSound;
+                    EffectsSource.Play();
+                    break;
+
+                case "BroccoliJoker":
+                    EffectsSource.clip = BroccoliJokerSound;
+                    EffectsSource.Play();
+                    break;
+
+                case "Start":
+                    EffectsSource.clip = StartSound;
+                    EffectsSource.Play();
+                    break;
+
+                case "Reset": 
+                    EffectsSource.clip = ResetSound;
+                    EffectsSource.Play();
+                    break;
+
+
+
+                case "Alert":
+                    EffectsSource.clip = AlertSound;
+                    EffectsSource.Play();
+                    break;
+                    */
         }
     }
 
