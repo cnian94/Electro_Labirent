@@ -28,16 +28,19 @@ public class CurrentDrawer : MonoBehaviour
     private int stationIndex;
 
     private bool currentAllowed;
+    private bool parallelAllowed;
     Transform startWire;
     Transform currentWire;
     bool isAllWiresViseted = false;
+
+    public GameObject ParallelRunner;
 
 
 
     // Use this for initialization
     void Start()
     {
-        lineDrawSpeed = 30;
+        lineDrawSpeed = 50;
     }
 
     private void OnEnable()
@@ -99,26 +102,18 @@ public class CurrentDrawer : MonoBehaviour
 
     Vector3 SetStationB(Transform newWire)
     {
-
         Vector3 newEndPos = Vector3.zero;
         float toEndDist = 0f;
 
         if (!newWire)
         {
-
-            //Debug.Log("HERE CURRENT WIRE: " + currentWire.name);
+            Debug.Log("Setting Parallel Station No Wire !!");
             newEndPos = destination.position;
-
-            /*if (!isAllWiresViseted)
-            {
-                Debug.Log("Not all wires viseted !!");
-                stationIndex = 0;
-            }*/
-
         }
 
         else
         {
+            Debug.Log("Setting Parallel Station Wire !!");
             newEndPos = newWire.position;
             // left wire
             if (newWire.eulerAngles.z == 90)
@@ -188,6 +183,75 @@ public class CurrentDrawer : MonoBehaviour
 
     }
 
+    IEnumerator RunParallelCurrent(Transform wire)
+    {
+
+        parallelAllowed = true;
+        
+
+        Vector3 stationA = gameObject.transform.position;
+
+
+
+        Vector3 stationB = SetStationB(wire);
+
+        Debug.Log("Parallel Station A: " + stationA);
+        Debug.Log("Parallel Station B: " + stationB);
+
+
+        float dist = Vector3.Distance(stationA, stationB);
+        float counter = 0;
+
+        Vector3 pointAlongParallelLine;
+
+        int i = 0;
+        while (i < wire.transform.parent.transform.childCount && parallelAllowed)
+        {
+            float x = Mathf.Lerp(0, dist, counter);
+
+            pointAlongParallelLine = x * Vector3.Normalize(stationB - stationA) + stationA;
+
+            Vector3 mousePosFar = new Vector3(pointAlongParallelLine.x, pointAlongParallelLine.y, cam.farClipPlane);
+            Vector3 mousePosNear = new Vector3(pointAlongParallelLine.x, pointAlongParallelLine.y, cam.nearClipPlane);
+
+            RaycastHit hit;
+            Physics.Raycast(mousePosNear, mousePosFar - mousePosNear, out hit, Mathf.Infinity);
+            Debug.Log("Parallel Runner hit: " + hit.collider.name);
+
+            if (hit.collider != null)
+            {
+
+                if (hit.collider.gameObject.CompareTag("Line") || hit.collider.gameObject.CompareTag("Resistor") || hit.collider.gameObject.CompareTag("Bulb") || hit.collider.gameObject.CompareTag("Battery"))
+                {
+                    //hit.collider.gameObject == wire
+                    if (ParallelRunner.gameObject.transform.position != stationB)
+                    {
+                        counter += .1f / lineDrawSpeed / dist;
+                        x = Mathf.Lerp(0, dist, counter);
+                        pointAlongParallelLine = x * Vector3.Normalize(stationB - stationA) + stationA;
+                        ParallelRunner.gameObject.transform.position = pointAlongParallelLine;
+                    }
+
+                    else
+                    {
+
+                        parallelAllowed = false;
+                        stationA = ParallelRunner.transform.position;
+                        ParallelRunner.gameObject.transform.position = stationA;
+                        stationB = SetStationB(hit.collider.gameObject.transform);
+                        dist = Vector3.Distance(stationA, stationB);
+                        counter = 0.0f;
+                        i++;
+                        parallelAllowed = true;
+
+                    }
+                }
+
+            }
+            yield return null;
+        }
+    }
+
 
     IEnumerator DrawCurrent()
     {
@@ -203,7 +267,7 @@ public class CurrentDrawer : MonoBehaviour
             //RaycastHit2D hit = Physics2D.Raycast(mousePosNear, mousePosFar - mousePosNear);
             RaycastHit hit;
             Physics.Raycast(mousePosNear, mousePosFar - mousePosNear, out hit, Mathf.Infinity);
-            //Debug.Log("HİTTTT !!!");
+            Debug.Log("HIT: " + hit.collider.name);
             if (hit.collider != null)
             {
 
@@ -215,12 +279,21 @@ public class CurrentDrawer : MonoBehaviour
                     //counter < dist
                     if (gameObject.transform.position != stationB)
                     {
-                        if (hit.collider.gameObject.CompareTag("Line") && GameManager.Instance.wires.IndexOf(hit.collider.gameObject.transform) == -1)
+                        /*if (hit.collider.gameObject.CompareTag("Line") && GameManager.Instance.wires.IndexOf(hit.collider.gameObject.transform) == -1)
                         {
                             //currentAllowed = false;
                             Debug.Log("Adding Wire: " + hit.collider.name);
-                            GameManager.Instance.wires.Add(hit.collider.gameObject.transform);
+                            //GameManager.Instance.wires.Add(hit.collider.gameObject.transform);
                             //currentAllowed = true;
+                        }*/
+
+
+                        if (!hit.collider.gameObject.name.Equals(currentWire.name) && GameManager.Instance.wires.IndexOf(hit.collider.gameObject.transform) == -1 && hit.collider.gameObject.CompareTag("Line"))
+                        {
+                            Debug.Log("Parallel Cable Detected !!");
+                            currentAllowed = false;
+                            ParallelRunner = Instantiate(ParallelRunner, GameManager.Instance.craftPanel.transform);
+                            StartCoroutine(RunParallelCurrent(hit.collider.gameObject.transform));
                         }
 
                         //counter += .1f / (lineDrawSpeed * dist);

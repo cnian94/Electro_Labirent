@@ -21,11 +21,16 @@ public class CircuitUIController : MonoBehaviour
 
 
     public GameObject CableDesk;
+    public GameObject ParallelDesk;
+    public GameObject SeriesDesk;
     public Color offColor = new Color(0.38f, 0.42f, 0.35f, 1.0f);
 
     //public GameObject DrawManager;
     public LineFactory lineFactory;
     private Line drawnLine;
+
+    public List<GameObject> parallels = new List<GameObject>();
+    public GameObject Parallel;
 
     //public GameObject CurrentRenderer;
     //public GameObject CurrentRunner;
@@ -56,7 +61,7 @@ public class CircuitUIController : MonoBehaviour
         Vector3 newPos = Vector3.zero;
         item.transform.localPosition = newPos;
         scrollbar.GetComponent<Scrollbar>().value = 1.0f;
-}
+    }
 
 
     public void DrawEnabled(bool val)
@@ -64,6 +69,9 @@ public class CircuitUIController : MonoBehaviour
         if (val)
         {
             CableDesk.GetComponent<Image>().color = Color.white;
+            CableDesk.transform.GetChild(0).transform.GetChild(0).gameObject.SetActive(false);
+            ParallelDesk.gameObject.SetActive(true);
+            SeriesDesk.gameObject.SetActive(true);
             //DrawManager.gameObject.SetActive(true);
         }
         else
@@ -74,58 +82,23 @@ public class CircuitUIController : MonoBehaviour
 
     }
 
+    public void AddParallelCable()
+    {
+
+        foreach (Transform wire in GameManager.Instance.wires)
+        {
+            GameObject newParallel = Instantiate(Parallel, wire.transform);
+            //parallel.GetComponent<SpriteRenderer>().color = new Color(1, 0.43f, 0, 0.153f);
+            newParallel.transform.rotation = wire.transform.rotation;
+            newParallel.name = wire.name + "Parallel";
+            parallels.Add(newParallel);
+        }
+    }
+
     // Update is called once per frame
     void Update()
     {
 
     }
-
-
-    /*
-    public void SetCircuitPanel()
-    {
-        if (!GameManager.Instance.isCircuitPanelActive)
-        {
-            OpenCircuitPanel();
-        }
-        else
-        {
-            CloseCircuitPanel();
-        }
-    }
-
-
-    void OpenCircuitPanel()
-    {
-        panelOpenButton.GetComponent<Image>().color = Color.black;
-        MainCamera.gameObject.SetActive(false);
-        UICamera.gameObject.SetActive(true);
-        gameObject.GetComponent<Canvas>().worldCamera = UICamera;
-        GameManager.Instance.isCircuitPanelActive = true;
-        panelOpenButton.transform.SetParent(circuitPanel.transform);
-        circuitPanel.gameObject.SetActive(true);
-        panelOpenButton.transform.Rotate(new Vector3(0, 0, 180));
-    }
-
-
-    void CloseCircuitPanel()
-    {
-        panelOpenButton.GetComponent<Image>().color = Color.white;
-        panelOpenButton.GetComponent<Animator>().SetTrigger("Reveal");
-        UICamera.gameObject.SetActive(false);
-        MainCamera.gameObject.SetActive(true);
-        gameObject.GetComponent<Canvas>().worldCamera = MainCamera;
-        GameManager.Instance.isCircuitPanelActive = false;
-        panelOpenButton.transform.SetParent(gameObject.transform);
-        circuitPanel.gameObject.SetActive(false);
-        panelOpenButton.transform.Rotate(new Vector3(0, 0, 180));
-        CurrentRunner.gameObject.SetActive(false);
-    }
-
-    public void RunCurrent()
-    {
-        CurrentRunner.gameObject.SetActive(true);
-    }
-    */
 
 }
