@@ -45,6 +45,7 @@ public class GameManager : MonoBehaviour
     public class DrawEvent : UnityEngine.Events.UnityEvent<bool> { }
     public DrawEvent drawEvent;
 
+
     public bool isDrawingAllowed = false;
     public int maxLines = 50;
 
