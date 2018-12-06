@@ -11,13 +11,18 @@ public class LevelSelector : MonoBehaviour
     private static LevelSelector _instance;
 
     public static LevelSelector instance
+
+   
     {
         get { return _instance ?? (_instance = new GameObject("NetworkManager").AddComponent<LevelSelector>()); }
     }
 
-
+    public Font Font;
     public GameObject LevelContent;
     public Button LevelButton;
+
+
+    public GameObject StarHolder;
 
     public int levelName;
     public int base_size;
@@ -47,9 +52,14 @@ public class LevelSelector : MonoBehaviour
         for (int i = 0; i < levels.Length; i++)
         {
             Button newLevel = Instantiate(LevelButton, LevelContent.transform);
+            StarHolder = Instantiate(StarHolder, newLevel.transform);
             //Debug.Log("Level " + levels[i].ToString());
             newLevel.name = levels[i].ToString();
-            newLevel.transform.GetChild(0).GetComponent<Text>().text = " " + levels[i].ToString();
+            newLevel.transform.GetChild(0).GetComponent<Text>().text = "" + levels[i].ToString();
+            newLevel.transform.GetChild(0).GetComponent<Text>().font = Font ;
+            newLevel.transform.localScale = new Vector3(1.2f, 1.2f, 1);
+            newLevel.transform.GetChild(0).localScale = new Vector3(0.6f, 0.6f, 1);
+            
 
         }
 
