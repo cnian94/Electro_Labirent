@@ -28,12 +28,12 @@ public class CurrentDrawer : MonoBehaviour
     private int stationIndex;
 
     private bool currentAllowed;
-    private bool parallelAllowed;
+    //private bool parallelAllowed;
     Transform startWire;
     Transform currentWire;
     bool isAllWiresViseted = false;
 
-    public GameObject ParallelRunner;
+
 
 
 
@@ -183,78 +183,81 @@ public class CurrentDrawer : MonoBehaviour
 
     }
 
-    IEnumerator RunParallelCurrent(Transform wire)
+
+
+    bool IsRunnerNeeded(GameObject key, GameObject hit)
     {
 
-        parallelAllowed = true;
-        
-
-        Vector3 stationA = gameObject.transform.position;
-
-
-
-        Vector3 stationB = SetStationB(wire);
-
-        Debug.Log("Parallel Station A: " + stationA);
-        Debug.Log("Parallel Station B: " + stationB);
-
-
-        float dist = Vector3.Distance(stationA, stationB);
-        float counter = 0;
-
-        Vector3 pointAlongParallelLine;
-
-        int i = 0;
-        while (i < wire.transform.parent.transform.childCount && parallelAllowed)
+        // runner varsa
+        if (GameManager.Instance.parallelRunners.ContainsKey(key))
         {
-            float x = Mathf.Lerp(0, dist, counter);
+            Debug.Log("NOT NEEDED 1 !!");
+            return false;
+        }
 
-            pointAlongParallelLine = x * Vector3.Normalize(stationB - stationA) + stationA;
-
-            Vector3 mousePosFar = new Vector3(pointAlongParallelLine.x, pointAlongParallelLine.y, cam.farClipPlane);
-            Vector3 mousePosNear = new Vector3(pointAlongParallelLine.x, pointAlongParallelLine.y, cam.nearClipPlane);
-
-            RaycastHit hit;
-            Physics.Raycast(mousePosNear, mousePosFar - mousePosNear, out hit, Mathf.Infinity);
-            Debug.Log("Parallel Runner hit: " + hit.collider.name);
-
-            if (hit.collider != null)
+        // runner yoksa
+        else
+        {
+            //pilin parentı ve çarptığı paralel kablonun parentının parentı aynı değilse
+            if (!GameManager.Instance.batteries[0].transform.parent.name.Equals(hit.transform.parent.transform.parent.gameObject.name))
             {
 
-                if (hit.collider.gameObject.CompareTag("Line") || hit.collider.gameObject.CompareTag("Resistor") || hit.collider.gameObject.CompareTag("Bulb") || hit.collider.gameObject.CompareTag("Battery"))
+                if (hit.gameObject == hit.transform.parent.GetChild(0).gameObject)
                 {
-                    //hit.collider.gameObject == wire
-                    if (ParallelRunner.gameObject.transform.position != stationB)
+                    Debug.Log("NEEDED 1 !!");
+                    return true;
+                }
+                else
+                {
+                    Debug.Log("NOT NEEDED 2 !!");
+                    return false;
+                }
+            }
+            else
+            {
+                Debug.Log("hit.gameObject.name:" + hit.gameObject.name);
+                if (hit.transform.parent.name.Equals("WireBottomParallel"))
+                {
+                    if (hit.gameObject == hit.transform.parent.GetChild(0).gameObject)
                     {
-                        counter += .1f / lineDrawSpeed / dist;
-                        x = Mathf.Lerp(0, dist, counter);
-                        pointAlongParallelLine = x * Vector3.Normalize(stationB - stationA) + stationA;
-                        ParallelRunner.gameObject.transform.position = pointAlongParallelLine;
+                        Debug.Log("NEEDED 2 !!");
+                        return true;
                     }
-
                     else
                     {
+                        Debug.Log("NOT NEEDED 3 !!");
+                        return false;
 
-                        parallelAllowed = false;
-                        stationA = ParallelRunner.transform.position;
-                        ParallelRunner.gameObject.transform.position = stationA;
-                        stationB = SetStationB(hit.collider.gameObject.transform);
-                        dist = Vector3.Distance(stationA, stationB);
-                        counter = 0.0f;
-                        i++;
-                        parallelAllowed = true;
+                    }
+
+                }
+                else
+                {
+                    if (hit.gameObject == hit.transform.parent.GetChild(2).gameObject)
+                    {
+                        Debug.Log("NEEDED 2 !!");
+                        return true;
+                    }
+                    else
+                    {
+                        Debug.Log("NOT NEEDED 3 !!");
+                        return false;
 
                     }
                 }
 
+
+
+
+
+                //}
             }
-            yield return null;
         }
     }
 
-
     IEnumerator DrawCurrent()
     {
+
         while (currentAllowed)
         {
             float x = Mathf.Lerp(0, dist, counter);
@@ -263,40 +266,35 @@ public class CurrentDrawer : MonoBehaviour
 
             Vector3 mousePosFar = new Vector3(pointAlongLine.x, pointAlongLine.y, cam.farClipPlane);
             Vector3 mousePosNear = new Vector3(pointAlongLine.x, pointAlongLine.y, cam.nearClipPlane);
+            //Debug.Log("mousePosFar first: " + mousePosFar);
+            //Debug.Log("mousePosNear first: " + mousePosNear);
 
-            //RaycastHit2D hit = Physics2D.Raycast(mousePosNear, mousePosFar - mousePosNear);
             RaycastHit hit;
             Physics.Raycast(mousePosNear, mousePosFar - mousePosNear, out hit, Mathf.Infinity);
-            Debug.Log("HIT: " + hit.collider.name);
+            //Debug.Log("HIT: " + hit.collider.name);
             if (hit.collider != null)
             {
 
                 if (hit.collider.gameObject.CompareTag("Line") || hit.collider.gameObject.CompareTag("Resistor") || hit.collider.gameObject.CompareTag("Bulb") || hit.collider.gameObject.CompareTag("Battery"))
                 {
-                    //Debug.Log("LİNE NAME: " + hit.collider.gameObject.name);
-                    //Debug.Log("Hit: " + hit.collider.name);
-
-                    //counter < dist
                     if (gameObject.transform.position != stationB)
                     {
-                        /*if (hit.collider.gameObject.CompareTag("Line") && GameManager.Instance.wires.IndexOf(hit.collider.gameObject.transform) == -1)
-                        {
-                            //currentAllowed = false;
-                            Debug.Log("Adding Wire: " + hit.collider.name);
-                            //GameManager.Instance.wires.Add(hit.collider.gameObject.transform);
-                            //currentAllowed = true;
-                        }*/
 
-
-                        if (!hit.collider.gameObject.name.Equals(currentWire.name) && GameManager.Instance.wires.IndexOf(hit.collider.gameObject.transform) == -1 && hit.collider.gameObject.CompareTag("Line"))
+                        //  && GameManager.Instance.wires.IndexOf(hit.collider.gameObject.transform) == -1
+                        //  && hit.collider.gameObject == hit.collider.gameObject.transform.parent.GetChild(0).gameObject
+                        if (!hit.collider.gameObject.name.Equals(currentWire.name) && hit.collider.gameObject.CompareTag("Line"))
                         {
-                            Debug.Log("Parallel Cable Detected !!");
-                            currentAllowed = false;
-                            ParallelRunner = Instantiate(ParallelRunner, GameManager.Instance.craftPanel.transform);
-                            StartCoroutine(RunParallelCurrent(hit.collider.gameObject.transform));
+                            if (IsRunnerNeeded(currentWire.gameObject, hit.collider.gameObject))
+                            {
+                                Debug.Log("Parallel Cable Detected !!");
+                                Debug.Log("Point Along line First: " + pointAlongLine);
+                                currentAllowed = false;
+                                GameManager.Instance.parallelRunner.Invoke(hit.collider.gameObject.transform, currentWire.gameObject);
+                                //currentAllowed = true;
+                            }
+
                         }
 
-                        //counter += .1f / (lineDrawSpeed * dist);
                         counter += .1f / lineDrawSpeed / dist;
                         x = Mathf.Lerp(0, dist, counter);
                         pointAlongLine = x * Vector3.Normalize(stationB - stationA) + stationA;
@@ -355,13 +353,6 @@ public class CurrentDrawer : MonoBehaviour
     public void TryAgain()
     {
         currentText.gameObject.SetActive(false);
-        //length = GameManager.Instance.stations.ToArray().Length;
-        //stationIndex = 0;
-        //origin = GameManager.Instance.stations[stationIndex];
-        //destination = GameManager.Instance.stations[stationIndex + 1];
-        //gameObject.transform.position = origin.position;
-        //dist = Vector3.Distance(origin.position, destination.position);
-        //counter = 0.0f;
         againButton.gameObject.SetActive(false);
         RunCurrentButton.gameObject.SetActive(true);
         circuitButton.gameObject.SetActive(true);

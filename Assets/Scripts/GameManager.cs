@@ -16,6 +16,10 @@ public class GameManager : MonoBehaviour
     //public List<Transform> stations = new List<Transform>();
     public List<Transform> batteries = new List<Transform>();
     public List<Transform> wires = new List<Transform>();
+    public List<GameObject> parallels = new List<GameObject>();
+
+    public Dictionary<GameObject, GameObject> parallelRunners = new Dictionary<GameObject, GameObject>();
+    //public List<GameObject> parallelRunners = new List<GameObject>();
 
     public GameObject MazeGenerator;
     public int xSize;
@@ -34,6 +38,7 @@ public class GameManager : MonoBehaviour
     public UnityEvent panelButtonEvent;
 
     public GameObject CurrentRunner;
+    public GameObject ParallelRunner;
 
 
     [System.Serializable]
@@ -44,6 +49,14 @@ public class GameManager : MonoBehaviour
     [System.Serializable]
     public class DrawEvent : UnityEngine.Events.UnityEvent<bool> { }
     public DrawEvent drawEvent;
+
+    [System.Serializable]
+    public class ParallelRunnerEvent : UnityEngine.Events.UnityEvent<Transform, GameObject> { }
+    public ParallelRunnerEvent parallelRunner;
+
+    [System.Serializable]
+    public class RunParallelRunner : UnityEngine.Events.UnityEvent<Transform> { }
+    public RunParallelRunner runParallelRunner;
 
 
     public bool isDrawingAllowed = false;
@@ -76,6 +89,18 @@ public class GameManager : MonoBehaviour
     {
         CalcMazeSize();
         _instance.panelButtonEvent.AddListener(RevealPanelButton);
+        _instance.parallelRunner.AddListener(AddParallelRunner);
+
+    }
+
+    void AddParallelRunner(Transform wire, GameObject currentWire)
+    {
+        Debug.Log("Adding Parallel Runner !!");
+        GameObject newParallelRunner = Instantiate(ParallelRunner, _instance.craftPanel.transform);
+        _instance.runParallelRunner.Invoke(wire);
+        _instance.parallelRunners.Add(currentWire, newParallelRunner);
+        //newParallelRunner.GetComponent<ParallelRunner>().startWire = wire;
+        //newParallelRunner.GetComponent<ParallelRunner>().StartCoroutine(newParallelRunner.GetComponent<ParallelRunner>().RunParallelCurrent2(wire));
     }
 
     void RevealPanelButton()
@@ -133,7 +158,7 @@ public class GameManager : MonoBehaviour
         GameManager.Instance.isCircuitPanelActive = true;
         circuitPanel.gameObject.SetActive(true);
         panelOpenButton.transform.Rotate(new Vector3(0, 0, 180));
-        Debug.Log("Anim state info: " + panelOpenButton.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("Reveal"));
+        //Debug.Log("Anim state info: " + panelOpenButton.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("Reveal"));
         if (panelOpenButton.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("Reveal"))
         {
             Debug.Log("Returning to base state !!");

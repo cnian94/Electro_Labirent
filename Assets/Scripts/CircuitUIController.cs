@@ -29,7 +29,7 @@ public class CircuitUIController : MonoBehaviour
     public LineFactory lineFactory;
     private Line drawnLine;
 
-    public List<GameObject> parallels = new List<GameObject>();
+    
     public GameObject Parallel;
 
     //public GameObject CurrentRenderer;
@@ -89,9 +89,14 @@ public class CircuitUIController : MonoBehaviour
         {
             GameObject newParallel = Instantiate(Parallel, wire.transform);
             //parallel.GetComponent<SpriteRenderer>().color = new Color(1, 0.43f, 0, 0.153f);
-            newParallel.transform.rotation = wire.transform.rotation;
+            if (wire.name.Equals("WireBottom"))
+            {
+                Vector3 newLocalRotation = newParallel.transform.localRotation.eulerAngles;
+                newLocalRotation.y = 180;
+                newParallel.transform.Rotate(newLocalRotation);
+            }
             newParallel.name = wire.name + "Parallel";
-            parallels.Add(newParallel);
+            GameManager.Instance.parallels.Add(newParallel);
         }
     }
 

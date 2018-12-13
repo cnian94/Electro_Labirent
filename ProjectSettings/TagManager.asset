@@ -18,6 +18,7 @@ TagManager:
   - Maze
   - ProgressBar
   - Button
+  - Parallel
   layers:
   - Default
   - TransparentFX

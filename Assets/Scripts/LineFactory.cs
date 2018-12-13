@@ -37,7 +37,7 @@ public class LineFactory : MonoBehaviour
             line.SetActive(false);
             line.transform.SetParent(transform);
             line.AddComponent<BoxCollider>();
-            Vector3 newSize = new Vector3(2.1066f, 2.1066f, 0);
+            Vector3 newSize = new Vector3(2.1066f, 0.6f, 0);
             line.GetComponent<BoxCollider>().size = newSize;
 
             pooledLines[i] = line.GetComponent<Line>();

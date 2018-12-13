@@ -163,6 +163,7 @@ MonoBehaviour:
   inventory: []
   batteries: []
   wires: []
+  parallels: []
   MazeGenerator: {fileID: 844899554}
   xSize: 0
   ySize: 0
@@ -179,6 +180,8 @@ MonoBehaviour:
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   CurrentRunner: {fileID: 349431496}
+  ParallelRunner: {fileID: 1322953926784212, guid: 08907fbd389048b4980a8b56b5e0b8df,
+    type: 2}
   itemCollected:
     m_PersistentCalls:
       m_Calls: []
@@ -189,6 +192,11 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: GameManager+DrawEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+  parallelRunner:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: GameManager+ParallelRunnerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
   isDrawingAllowed: 0
   maxLines: 50
   level: 0
@@ -928,8 +936,6 @@ MonoBehaviour:
   stationB: {x: 0, y: 0, z: 0}
   destination: {fileID: 0}
   lineDrawSpeed: 30
-  ParallelRunner: {fileID: 1322953926784212, guid: 08907fbd389048b4980a8b56b5e0b8df,
-    type: 2}
 --- !u!1 &835603819
 GameObject:
   m_ObjectHideFlags: 0
@@ -1198,7 +1204,6 @@ MonoBehaviour:
   SeriesDesk: {fileID: 939923937}
   offColor: {r: 0.38, g: 0.42, b: 0.35, a: 1}
   lineFactory: {fileID: 0}
-  parallels: []
   Parallel: {fileID: 1234278816809358, guid: 1c5f589a373b61645963c14698757966, type: 2}
 --- !u!1 &939923937
 GameObject:
