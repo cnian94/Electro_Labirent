@@ -89,12 +89,26 @@ public class CircuitUIController : MonoBehaviour
         {
             GameObject newParallel = Instantiate(Parallel, wire.transform);
             //parallel.GetComponent<SpriteRenderer>().color = new Color(1, 0.43f, 0, 0.153f);
-            if (wire.name.Equals("WireBottom"))
+
+            /*if (wire.name.Equals("WireBottom"))
             {
                 Vector3 newLocalRotation = newParallel.transform.localRotation.eulerAngles;
-                newLocalRotation.y = 180;
+                newLocalRotation.y = 180.0f;
                 newParallel.transform.Rotate(newLocalRotation);
             }
+
+            if (wire.name.Equals("WireLeft"))
+            {
+                Debug.Log("Rotating WireLeftParallel !!");
+                //Vector3 newLocalRotation = newParallel.transform.localRotation.eulerAngles;
+                //newLocalRotation.x = 180.0f;
+                //newLocalRotation.y = 180.0f;
+                //newLocalRotation.z = 180.0f;
+                //newParallel.transform.localRotation = Quaternion.Euler(180.0f, 180.0f, 270.0f);
+                //newParallel.transform.Ro
+                //burdayımmm
+            }*/
+
             newParallel.name = wire.name + "Parallel";
             GameManager.Instance.parallels.Add(newParallel);
         }

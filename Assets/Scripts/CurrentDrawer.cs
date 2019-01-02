@@ -40,7 +40,7 @@ public class CurrentDrawer : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        lineDrawSpeed = 50;
+        lineDrawSpeed = 20;
     }
 
     private void OnEnable()
@@ -185,10 +185,13 @@ public class CurrentDrawer : MonoBehaviour
 
 
 
-    bool IsRunnerNeeded(GameObject key, GameObject hit)
+    bool IsRunnerNeeded(GameObject hit)
     {
 
         // runner varsa
+        GameObject key = hit.transform.parent.parent.gameObject;
+        Debug.Log("KEYYY: " + key.name);
+        Debug.Log("Contains: " + GameManager.Instance.parallelRunners.ContainsKey(key));
         if (GameManager.Instance.parallelRunners.ContainsKey(key))
         {
             Debug.Log("NOT NEEDED 1 !!");
@@ -198,11 +201,22 @@ public class CurrentDrawer : MonoBehaviour
         // runner yoksa
         else
         {
-            //pilin parentı ve çarptığı paralel kablonun parentının parentı aynı değilse
-            if (!GameManager.Instance.batteries[0].transform.parent.name.Equals(hit.transform.parent.transform.parent.gameObject.name))
+            Debug.Log("Hit : " + hit.name);
+            if (hit.gameObject == hit.transform.parent.GetChild(0).gameObject)
             {
+                Debug.Log("NEEDED 2 !!");
+                return true;
+            }
+            else
+            {
+                Debug.Log("NOT NEEDED 3 !!");
+                return false;
+            }
 
-                if (hit.gameObject == hit.transform.parent.GetChild(0).gameObject)
+            /* today
+            if (HasBattery(key.transform))
+            {
+                if(hit.gameObject == hit.transform.parent.GetChild(2).gameObject)
                 {
                     Debug.Log("NEEDED 1 !!");
                     return true;
@@ -215,45 +229,35 @@ public class CurrentDrawer : MonoBehaviour
             }
             else
             {
-                Debug.Log("hit.gameObject.name:" + hit.gameObject.name);
-                if (hit.transform.parent.name.Equals("WireBottomParallel"))
+                if (hit.gameObject == hit.transform.parent.GetChild(0).gameObject)
                 {
-                    if (hit.gameObject == hit.transform.parent.GetChild(0).gameObject)
-                    {
-                        Debug.Log("NEEDED 2 !!");
-                        return true;
-                    }
-                    else
-                    {
-                        Debug.Log("NOT NEEDED 3 !!");
-                        return false;
-
-                    }
-
+                    Debug.Log("NEEDED 2 !!");
+                    return true;
                 }
                 else
                 {
-                    if (hit.gameObject == hit.transform.parent.GetChild(2).gameObject)
-                    {
-                        Debug.Log("NEEDED 2 !!");
-                        return true;
-                    }
-                    else
-                    {
-                        Debug.Log("NOT NEEDED 3 !!");
-                        return false;
-
-                    }
+                    Debug.Log("NOT NEEDED 3 !!");
+                    return false;
                 }
+            }*/
 
-
-
-
-
-                //}
-            }
         }
     }
+
+
+    bool HasBattery(Transform parentWire)
+    {
+        bool hasBattery = false;
+        foreach (Transform child in parentWire)
+        {
+            if (child.CompareTag("Battery"))
+            {
+                hasBattery = true;
+            }
+        }
+        return hasBattery;
+    }
+
 
     IEnumerator DrawCurrent()
     {
@@ -284,13 +288,16 @@ public class CurrentDrawer : MonoBehaviour
                         //  && hit.collider.gameObject == hit.collider.gameObject.transform.parent.GetChild(0).gameObject
                         if (!hit.collider.gameObject.name.Equals(currentWire.name) && hit.collider.gameObject.CompareTag("Line"))
                         {
-                            if (IsRunnerNeeded(currentWire.gameObject, hit.collider.gameObject))
+                            if (IsRunnerNeeded(hit.collider.gameObject))
                             {
-                                Debug.Log("Parallel Cable Detected !!");
-                                Debug.Log("Point Along line First: " + pointAlongLine);
+                                //Debug.Log("Parallel Cable Detected !!");
+                                //Debug.Log("Point Along line First: " + pointAlongLine);
+                                Debug.Log("Has Battery: " + hit.transform.parent.parent.gameObject.name);
+                                gameObject.GetComponent<TrailRenderer>().widthMultiplier = 0.5f;
+
                                 currentAllowed = false;
-                                GameManager.Instance.parallelRunner.Invoke(hit.collider.gameObject.transform, currentWire.gameObject);
-                                //currentAllowed = true;
+                                GameManager.Instance.parallelRunner.Invoke(hit.collider.gameObject.transform, hit.transform.parent.parent.gameObject);
+                                currentAllowed = true;
                             }
 
                         }
