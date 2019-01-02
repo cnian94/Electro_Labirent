@@ -19,6 +19,7 @@ TagManager:
   - ProgressBar
   - Button
   - Parallel
+  - CurrentRunner
   layers:
   - Default
   - TransparentFX
@@ -32,7 +33,7 @@ TagManager:
   - Wire
   - Component
   - Wall
-  - 
+  - CurrentWire
   - 
   - 
   - 

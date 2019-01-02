@@ -55,7 +55,7 @@ public class GameManager : MonoBehaviour
     public ParallelRunnerEvent parallelRunner;
 
     [System.Serializable]
-    public class RunParallelRunner : UnityEngine.Events.UnityEvent<Transform> { }
+    public class RunParallelRunner : UnityEngine.Events.UnityEvent<Transform, int> { }
     public RunParallelRunner runParallelRunner;
 
 
@@ -95,10 +95,12 @@ public class GameManager : MonoBehaviour
 
     void AddParallelRunner(Transform wire, GameObject currentWire)
     {
-        Debug.Log("Adding Parallel Runner !!");
+        //Debug.Log("Adding Parallel Runner !!");
         GameObject newParallelRunner = Instantiate(ParallelRunner, _instance.craftPanel.transform);
-        _instance.runParallelRunner.Invoke(wire);
+        newParallelRunner.gameObject.GetComponent<TrailRenderer>().widthMultiplier = 0.5f;
+        _instance.runParallelRunner.Invoke(wire, newParallelRunner.gameObject.GetInstanceID());
         _instance.parallelRunners.Add(currentWire, newParallelRunner);
+        Debug.Log("CurrentWire: " + currentWire.gameObject.name);
         //newParallelRunner.GetComponent<ParallelRunner>().startWire = wire;
         //newParallelRunner.GetComponent<ParallelRunner>().StartCoroutine(newParallelRunner.GetComponent<ParallelRunner>().RunParallelCurrent2(wire));
     }

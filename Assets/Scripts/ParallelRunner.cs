@@ -7,6 +7,7 @@ public class ParallelRunner : MonoBehaviour
 
 
     public Transform startWire;
+    GameObject currentRunner;
 
     private Camera cam;
 
@@ -21,12 +22,19 @@ public class ParallelRunner : MonoBehaviour
 
     List<Transform> otherWires = new List<Transform>();
 
+    Vector3 raycastOrigin;
+    Vector3 raycastDirection;
+
+    RaycastHit hit;
+
 
 
     private void Awake()
     {
         cam = GameObject.FindGameObjectWithTag("UICamera").GetComponent<Camera>();
-        lineDrawSpeed = 20;
+        currentRunner = GameObject.FindGameObjectWithTag("CurrentRunner");
+        //lineDrawSpeed = 50;
+        lineDrawSpeed = 12;
         origin = GameManager.Instance.batteries[0].transform.GetChild(0).transform;
         destination = GameManager.Instance.batteries[0].transform.GetChild(1).transform;
         GameManager.Instance.runParallelRunner.AddListener(StartRunner);
@@ -45,40 +53,262 @@ public class ParallelRunner : MonoBehaviour
 
     }
 
-    void StartRunner(Transform startWire)
+    void StartRunner(Transform startWire, int ID)
     {
-        Debug.Log("Starting Runner !!");
-        StartCoroutine(RunParallelCurrent(startWire));
+        //Debug.Log("Starting Runner !!");
+        if (ID == gameObject.GetInstanceID())
+        {
+            StartCoroutine(RunParallelCurrent(startWire));
+        }
+
     }
 
     Vector3[] GetStations(Transform hitWire)
     {
         Vector3[] stations = { Vector3.zero, Vector3.zero };
-        Debug.Log("hitWire Parent Eulers: " + hitWire.parent.eulerAngles.z);
-        Debug.Log("hitWire Local Eulers: " + hitWire.localEulerAngles.z);
+        //Debug.Log("hitWire Eulers: " + hitWire.transform.rotation);
         BoxCollider collider = hitWire.gameObject.GetComponent<BoxCollider>();
 
 
         if (hitWire.parent.eulerAngles.z == 0)
         {
-            Debug.Log("Parent Euler 0");
+            //Debug.Log("Parent Euler 0");
+
+            if (HasBattery(hitWire.parent.parent))
+            {
+                lineDrawSpeed = 9;
+
+                if (hitWire.gameObject == hitWire.parent.GetChild(0).gameObject)
+                {
+                    //Debug.Log("Top Parallel 1:");
+                    stations[0] = collider.transform.position - collider.bounds.size / 2;
+                    stations[1] = collider.transform.position + collider.bounds.size / 2;
+                    stations[0].x = stations[1].x - ((stations[1].x - stations[0].x) / 2);
+                    stations[1].x = stations[0].x;
+
+                }
+
+                if (hitWire.gameObject == hitWire.parent.GetChild(1).gameObject)
+                {
+                    //Debug.Log("Top Parallel 2:");
+                    stations[0] = collider.transform.position - collider.bounds.size / 2;
+                    stations[1] = collider.transform.position + collider.bounds.size / 2;
+                    stations[0].y = stations[1].y - ((stations[1].y - stations[0].y) / 2);
+                    stations[1].y = stations[0].y;
+                }
+
+
+                if (hitWire.gameObject == hitWire.parent.GetChild(2).gameObject)
+                {
+                    //Debug.Log("Top Parallel 3:");
+                    stations[0] = collider.transform.position + collider.bounds.size / 2;
+                    stations[1] = collider.transform.position - collider.bounds.size / 2;
+                    stations[0].x = stations[1].x - ((stations[1].x - stations[0].x) / 2);
+                    stations[1].x = stations[0].x;
+                }
+            }
+            else
+            {
+                if (hitWire.gameObject == hitWire.parent.GetChild(0).gameObject)
+                {
+                    //Debug.Log("Top Parallel 1:");
+                    stations[0] = collider.transform.position - collider.bounds.size / 2;
+                    stations[1] = collider.transform.position + collider.bounds.size / 2;
+                    stations[0].x = stations[1].x - ((stations[1].x - stations[0].x) / 2);
+                    stations[1].x = stations[0].x;
+                }
+
+                if (hitWire.gameObject == hitWire.parent.GetChild(1).gameObject)
+                {
+                    //Debug.Log("Top Parallel 2:");
+                    stations[0] = collider.transform.position - collider.bounds.size / 2;
+                    stations[1] = collider.transform.position + collider.bounds.size / 2;
+                    stations[0].y = stations[1].y - ((stations[1].y - stations[0].y) / 2);
+                    stations[1].y = stations[0].y;
+                }
+
+
+                if (hitWire.gameObject == hitWire.parent.GetChild(2).gameObject)
+                {
+                    //Debug.Log("Top Parallel 3:");
+                    stations[0] = collider.transform.position + collider.bounds.size / 2;
+                    stations[1] = collider.transform.position - collider.bounds.size / 2;
+                    stations[0].x = stations[1].x - ((stations[1].x - stations[0].x) / 2);
+                    stations[1].x = stations[0].x;
+                }
+            }
+
+
         }
 
         if (hitWire.parent.eulerAngles.z == 90)
         {
-            Debug.Log("Parent Euler 90");
+            //Debug.Log("Parent Euler 90");
+
+            if (HasBattery(hitWire.parent.parent))
+            {
+                Debug.Log("Has Battery 2 !!!");
+                lineDrawSpeed = 9;
+
+                if (hitWire.gameObject == hitWire.parent.GetChild(0).gameObject)
+                {
+                    //Debug.Log("Left Parallel 1:");
+                    stations[0] = collider.transform.position + collider.bounds.size / 2;
+                    stations[1] = collider.transform.position - collider.bounds.size / 2;
+                    stations[0].y = stations[1].y - ((stations[1].y - stations[0].y) / 2);
+                    stations[1].y = stations[0].y;
+
+
+
+                }
+
+                if (hitWire.gameObject == hitWire.parent.GetChild(1).gameObject)
+                {
+                    //Debug.Log("Left Parallel 2:");
+                    stations[0] = collider.transform.position - collider.bounds.size / 2;
+                    stations[1] = collider.transform.position + collider.bounds.size / 2;
+                    stations[0].x = stations[1].x - ((stations[1].x - stations[0].x) / 2);
+                    stations[1].x = stations[0].x;
+
+                }
+
+
+                if (hitWire.gameObject == hitWire.parent.GetChild(2).gameObject)
+                {
+                    //Debug.Log("Left Parallel 3:");
+                    stations[0] = collider.transform.position - collider.bounds.size / 2;
+                    stations[1] = collider.transform.position + collider.bounds.size / 2;
+                    stations[0].y = stations[1].y - ((stations[1].y - stations[0].y) / 2);
+                    stations[1].y = stations[0].y;
+
+                }
+
+            }
+
+            else
+            {
+                Debug.Log("No Battery 2 !!!");
+                if (hitWire.gameObject == hitWire.parent.GetChild(0).gameObject)
+                {
+                    //Debug.Log("Left Parallel 1:");
+                    stations[0] = collider.transform.position + collider.bounds.size / 2;
+                    stations[1] = collider.transform.position - collider.bounds.size / 2;
+                    stations[0].y = stations[1].y - ((stations[1].y - stations[0].y) / 2);
+                    stations[1].y = stations[0].y;
+                }
+
+                if (hitWire.gameObject == hitWire.parent.GetChild(1).gameObject)
+                {
+                    //Debug.Log("Left Parallel 2:");
+                    stations[0] = collider.transform.position - collider.bounds.size / 2;
+                    stations[1] = collider.transform.position + collider.bounds.size / 2;
+                    stations[0].x = stations[1].x - ((stations[1].x - stations[0].x) / 2);
+                    stations[1].x = stations[0].x;
+                }
+
+
+                if (hitWire.gameObject == hitWire.parent.GetChild(2).gameObject)
+                {
+                    //Debug.Log("Left Parallel 3:");
+                    stations[0] = collider.transform.position - collider.bounds.size / 2;
+                    stations[1] = collider.transform.position + collider.bounds.size / 2;
+                    stations[0].y = stations[1].y - ((stations[1].y - stations[0].y) / 2);
+                    stations[1].y = stations[0].y;
+                }
+            }
+
+
+
         }
 
         if (hitWire.parent.eulerAngles.z == 180)
         {
             Debug.Log("Parent Euler 180");
 
-            if (hitWire.localEulerAngles.z == 270)
+            if (HasBattery(hitWire.parent.parent))
             {
-                stations[0] = collider.transform.position + collider.bounds.size / 2;
-                stations[1] = collider.transform.position - collider.bounds.size / 2;
-                stations[0].x = stations[1].x - ((stations[1].x - stations[0].x) / 2);
-                stations[1].x = stations[0].x;
+                lineDrawSpeed = 9;
+                Debug.Log("Has Battery !!");
+                if (hitWire.gameObject == hitWire.parent.GetChild(2).gameObject)
+                {
+                    //Debug.Log("Bottom Parallel 1:");
+                    stations[0] = collider.transform.position - collider.bounds.size / 2;
+                    stations[1] = collider.transform.position + collider.bounds.size / 2;
+                    stations[0].x = stations[1].x - ((stations[1].x - stations[0].x) / 2);
+                    stations[1].x = stations[0].x;
+
+                    /* Today
+                    stations[0] = collider.transform.position + collider.bounds.size / 2;
+                    stations[1] = collider.transform.position - collider.bounds.size / 2;
+                    stations[0].x = stations[1].x - ((stations[1].x - stations[0].x) / 2);
+                    stations[1].x = stations[0].x;
+                    */
+                }
+
+                if (hitWire.gameObject == hitWire.parent.GetChild(0).gameObject)
+                {
+                    //Debug.Log("Bottom Parallel 3:");
+                    stations[0] = collider.transform.position + collider.bounds.size / 2;
+                    stations[1] = collider.transform.position - collider.bounds.size / 2;
+                    stations[0].x = stations[1].x - ((stations[1].x - stations[0].x) / 2);
+                    stations[1].x = stations[0].x;
+
+                    /* today
+                    stations[0] = collider.transform.position - collider.bounds.size / 2;
+                    stations[1] = collider.transform.position + collider.bounds.size / 2;
+                    stations[0].x = stations[1].x - ((stations[1].x - stations[0].x) / 2);
+                    stations[1].x = stations[0].x;
+                    */
+                }
+
+
+                if (hitWire.gameObject == hitWire.parent.GetChild(1).gameObject)
+                {
+                    //Debug.Log("Bottom Parallel 2:");
+
+                    /* today
+                    stations[0] = collider.transform.position - collider.bounds.size / 2;
+                    stations[1] = collider.transform.position + collider.bounds.size / 2;
+                    stations[0].y = stations[1].y - ((stations[1].y - stations[0].y) / 2);
+                    stations[1].y = stations[0].y;
+                    */
+                    stations[0] = collider.transform.position + collider.bounds.size / 2;
+                    stations[1] = collider.transform.position - collider.bounds.size / 2;
+                    stations[0].y = stations[1].y - ((stations[1].y - stations[0].y) / 2);
+                    stations[1].y = stations[0].y;
+                }
+            }
+            else
+            {
+                Debug.Log("No Battery !!");
+                Debug.Log("parent: " + hitWire.parent.gameObject.name);
+
+                if (hitWire.gameObject == hitWire.parent.GetChild(0).gameObject)
+                {
+                    stations[0] = collider.transform.position + collider.bounds.size / 2;
+                    stations[1] = collider.transform.position - collider.bounds.size / 2;
+                    stations[0].x = stations[1].x - ((stations[1].x - stations[0].x) / 2);
+                    stations[1].x = stations[0].x;
+                }
+
+
+                if (hitWire.gameObject == hitWire.parent.GetChild(1).gameObject)
+                {
+                    stations[0] = collider.transform.position + collider.bounds.size / 2;
+                    stations[1] = collider.transform.position - collider.bounds.size / 2;
+                    stations[0].y = stations[1].y - ((stations[1].y - stations[0].y) / 2);
+                    stations[1].y = stations[0].y;
+                }
+
+
+                if (hitWire.gameObject == hitWire.parent.GetChild(2).gameObject)
+                {
+                    stations[0] = collider.transform.position - collider.bounds.size / 2;
+                    stations[1] = collider.transform.position + collider.bounds.size / 2;
+                    stations[0].x = stations[1].x - ((stations[1].x - stations[0].x) / 2);
+                    stations[1].x = stations[0].x;
+                }
+
             }
 
         }
@@ -86,88 +316,103 @@ public class ParallelRunner : MonoBehaviour
 
         if (hitWire.parent.eulerAngles.z == 270)
         {
-            Debug.Log("Parent Euler 270");
-        }
+            //Debug.Log("Parent Euler 270");
 
-
-
-        /*
-        if (hitWire.localEulerAngles.z == 90)
-        {
-            Debug.Log("Local: " + 90);
-            if (hitWire.parent.eulerAngles.z == 180)
+            if (HasBattery(hitWire.parent.parent))
             {
-                stations[0] = collider.transform.position - collider.bounds.size / 2;
-                stations[1] = collider.transform.position + collider.bounds.size / 2;
-                stations[0].x = stations[1].x - ((stations[1].x - stations[0].x) / 2);
-                stations[1].x = stations[0].x;
+                lineDrawSpeed = 9;
+
+                if (hitWire.gameObject == hitWire.parent.GetChild(0).gameObject)
+                {
+                    //Debug.Log("Right Parallel 1:");
+                    stations[0] = collider.transform.position - collider.bounds.size / 2f;
+                    stations[1] = collider.transform.position + collider.bounds.size / 2f;
+                    stations[0].y = stations[1].y - ((stations[1].y - stations[0].y) / 2f);
+                    stations[1].y = stations[0].y;
+
+                }
+
+                if (hitWire.gameObject == hitWire.parent.GetChild(1).gameObject)
+                {
+                    //Debug.Log("Right Parallel 2:");
+                    stations[0] = collider.transform.position + collider.bounds.size / 2f;
+                    stations[1] = collider.transform.position - collider.bounds.size / 2f;
+                    stations[0].x = stations[1].x - ((stations[1].x - stations[0].x) / 2f);
+                    stations[1].x = stations[0].x;
+                }
+
+
+                if (hitWire.gameObject == hitWire.parent.GetChild(2).gameObject)
+                {
+                    //Debug.Log("Right Parallel 3:");
+
+                    stations[0] = collider.transform.position + collider.bounds.size / 2f;
+                    stations[1] = collider.transform.position - collider.bounds.size / 2f;
+                    stations[0].y = stations[1].y - ((stations[1].y - stations[0].y) / 2f);
+                    stations[1].y = stations[0].y;
+                }
+            }
+            else
+            {
+                if (hitWire.gameObject == hitWire.parent.GetChild(0).gameObject)
+                {
+                    //Debug.Log("Right Parallel 1:");
+                    stations[0] = collider.transform.position - collider.bounds.size / 2f;
+                    stations[1] = collider.transform.position + collider.bounds.size / 2f;
+                    stations[0].y = stations[1].y - ((stations[1].y - stations[0].y) / 2f);
+                    stations[1].y = stations[0].y;
+                }
+
+                if (hitWire.gameObject == hitWire.parent.GetChild(1).gameObject)
+                {
+                    //Debug.Log("Right Parallel 2:");
+                    stations[0] = collider.transform.position + collider.bounds.size / 2f;
+                    stations[1] = collider.transform.position - collider.bounds.size / 2f;
+                    stations[0].x = stations[1].x - ((stations[1].x - stations[0].x) / 2f);
+                    stations[1].x = stations[0].x;
+                }
+
+
+                if (hitWire.gameObject == hitWire.parent.GetChild(2).gameObject)
+                {
+                    //Debug.Log("Right Parallel 3:");
+                    stations[0] = collider.transform.position + collider.bounds.size / 2f;
+                    stations[1] = collider.transform.position - collider.bounds.size / 2f;
+                    stations[0].y = stations[1].y - ((stations[1].y - stations[0].y) / 2f);
+                    stations[1].y = stations[0].y;
+                }
             }
 
+
+
         }
 
-        if (hitWire.localEulerAngles.z == 180)
-        {
-            Debug.Log("Local: " + 180);
-            stations[0] = collider.transform.position - collider.bounds.size / 2;
-            stations[1] = collider.transform.position + collider.bounds.size / 2;
-            stations[0].y = stations[1].y - ((stations[1].y - stations[0].y) / 2);
-            stations[1].y = stations[0].y;
-        }
+        stations[0].z = 0f;
+        stations[1].z = 0f;
 
-        if (hitWire.localEulerAngles.z == 0)
-        {
-            Debug.Log("Local: " + 0);
-            stations[0] = collider.transform.position - collider.bounds.size / 2;
-            stations[1] = collider.transform.position + collider.bounds.size / 2;
-            stations[0].y = stations[1].y - ((stations[1].y - stations[0].y) / 2);
-            stations[1].y = stations[0].y;
-        }
-
-        if (hitWire.localEulerAngles.z == 270)
-        {
-            Debug.Log("Local: " + 270);
-            if (hitWire.parent.eulerAngles.z == 180)
-            {
-                Debug.Log("ONE !!");
-                stations[0] = collider.transform.position + collider.bounds.size / 2;
-                stations[1] = collider.transform.position - collider.bounds.size / 2;
-                stations[0].x = stations[1].x - ((stations[1].x - stations[0].x) / 2);
-                stations[1].x = stations[0].x;
-            }
-            if (hitWire.parent.eulerAngles.z == 90)
-            {
-                Debug.Log("TWO !!");
-                stations[0] = collider.transform.position + collider.bounds.size / 2;
-                stations[1] = collider.transform.position - collider.bounds.size / 2;
-                stations[0].y = stations[1].y - ((stations[1].y - stations[0].y) / 2);
-                stations[1].y = stations[0].y;
-            }
-
-        }*/
-        stations[0].z = 0;
-        stations[1].z = 0;
-        Debug.Log("Station A: " + stations[0]);
-        Debug.Log("Station B: " + stations[1]);
         return stations;
     }
 
+    IEnumerator MergeRunners()
+    {
+        Vector3 startPosition = gameObject.transform.position;
+        Vector3 targetPosition = currentRunner.transform.position;
+
+        while (gameObject.transform.position != targetPosition)
+        {
+            gameObject.transform.position = Vector3.MoveTowards(startPosition, targetPosition, 7.0f * Time.deltaTime);
+            yield return null;
+        }
+
+    }
+
+
     public IEnumerator RunParallelCurrent(Transform startWire)
     {
-        Debug.Log("Starting Parallel Runner !! ");
-
-        //Debug.Log("First Parallel Eulers: " + wire.eulerAngles);
-        //Debug.Log("First Parallel Local Eulers: " + wire.localEulerAngles);
         this.startWire = startWire;
         Transform parallel = startWire.transform.parent;
 
-        /*foreach (Transform child in parallel)
-        {
-            if (child != wire)
-            {
-                otherWires.Add(child);
-            }
-        }*/
-        Transform currentWire = startWire;
+        //Transform currentWire = startWire;
 
         newStations = GetStations(startWire);
 
@@ -175,144 +420,192 @@ public class ParallelRunner : MonoBehaviour
 
         stationB = newStations[1];
 
-        stationA.z = 0;
-        stationB.z = 0;
-
-        //Debug.Log("Station A-2: " + stationA);
-        //Debug.Log("Station B-3: " + stationB);
-
 
         float dist = Vector3.Distance(stationA, stationB);
         float counter = 0;
 
-        Vector3 pointAlongParallelLine = Vector3.zero;
+        float x = Mathf.Lerp(0, dist, counter);
+
+        Vector3 pointAlongParallelLine = x * Vector3.Normalize(stationB - stationA) + stationA;
+
+        raycastOrigin = pointAlongParallelLine;
+        raycastOrigin.z = -5;
+        raycastDirection = Vector3.forward * 10.0f;
 
         int stationIndex = 0;
         bool movingAllowed = true;
 
-        //gameObject.transform.position = stationA;
+
 
 
         while (movingAllowed)
         {
-            float x = Mathf.Lerp(0, dist, counter);
 
-            pointAlongParallelLine = x * Vector3.Normalize(stationB - stationA) + stationA;
+            //x = Mathf.Lerp(0, dist, counter);
+            //pointAlongParallelLine = x * Vector3.Normalize(stationB - stationA) + stationA;
 
-            //Debug.Log("point along line: " + pointAlongParallelLine);
+            Color castColor = Color.red;
 
-            //Debug.Log("farClipPane: " + cam.farClipPlane);
-            //Debug.Log("nearClipPane: " + cam.nearClipPlane);
+            if (stationIndex == 0)
+            {
+                castColor = Color.cyan;
+                //Debug.Log("On Station 0 !!");
 
-            Vector3 mousePosFar = new Vector3(pointAlongParallelLine.x, pointAlongParallelLine.y, cam.farClipPlane);
-            Vector3 mousePosNear = new Vector3(pointAlongParallelLine.x, pointAlongParallelLine.y, cam.nearClipPlane);
+                Physics.Raycast(raycastOrigin, raycastDirection, out hit);
+                //Debug.DrawRay(raycastOrigin, raycastDirection, castColor, 1);
+            }
+
+            if (stationIndex == 1)
+            {
+                castColor = Color.green;
+                //Debug.Log("On Station 1 !!");
+
+                Physics.Raycast(raycastOrigin, raycastDirection, out hit);
+                //Debug.DrawRay(raycastOrigin, raycastDirection, castColor, 1);
+            }
+
+            if (stationIndex == 2)
+            {
+                castColor = Color.grey;
+                //Debug.Log("On Station 2 !!");
+                Physics.Raycast(raycastOrigin, raycastDirection, out hit);
+                //Debug.DrawRay(raycastOrigin, raycastDirection, castColor, 1);
+            }
+
+            if (stationIndex == 3)
+            {
+                castColor = Color.red;
+                //Debug.Log("On Station 3 !!");
+                Physics.Raycast(raycastOrigin, raycastDirection, out hit);
+                //Debug.DrawRay(raycastOrigin, raycastDirection, castColor, 1);
+            }
 
 
 
-            //Debug.Log("mousePosFar: " + mousePosFar);
-            //Debug.Log("mousePosNear: " + mousePosNear);
-
-            RaycastHit hit;
-            Physics.Raycast(mousePosNear, mousePosFar - mousePosNear, out hit, Mathf.Infinity);
-            //Debug.DrawRay(mousePosNear, mousePosFar - mousePosNear, Color.red, 30);
 
             if (hit.collider != null)
             {
 
                 if (hit.collider.gameObject.CompareTag("Line") || hit.collider.gameObject.CompareTag("Resistor") || hit.collider.gameObject.CompareTag("Bulb") || hit.collider.gameObject.CompareTag("Battery"))
                 {
-                    // gameObject.transform.position != stationB
-                    //Debug.Log("Hittt: " +hit.collider.gameObject.name);
-
-                    if (hit.collider.gameObject == currentWire.gameObject && gameObject.transform.position != stationB)
+                    //(hit.collider.gameObject == currentWire.gameObject && gameObject.transform.position != destination.position) || hit.collider.gameObject.CompareTag("Battery") || hit.collider.gameObject.CompareTag("Bulb") || hit.collider.gameObject.CompareTag("Resistor")
+                    if (gameObject.transform.position != stationB)
                     {
                         counter += .1f / lineDrawSpeed;
                         x = Mathf.Lerp(0, dist, counter);
                         pointAlongParallelLine = x * Vector3.Normalize(stationB - stationA) + stationA;
                         gameObject.transform.position = pointAlongParallelLine;
-                        Debug.Log("runner pos: " + gameObject.transform.position);
-                        //Debug.Log("pointAlongLine: " + pointAlongParallelLine.y);
+                        pointAlongParallelLine.z = raycastOrigin.z;
+                        raycastOrigin = pointAlongParallelLine;
+                        //Debug.Log("StationIndex: " + stationIndex);
                     }
 
                     else
                     {
-                        movingAllowed = false;
 
-                        if (stationIndex < parallel.childCount - 1)
+                        movingAllowed = false;
+                        if (stationIndex == 0)
                         {
-                            Debug.Log("Setting new station !! " + stationIndex);
-                            counter = 0;
+                            //Debug.Log("End Of Station 0 !!");
                             newStations = GetStations(hit.collider.gameObject.transform);
                             stationA = newStations[0];
                             stationB = newStations[1];
-                            //Debug.Log("Station BB: " + stationB);
-                            dist = Vector3.Distance(stationA, stationB);
                             gameObject.transform.position = stationA;
-                            currentWire = hit.collider.gameObject.transform;
-                            stationIndex++;
+                            counter = 0;
+                            dist = Vector3.Distance(stationA, stationB);
+                            movingAllowed = true;
                         }
 
-                        if (stationIndex == parallel.childCount - 1 && hit.collider.gameObject == parallel.parent.gameObject)
+
+                        if (stationIndex == 1)
                         {
+                            //Debug.Log("End Of Station 1 !!");
 
-                            Debug.Log("To Destination: " + stationIndex);
+                            raycastOrigin.z = 5;
+                            raycastDirection = Vector3.back * 10.0f;
+                            Physics.Raycast(raycastOrigin, raycastDirection, out hit);
+                            Debug.DrawRay(raycastOrigin, raycastDirection, castColor, 1);
+                            newStations = GetStations(hit.collider.gameObject.transform);
+                            stationA = newStations[0];
+                            stationB = newStations[1];
+                            Debug.Log("Station A: " + stationA);
+                            Debug.Log("Station B: " + stationB);
+                            gameObject.transform.position = stationA;
+                            counter = 0;
+                            dist = Vector3.Distance(stationA, stationB);
+                            movingAllowed = true;
+                        }
 
-                            if (HasBattery(parallel.parent))
+                        if (stationIndex == 2)
+                        {
+                            //Debug.Log("End Of Station 2 !!");
+                            Debug.Log("No Battery !!");
+                            Debug.Log("SİLİYORUMMMMM !!");
+                            //Debug.Log("Hit: " + hit.collider.gameObject.name + " ---- " + hit.transform.eulerAngles);
+                            StartCoroutine(MergeRunners());
+                            currentRunner.gameObject.GetComponent<TrailRenderer>().widthMultiplier = 1f;
+                            //Debug.Log("Key Name: " + hit.collider.gameObject.transform.parent.transform.parent.gameObject.name);
+                            //Debug.Log("Length 1: " + GameManager.Instance.parallelRunners.Count);
+                            GameManager.Instance.parallelRunners.Remove(hit.collider.gameObject.transform.parent.transform.parent.gameObject);
+                            //Debug.Log("Length 2: " + GameManager.Instance.parallelRunners.Count);
+                            Destroy(gameObject);
+
+                            /* Today
+                            if (HasBattery(startWire.parent.transform.parent))
                             {
                                 Debug.Log("Has Battery !!");
-                                counter = 0;
+                                Debug.Log("Hit Euler angles: " + hit.transform.eulerAngles);
                                 stationA = stationB;
-                                stationB = destination.position;
-                                //stationB.x = stationA.x;
-                                stationA.z = 0;
-                                stationB.z = 0;
-                                stationA.y = stationB.y - ((stationB.y - stationA.y) / 2);
-                                stationB.y = stationA.y;
-                                dist = Vector3.Distance(stationA, stationB);
+                                if(hit.transform.eulerAngles.z == 180  || hit.transform.eulerAngles.z == 90)
+                                {
+                                    stationB = startWire.gameObject.GetComponent<BoxCollider>().bounds.center + startWire.gameObject.GetComponent<BoxCollider>().bounds.size / 2;
+                                }
+
+                                if(hit.transform.eulerAngles.z == 0 || hit.transform.eulerAngles.z == 270)
+                                {
+                                    stationB = startWire.gameObject.GetComponent<BoxCollider>().bounds.center - startWire.gameObject.GetComponent<BoxCollider>().bounds.size / 2;
+                                }
+
                                 gameObject.transform.position = stationA;
-                                currentWire = parallel.parent.transform;
-                                stationIndex++;
-                                Debug.Log("StationIndex: " + stationIndex);
-                                Debug.Log("Station B: " + stationB);
-                                Debug.Log("Destination:" + destination.position);
+                                counter = 0;
+                                dist = Vector3.Distance(stationA, stationB);
+                                //movingAllowed = true;
                             }
+                            else
+                            {
+                                Debug.Log("No Battery !!");
+                                Debug.Log("SİLİYORUMMMMM !!");
+                                //Debug.Log("Hit: " + hit.collider.gameObject.name + " ---- " + hit.transform.eulerAngles);
+                                StartCoroutine(MergeRunners());
+                                currentRunner.gameObject.GetComponent<TrailRenderer>().widthMultiplier = 1f;
+                                //Debug.Log("Key Name: " + hit.collider.gameObject.transform.parent.transform.parent.gameObject.name);
+                                //Debug.Log("Length 1: " + GameManager.Instance.parallelRunners.Count);
+                                GameManager.Instance.parallelRunners.Remove(hit.collider.gameObject.transform.parent.transform.parent.gameObject);
+                                //Debug.Log("Length 2: " + GameManager.Instance.parallelRunners.Count);
+                                Destroy(gameObject);
+                            }*/
+
 
                         }
 
-
-                        Debug.Log(gameObject.transform.position == stationB && stationIndex == parallel.childCount);
-
-
-                        if (gameObject.transform.position == stationB && stationIndex == parallel.childCount)
+                        if (stationIndex == 3)
                         {
-                            Debug.Log("To First Wire");
-                            Vector3 newSize = parallel.parent.gameObject.GetComponent<BoxCollider>().size;
-                            newSize.z = 0.0f;
-                            parallel.parent.gameObject.GetComponent<BoxCollider>().size = newSize;
-                            counter = 0;
-                            stationIndex = -1;
-                            stationA = origin.position;
-
-                            stationB = startWire.gameObject.GetComponent<BoxCollider>().transform.position + startWire.gameObject.GetComponent<BoxCollider>().bounds.size / 2;
-                            stationA.y = stationB.y;
-                            stationA.z = 0;
-                            stationB.z = 0;
+                            //Debug.Log("End Of Station 3 !!");
+                            raycastOrigin.z = -5;
+                            raycastDirection = Vector3.forward * 10.0f;
+                            newStations = GetStations(startWire);
+                            Physics.Raycast(raycastOrigin, raycastDirection, out hit);
+                            Debug.DrawRay(raycastOrigin, raycastDirection, castColor, 1);
+                            stationA = newStations[0];
+                            stationB = newStations[1];
                             gameObject.transform.position = stationA;
-                            currentWire = parallel.parent.transform;
-
+                            counter = 0;
+                            dist = Vector3.Distance(stationA, stationB);
+                            stationIndex = -1;
+                            movingAllowed = true;
                         }
 
-                        if (stationIndex == parallel.childCount - 1)
-                        {
-                            Vector3 newSize = parallel.parent.gameObject.GetComponent<BoxCollider>().size;
-                            newSize.z = 0.014f;
-                            parallel.parent.gameObject.GetComponent<BoxCollider>().size = newSize;
-
-
-                        }
-                        movingAllowed = true;
-
-
+                        stationIndex++;
                     }
 
                 }
