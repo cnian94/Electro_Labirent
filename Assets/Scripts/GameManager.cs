@@ -115,9 +115,80 @@ public class GameManager : MonoBehaviour
 
     void CalcMazeSize()
     {
-        int dif = LevelSelector.instance.levelName;
-        xSize = LevelSelector.instance.base_size + dif;
-        ySize = LevelSelector.instance.base_size + dif;
+        //int dif = LevelSelector.instance.levelName;
+
+        if (LevelSelector.instance.levelName == 1)
+        {
+            //int dif = 4;
+            xSize = 5;
+            ySize = 5;
+        }
+
+        else if (LevelSelector.instance.levelName == 2)
+        {
+            //int dif = 4;
+            xSize = 5;
+            ySize = 5;
+        }
+
+        else if (LevelSelector.instance.levelName == 3)
+        {
+            //int dif = 4;
+            xSize = 10;
+            ySize = 10;
+        }
+
+        else if (LevelSelector.instance.levelName == 4)
+        {
+            //int dif = 4;
+            xSize = 10;
+            ySize = 10;
+        }
+
+        else if (LevelSelector.instance.levelName == 5)
+        {
+            //int dif = 4;
+            xSize = 10;
+            ySize = 10;
+        }
+
+        else if (LevelSelector.instance.levelName == 6)
+        {
+            //int dif = 4;
+            xSize = 15;
+            ySize = 15;
+        }
+
+        else if (LevelSelector.instance.levelName == 7)
+        {
+            //int dif = 4;
+            xSize = 20;
+            ySize = 20;
+        }
+
+        else if (LevelSelector.instance.levelName == 8)
+        {
+            //int dif = 4;
+            xSize = 10;
+            ySize = 10;
+        }
+
+        else if (LevelSelector.instance.levelName == 9)
+        {
+            //int dif = 4;
+            xSize = 10;
+            ySize = 10;
+        }
+
+        else if (LevelSelector.instance.levelName == 10)
+        {
+            //int dif = 4;
+            xSize = 15;
+            ySize = 15;
+        }
+
+        //xSize = LevelSelector.instance.base_size + dif;
+        //ySize = LevelSelector.instance.base_size + dif;
         MazeGenerator.gameObject.SetActive(true);
     }
 

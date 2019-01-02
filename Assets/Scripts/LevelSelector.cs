@@ -48,18 +48,18 @@ public class LevelSelector : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        base_size = 4;
+        base_size = 4;   //GameManager  CalcMazeSize()
         for (int i = 0; i < levels.Length; i++)
         {
             Button newLevel = Instantiate(LevelButton, LevelContent.transform);
             StarHolder = Instantiate(StarHolder, newLevel.transform);
             //Debug.Log("Level " + levels[i].ToString());
             newLevel.name = levels[i].ToString();
-            newLevel.transform.GetChild(0).GetComponent<Text>().text = "" + levels[i].ToString();
-            newLevel.transform.GetChild(0).GetComponent<Text>().font = Font ;
-            newLevel.transform.localScale = new Vector3(1.2f, 1.2f, 1);
-            newLevel.transform.GetChild(0).localScale = new Vector3(0.6f, 0.6f, 1);
-            
+            newLevel.transform.GetChild(0).GetComponent<Text>().text = "" + levels[i].ToString();  // Burayı Doğa ile yaptık zaten yerleştirme ve font ile alakalı
+            newLevel.transform.GetChild(0).GetComponent<Text>().font = Font;   // Burayı Doğa ile yaptık zaten yerleştirme ve font ile alakalı
+            newLevel.transform.localScale = new Vector3(1.2f, 1.2f, 1);   // Burayı Doğa ile yaptık zaten yerleştirme ve font ile alakalı
+            newLevel.transform.GetChild(0).localScale = new Vector3(0.6f, 0.6f, 1);   // Burayı Doğa ile yaptık zaten yerleştirme ve font ile alakalı
+
 
         }
 

@@ -60,36 +60,41 @@ public class Maze : MonoBehaviour
         //Physics.IgnoreLayerCollision(8, 11);
     }
 
-    void GenerateRandomItems()
+    void GenerateRandomItems(Dictionary<int,int> itemsToCreate)
     {
         Vector3 endPos = allWalls[0].transform.position;
-        for (int i = 0; i < 15; i++)
+
+        foreach (KeyValuePair<int, int> item in itemsToCreate)
         {
-            //int randomIndex = Random.Range(0, allWalls.Length - 1);
-            int randomIndex = Random.Range(allWalls.Length * 3 / 4, allWalls.Length - 1);
-            Vector3 itemPos = allWalls[randomIndex].gameObject.transform.position;
-            //Debug.Log("SELECTED WALL POS: " + itemPos);
-            if(itemPos.z < 0)
+            // do something with entry.Value or entry.Key
+            for(int i = 0; i < item.Value; i++)
             {
-                itemPos.z += 0.5f;
+                int randomIndex = Random.Range(allWalls.Length * 3 / 4, allWalls.Length - 1);
+                Vector3 itemPos = allWalls[randomIndex].gameObject.transform.position;
+                //Debug.Log("SELECTED WALL POS: " + itemPos);
+                if (itemPos.z < 0)
+                {
+                    itemPos.z += 0.5f;
+                }
+                else
+                {
+                    itemPos.z -= 0.5f;
+                }
+
+                GameObject randomItem = Instantiate(GameManager.Instance.items[item.Key], itemPos, Quaternion.identity);
+                randomItem.name = GameManager.Instance.items[item.Key].name;
+                Vector3 newScale = randomItem.gameObject.transform.localScale;
+                newScale.x = 0.4f;
+                newScale.y = 0.4f;
+                randomItem.gameObject.transform.localScale = newScale;
+
+
+                randomItem.transform.Rotate(new Vector3(-90, 0, 0));
+                StartCoroutine(SetRandomItemParent(randomItem.transform));
+
             }
-            else
-            {
-                itemPos.z -= 0.5f;
-            }
-
-            int index = Random.Range(0, GameManager.Instance.items.Count);
-            GameObject randomItem = Instantiate(GameManager.Instance.items[index], itemPos, Quaternion.identity);
-            randomItem.name = GameManager.Instance.items[index].name;
-            Vector3 newScale = randomItem.gameObject.transform.localScale;
-            newScale.x = 0.4f;
-            newScale.y = 0.4f;
-            randomItem.gameObject.transform.localScale = newScale;
-
-
-            randomItem.transform.Rotate(new Vector3(-90, 0, 0));
-            StartCoroutine(SetRandomItemParent(randomItem.transform));
         }
+
     }
 
     IEnumerator SetRandomItemParent(Transform item)
@@ -98,10 +103,72 @@ public class Maze : MonoBehaviour
         item.SetParent(GameManager.Instance.Maze.transform);
     }
 
+    Dictionary<int,int> GetLevelItems(int levelNumber)
+    {
+        Dictionary<int, int> items = new Dictionary<int, int>();
+
+        // 0 = bulb   1 = battery  2 = resistor   itemsAdd(hangi item, sayısı) 
+
+        if(levelNumber == 1)
+        {
+            //çantasında battery olmalı ama !!
+        }
+
+        else if (levelNumber == 2)
+        {
+            //çantasında bulb olmalı ama  !!
+        }
+
+        else if (levelNumber == 3)
+        {
+            items.Add(1, 1);
+        }
+
+        else if (levelNumber == 4)
+        {
+            items.Add(2, 1);
+        }
+
+        else if (levelNumber == 5)
+        {
+            items.Add(0, 1);
+        }
+
+        else if (levelNumber == 6)
+        {
+            items.Add(0, 1);
+            items.Add(1, 1);
+        }
+
+        else if (levelNumber == 7)
+        {
+            items.Add(1, 3);
+        }
+
+        else if (levelNumber == 8)
+        {
+            items.Add(1, 1);
+        }
+
+        else if (levelNumber == 9)
+        {
+            items.Add(0, 1);
+        }
+
+        else if (levelNumber == 10)
+        {
+            items.Add(0, 1);
+            items.Add(1, 1);
+        }
+
+        
+        return items;
+    }
+
     void SpawnPlayer(GameObject[] allWalls)
     {
         Destroy(allWalls[0].gameObject);
-        GenerateRandomItems();
+        GenerateRandomItems(GetLevelItems(LevelSelector.instance.levelName));
         Vector3 playerPos = Vector3.zero;
         playerPos.x = allWalls[allWalls.Length - 1].transform.position.x;
         playerPos.z = allWalls[allWalls.Length - 1].transform.position.z - 0.5f;
