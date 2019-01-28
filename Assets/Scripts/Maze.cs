@@ -18,6 +18,7 @@ public class Maze : MonoBehaviour
 
     GameObject[] allWalls;
 
+    public GameObject FinishLine;
     public GameObject Wall;
     public float wallLength;
     public int xSize;
@@ -233,7 +234,6 @@ public class Maze : MonoBehaviour
     void SpawnPlayer(GameObject[] allWalls)
     {
         Destroy(allWalls[0].gameObject);
-        //GenerateRandomItems(GetLevelItems(LevelSelector.instance.currentLevel.number));
         GenerateInventoryItems();
         GenerateMazeItems();
         Vector3 playerPos = Vector3.zero;
@@ -245,6 +245,7 @@ public class Maze : MonoBehaviour
         Player.transform.localScale = newScale;
         Player.name = "Player";
         Player.transform.SetParent(WallHolder.transform);
+        GameObject finishLine = Instantiate(FinishLine, WallHolder.transform);
 
 
         GameManager.Instance.FindPlayer.Invoke();

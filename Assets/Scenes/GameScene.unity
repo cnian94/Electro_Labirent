@@ -183,10 +183,10 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  AdjustLevelLightEvent:
+  adjustLevelLightEvent:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+    m_TypeName: GameManager+AdjustLevelLightEvent, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   itemCollected:
     m_PersistentCalls:
@@ -1199,6 +1199,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c92a8609edd5a70459c84a62b835f4b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  FinishLine: {fileID: 1534647699641494, guid: 84c045e6c3aa9144f84516a23b4eb49c, type: 2}
   Wall: {fileID: 1076087300681562, guid: 2c147a6dbf3a0524ea5eac3ec269e973, type: 2}
   wallLength: 1
   xSize: 15
