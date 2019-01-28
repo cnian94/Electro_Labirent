@@ -245,7 +245,10 @@ public class Maze : MonoBehaviour
         Player.transform.localScale = newScale;
         Player.name = "Player";
         Player.transform.SetParent(WallHolder.transform);
-        GameObject finishLine = Instantiate(FinishLine, WallHolder.transform);
+        GameObject finishLine = Instantiate(FinishLine, allWalls[0].transform.position, Quaternion.identity);
+        finishLine.transform.Rotate(90, 0, 0);
+        finishLine.transform.SetParent(WallHolder.transform);
+     
 
 
         GameManager.Instance.FindPlayer.Invoke();

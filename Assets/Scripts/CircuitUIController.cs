@@ -119,6 +119,43 @@ public class CircuitUIController : MonoBehaviour
         CurrentRunner.gameObject.SetActive(false);
     }
 
+    Vector3 SetItemScale(GameObject item)
+    {
+        Vector3 newScale = item.transform.localScale;
+        if (item.CompareTag("Battery"))
+        {
+            newScale.x = 75f;
+            newScale.y = 100f;
+            Vector3 tmpSize = item.GetComponent<BoxCollider>().size;
+            DestroyImmediate(item.GetComponent<BoxCollider>(), true);
+            item.AddComponent<BoxCollider>();
+            item.GetComponent<BoxCollider>().size = tmpSize;
+        }
+
+        if (item.CompareTag("Bulb"))
+        {
+            newScale.x = 75f;
+            newScale.y = 100f;
+            float tmpRadius = item.GetComponent<SphereCollider>().radius;
+            DestroyImmediate(item.GetComponent<SphereCollider>(), true);
+            item.AddComponent<SphereCollider>();
+            item.GetComponent<SphereCollider>().radius = tmpRadius;
+        }
+
+        if (item.CompareTag("Resistor"))
+        {
+            newScale.x = 75f;
+            newScale.y = 100f;
+            Vector3 tmpSize = item.GetComponent<BoxCollider>().size;
+            DestroyImmediate(item.GetComponent<BoxCollider>(), true);
+            item.AddComponent<BoxCollider>();
+            item.GetComponent<BoxCollider>().size = tmpSize;
+        }
+
+
+        return newScale;
+    }
+
     void AddItem(GameObject item)
     {
         GameObject desk = Instantiate(inventoryDesk, inventoryContent.transform);
@@ -127,6 +164,7 @@ public class CircuitUIController : MonoBehaviour
         item.transform.SetParent(desk.transform);
         Vector3 newPos = Vector3.zero;
         item.transform.localPosition = newPos;
+        item.transform.localScale = SetItemScale(item);
         scrollbar.GetComponent<Scrollbar>().value = 1.0f;
     }
 
