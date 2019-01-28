@@ -124,6 +124,155 @@ public class LineFactory : MonoBehaviour
         return newScale;
     }
 
+    bool HasBattery(Transform parentWire)
+    {
+        bool hasBattery = false;
+        foreach (Transform child in parentWire)
+        {
+            if (child.CompareTag("Battery"))
+            {
+                hasBattery = true;
+            }
+        }
+        return hasBattery;
+    }
+
+    bool HasBulb(Transform parentWire)
+    {
+        bool hasBulb = false;
+        foreach (Transform child in parentWire)
+        {
+            if (child.CompareTag("Bulb"))
+            {
+                hasBulb = true;
+            }
+        }
+        return hasBulb;
+    }
+
+    bool HasResistor(Transform parentWire)
+    {
+        bool hasResistor = false;
+        foreach (Transform child in parentWire)
+        {
+            if (child.CompareTag("Resistor"))
+            {
+                hasResistor = true;
+            }
+        }
+        return hasResistor;
+    }
+
+    Transform GetParentWireByIndex(int index)
+    {
+        return GameManager.Instance.wires[index];
+    }
+
+    void GenerateBulbs()
+    {
+        Transform parentWire = GetParentWireByIndex(2);
+
+        if (!HasBulb(parentWire) && !HasBattery(parentWire) && !HasResistor(parentWire))
+        {
+            GameObject bulb = Instantiate(GameManager.Instance.items[0], parentWire.transform);
+            Vector3 newPos = bulb.transform.localPosition;
+            newPos.x += 0.6f;
+            newPos.y += 4f;
+            bulb.transform.localPosition = newPos;
+            bulb.transform.localScale = SetItemScale(bulb);
+            bulb.name = GameManager.Instance.items[0].name;
+        }
+        else
+        {
+
+        }
+    }
+
+    void GenerateBatteries()
+    {
+        Transform parentWire = GetParentWireByIndex(0);
+
+        if (!HasBulb(parentWire) && !HasBattery(parentWire) && !HasResistor(parentWire))
+        {
+
+            GameObject battery = Instantiate(GameManager.Instance.items[1], parentWire.transform);
+            Vector3 newPos = battery.transform.localPosition;
+            battery.transform.localPosition = newPos;
+            battery.transform.localScale = SetItemScale(battery);
+            battery.transform.localEulerAngles = parentWire.transform.eulerAngles;
+            battery.name = GameManager.Instance.items[1].name;
+            GameManager.Instance.batteries.Add(battery.transform);
+            endPoint = battery.transform.GetChild(1).gameObject.transform;
+        }
+        else
+        {
+
+        }
+    }
+
+    void GenerateResistors()
+    {
+
+        Transform parentWire = GetParentWireByIndex(3);
+        Debug.Log("Resistor Parent Name:" + parentWire.name);
+
+        if (!HasBulb(parentWire) && !HasBattery(parentWire) && !HasResistor(parentWire))
+        {
+            GameObject resistor = Instantiate(GameManager.Instance.items[2], parentWire.transform);
+            Vector3 newPos = resistor.transform.localPosition;
+            newPos.x += 0.3f;
+            resistor.transform.localPosition = newPos;
+            resistor.transform.localScale = SetItemScale(resistor);
+            resistor.name = GameManager.Instance.items[2].name;
+        }
+        else
+        {
+
+        }
+    }
+
+
+    void GenerateInitialItems()
+    {
+        Debug.Log("Circuit items:" + LevelSelector.instance.currentLevel.inventoryItems.Count);
+
+
+        foreach (KeyValuePair<int, int> item in LevelSelector.instance.currentLevel.circuitItems)
+        {
+            // do something with entry.Value or entry.Key
+            Debug.Log("key:" + item.Key);
+            Debug.Log("val:" + item.Value);
+
+            // bulb
+            if (item.Key == 0)
+            {
+                for (int i = 0; i < item.Value; i++)
+                {
+                    GenerateBulbs();
+                }
+            }
+
+            // battery
+            if (item.Key == 1)
+            {
+                for (int i = 0; i < item.Value; i++)
+                {
+                    GenerateBatteries();
+                }
+            }
+
+            // resistor
+            if (item.Key == 2)
+            {
+                for (int i = 0; i < item.Value; i++)
+                {
+                    Debug.Log("Generating resistor #" + (i + 1));
+                    GenerateResistors();
+                }
+            }
+        }
+    }
+
     void CreateBasicCircuit()
     {
 
@@ -138,39 +287,34 @@ public class LineFactory : MonoBehaviour
         Vector2 point1 = new Vector2(start_x, start_y);
         Vector2 point2 = point1;
         Vector3 stationPos = Vector3.zero;
+        Color line_color = new Color(0.58f, 0.55f, 0.6f, 1f);
 
         for (int i = 0; i < 4; i++)
         {
             if (i == 0)
             {
                 point2.x = point1.x - Screen.width / 2.0f;
-
-                drawnLine = GetLine(point1, point2, 10.0f, Color.black, gameObject.transform.parent.transform);
+                drawnLine = GetLine(point1, point2, 10.0f, line_color, gameObject.transform.parent.transform);
                 GameManager.Instance.wires.Add(drawnLine.transform);
                 GameObject station = Instantiate(this.station, drawnLine.transform);
                 stationPos = station.gameObject.transform.localPosition;
                 stationPos.x = 1f;
                 stationPos.z = 1f;
                 station.gameObject.transform.localPosition = stationPos;
-                //Debug.Log("Station 1 Pos: " + station.gameObject.transform.position);
-                //Debug.Log("Station 1 LocalPos: " + station.gameObject.transform.localPosition);
 
                 station.name = i.ToString();
                 drawnLine.name = "WireBottom";
 
+                /*
                 GameObject battery = Instantiate(GameManager.Instance.items[1], drawnLine.transform);
                 Vector3 newPos = battery.transform.localPosition;
                 battery.transform.localPosition = newPos;
                 battery.transform.localScale = SetItemScale(battery);
-                //battery.transform.rotation = Quaternion.AngleAxis(180, Vector3.down);
-                //battery.transform.eulerAngles = drawnLine.transform.eulerAngles;
                 battery.transform.localEulerAngles = drawnLine.transform.eulerAngles;
                 battery.name = GameManager.Instance.items[1].name;
                 GameManager.Instance.batteries.Add(battery.transform);
-
-                //GameManager.Instance.stations.Add(station.gameObject.transform);
-                //GameManager.Instance.stations.Insert(0, battery.transform.GetChild(0).gameObject.transform);
                 endPoint = battery.transform.GetChild(1).gameObject.transform;
+                */
 
             }
 
@@ -178,14 +322,13 @@ public class LineFactory : MonoBehaviour
             {
                 point1 = point2;
                 point2.y = point1.y + Screen.width / 2.0f;
-                drawnLine = GetLine(point1, point2, 10f, Color.black, gameObject.transform.parent.transform);
+                drawnLine = GetLine(point1, point2, 10f, line_color, gameObject.transform.parent.transform);
                 GameManager.Instance.wires.Add(drawnLine.transform);
                 GameObject station = Instantiate(this.station, drawnLine.transform);
                 stationPos.x = 1f;
                 station.gameObject.transform.localPosition = stationPos;
 
                 station.name = i.ToString();
-                //GameManager.Instance.stations.Add(station.gameObject.transform);
                 drawnLine.name = "WireLeft";
             }
 
@@ -194,30 +337,21 @@ public class LineFactory : MonoBehaviour
                 point1 = point2;
                 point2.x = point2.x + Screen.width / 2.0f;
 
-                drawnLine = GetLine(point1, point2, 10f, Color.black, gameObject.transform.parent.transform);
+                drawnLine = GetLine(point1, point2, 10f, line_color, gameObject.transform.parent.transform);
                 GameManager.Instance.wires.Add(drawnLine.transform);
                 GameObject station = Instantiate(this.station, drawnLine.transform);
                 station.gameObject.transform.localPosition = stationPos;
                 station.name = i.ToString();
-                //GameManager.Instance.stations.Add(station.gameObject.transform);
                 drawnLine.name = "WireTop";
 
+
+                /*
                 GameObject resistor = Instantiate(GameManager.Instance.items[2], drawnLine.transform);
                 Vector3 newPos = resistor.transform.localPosition;
                 newPos.x -= 0.3f;
                 resistor.transform.localPosition = newPos;
                 resistor.transform.localScale = SetItemScale(resistor);
                 resistor.name = GameManager.Instance.items[2].name;
-
-                /*GameObject text = new GameObject();
-                TextMesh t = text.AddComponent<TextMesh>();
-                t.text = "10";
-                t.fontSize = 30;
-
-                text.transform.SetParent(resistor.transform);
-
-                //t.transform.localEulerAngles += new Vector3(90, 0, 0);
-                t.transform.localPosition = Vector3.zero;**/
 
 
                 GameObject bulb = Instantiate(GameManager.Instance.items[0], drawnLine.transform);
@@ -227,13 +361,14 @@ public class LineFactory : MonoBehaviour
                 bulb.transform.localPosition = newPos;
                 bulb.transform.localScale = SetItemScale(bulb);
                 bulb.name = GameManager.Instance.items[0].name;
+                */
             }
 
             if (i == 3)
             {
                 point1 = point2;
                 point2.y = point1.y - Screen.width / 2.0f;
-                drawnLine = GetLine(point1, point2, 10f, Color.black, gameObject.transform.parent.transform);
+                drawnLine = GetLine(point1, point2, 10f, line_color, gameObject.transform.parent.transform);
                 GameManager.Instance.wires.Add(drawnLine.transform);
                 GameObject station = Instantiate(this.station, drawnLine.transform);
                 station.gameObject.transform.localPosition = stationPos;
@@ -244,6 +379,8 @@ public class LineFactory : MonoBehaviour
             }
 
         }
+
+        GenerateInitialItems();
 
         //GameManager.Instance.stations.Add(endPoint.transform);
         //Debug.Log("First last wire: " + GameManager.Instance.wires[3]);

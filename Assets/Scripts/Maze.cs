@@ -52,22 +52,148 @@ public class Maze : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        xSize = GameManager.Instance.xSize;
-        ySize = GameManager.Instance.ySize;
-        //GameManager.Instance.inventory.Add(Cable);
+        CalcMazeSize();
         CreateWalls();
         GameManager.Instance.Maze = WallHolder.gameObject;
-        //Physics.IgnoreLayerCollision(8, 11);
     }
 
-    void GenerateRandomItems(Dictionary<int,int> itemsToCreate)
+    void CalcMazeSize()
     {
+
+        if (LevelSelector.instance.currentLevel.number == 1)
+        {
+            //int dif = 4;
+            xSize = 5;
+            ySize = 5;
+        }
+
+        else if (LevelSelector.instance.currentLevel.number == 2)
+        {
+            //int dif = 4;
+            xSize = 5;
+            ySize = 5;
+        }
+
+        else if (LevelSelector.instance.currentLevel.number == 3)
+        {
+            //int dif = 4;
+            xSize = 10;
+            ySize = 10;
+        }
+
+        else if (LevelSelector.instance.currentLevel.number == 4)
+        {
+            //int dif = 4;
+            xSize = 10;
+            ySize = 10;
+        }
+
+        else if (LevelSelector.instance.currentLevel.number == 5)
+        {
+            //int dif = 4;
+            xSize = 10;
+            ySize = 10;
+        }
+
+        else if (LevelSelector.instance.currentLevel.number == 6)
+        {
+            //int dif = 4;
+            xSize = 15;
+            ySize = 15;
+        }
+
+        else if (LevelSelector.instance.currentLevel.number == 7)
+        {
+            //int dif = 4;
+            xSize = 20;
+            ySize = 20;
+        }
+
+        else if (LevelSelector.instance.currentLevel.number == 8)
+        {
+            //int dif = 4;
+            xSize = 10;
+            ySize = 10;
+        }
+
+        else if (LevelSelector.instance.currentLevel.number == 9)
+        {
+            //int dif = 4;
+            xSize = 10;
+            ySize = 10;
+        }
+
+        else if (LevelSelector.instance.currentLevel.number == 10)
+        {
+            //int dif = 4;
+            xSize = 15;
+            ySize = 15;
+        }
+
+        //xSize = LevelSelector.instance.base_size + dif;
+        //ySize = LevelSelector.instance.base_size + dif;
+        //gameObject.SetActive(true);
+    }
+
+    void GenerateInventoryItems()
+    {
+        Dictionary<int, int> itemsToCreate = LevelSelector.instance.GetInventoryItems();
+        foreach (KeyValuePair<int, int> item in itemsToCreate)
+        {
+            // do something with entry.Value or entry.Key
+
+            if (item.Key == 0)
+            {
+                for (int i = 0; i < item.Value; i++)
+                {
+                    GameObject bulb = GameManager.Instance.items[item.Key];
+                    GameManager.Instance.inventory.Add(bulb);
+                }
+
+            }
+
+            if (item.Key == 1)
+            {
+                for (int i = 0; i < item.Value; i++)
+                {
+                    Debug.Log("Adding Battery to inventory !!");
+                    GameObject battery = GameManager.Instance.items[item.Key];
+                    GameManager.Instance.inventory.Add(battery);
+                }
+
+            }
+
+            if (item.Key == 2)
+            {
+                for (int i = 0; i < item.Value; i++)
+                {
+                    GameObject resistor = GameManager.Instance.items[item.Key];
+                    GameManager.Instance.inventory.Add(resistor);
+                }
+
+            }
+
+            if (item.Key == 3)
+            {
+                for (int i = 0; i < item.Value; i++)
+                {
+                    GameObject cable = GameManager.Instance.items[item.Key];
+                    GameManager.Instance.inventory.Add(cable);
+                }
+
+            }
+        }
+    }
+
+    void GenerateMazeItems()
+    {
+        Dictionary<int, int> itemsToCreate = LevelSelector.instance.GetMazeItems();
         Vector3 endPos = allWalls[0].transform.position;
 
         foreach (KeyValuePair<int, int> item in itemsToCreate)
         {
             // do something with entry.Value or entry.Key
-            for(int i = 0; i < item.Value; i++)
+            for (int i = 0; i < item.Value; i++)
             {
                 int randomIndex = Random.Range(allWalls.Length * 3 / 4, allWalls.Length - 1);
                 Vector3 itemPos = allWalls[randomIndex].gameObject.transform.position;
@@ -103,72 +229,13 @@ public class Maze : MonoBehaviour
         item.SetParent(GameManager.Instance.Maze.transform);
     }
 
-    Dictionary<int,int> GetLevelItems(int levelNumber)
-    {
-        Dictionary<int, int> items = new Dictionary<int, int>();
-
-        // 0 = bulb   1 = battery  2 = resistor   itemsAdd(hangi item, sayısı) 
-
-        if(levelNumber == 1)
-        {
-            //çantasında battery olmalı ama !!
-        }
-
-        else if (levelNumber == 2)
-        {
-            //çantasında bulb olmalı ama  !!
-        }
-
-        else if (levelNumber == 3)
-        {
-            items.Add(1, 1);
-        }
-
-        else if (levelNumber == 4)
-        {
-            items.Add(2, 1);
-        }
-
-        else if (levelNumber == 5)
-        {
-            items.Add(0, 1);
-        }
-
-        else if (levelNumber == 6)
-        {
-            items.Add(0, 1);
-            items.Add(1, 1);
-        }
-
-        else if (levelNumber == 7)
-        {
-            items.Add(1, 3);
-        }
-
-        else if (levelNumber == 8)
-        {
-            items.Add(1, 1);
-        }
-
-        else if (levelNumber == 9)
-        {
-            items.Add(0, 1);
-        }
-
-        else if (levelNumber == 10)
-        {
-            items.Add(0, 1);
-            items.Add(1, 1);
-        }
-
-        
-        return items;
-    }
 
     void SpawnPlayer(GameObject[] allWalls)
     {
         Destroy(allWalls[0].gameObject);
-        GenerateRandomItems(GetLevelItems(LevelSelector.instance.levelName));
+        //GenerateRandomItems(GetLevelItems(LevelSelector.instance.currentLevel.number));
+        GenerateInventoryItems();
+        GenerateMazeItems();
         Vector3 playerPos = Vector3.zero;
         playerPos.x = allWalls[allWalls.Length - 1].transform.position.x;
         playerPos.z = allWalls[allWalls.Length - 1].transform.position.z - 0.5f;

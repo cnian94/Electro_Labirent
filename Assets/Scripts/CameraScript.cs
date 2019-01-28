@@ -9,9 +9,10 @@ public class CameraScript : MonoBehaviour
     public GameObject MazeGenerator;
     public GameObject Player;
 
-    //private Vector3 offset;
+    public GameObject QuestionMark;
+
     public bool isCameraAdjusted = false;
-    public GameObject panelButton;
+    bool zoomFinish = false;
 
 
     private void Awake()
@@ -61,8 +62,8 @@ public class CameraScript : MonoBehaviour
         //endPos.z = Screen.height / 124.67f;
         //Debug.Log("POSS: " + Player.transform.position);
         StartCoroutine(ZoomToPlayer(endPos, 2));
-
     }
+
 
     IEnumerator ZoomToPlayer(Vector3 end, float seconds)
     {
@@ -88,7 +89,17 @@ public class CameraScript : MonoBehaviour
         RenderSettings.ambientLight = Color.black;
         gameObject.transform.position = end;
         isCameraAdjusted = true;
-        Player.transform.GetChild(0).gameObject.SetActive(true);
+
+        GameObject playerLight = Player.transform.GetChild(0).gameObject;
+        GameManager.Instance.adjustLevelLightEvent.Invoke(false);
+        StartCoroutine(InvokeShowLevelBeginEvent());
+    }
+
+    IEnumerator InvokeShowLevelBeginEvent()
+    {
+        QuestionMark.SetActive(true);
+        yield return new WaitForSeconds(3f);
+        GameManager.Instance.ShowLevelBeginMessageEvent.Invoke();
     }
 
     private void LateUpdate()
@@ -99,7 +110,8 @@ public class CameraScript : MonoBehaviour
             newPos.x = Player.transform.position.x;
             newPos.z = Player.transform.position.z;
             transform.position = newPos;
-            panelButton.gameObject.SetActive(true);
+            //panelButton.gameObject.SetActive(true);
+            //GameManager.Instance.ShowLevelBeginMessageEvent.Invoke();
         }
     }
 }

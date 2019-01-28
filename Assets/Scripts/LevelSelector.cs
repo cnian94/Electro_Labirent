@@ -11,23 +11,25 @@ public class LevelSelector : MonoBehaviour
     private static LevelSelector _instance;
 
     public static LevelSelector instance
-
-   
     {
-        get { return _instance ?? (_instance = new GameObject("NetworkManager").AddComponent<LevelSelector>()); }
+        get { return _instance ?? (_instance = new GameObject("LevelSelector").AddComponent<LevelSelector>()); }
     }
 
-    public Font Font;
-    public GameObject LevelContent;
-    public Button LevelButton;
+    [System.Serializable]
+    public class LevelItemsEvent : UnityEngine.Events.UnityEvent<Dictionary<int, int>> { }
+    public LevelItemsEvent levelItemsEvent;
 
 
-    public GameObject StarHolder;
+    [System.Serializable]
+    public class OpenLevelEvent : UnityEngine.Events.UnityEvent<int> { }
+    public OpenLevelEvent openLevelEvent;
+
+    public LevelModel currentLevel;
 
     public int levelName;
     public int base_size;
 
-    private int[] levels = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
+
 
 
     private void Awake()
@@ -48,35 +50,220 @@ public class LevelSelector : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        openLevelEvent.AddListener(OpenLevel);
         base_size = 4;   //GameManager  CalcMazeSize()
-        for (int i = 0; i < levels.Length; i++)
-        {
-            Button newLevel = Instantiate(LevelButton, LevelContent.transform);
-            StarHolder = Instantiate(StarHolder, newLevel.transform);
-            //Debug.Log("Level " + levels[i].ToString());
-            newLevel.name = levels[i].ToString();
-            newLevel.transform.GetChild(0).GetComponent<Text>().text = "" + levels[i].ToString();  // Burayı Doğa ile yaptık zaten yerleştirme ve font ile alakalı
-            newLevel.transform.GetChild(0).GetComponent<Text>().font = Font;   // Burayı Doğa ile yaptık zaten yerleştirme ve font ile alakalı
-            newLevel.transform.localScale = new Vector3(1.2f, 1.2f, 1);   // Burayı Doğa ile yaptık zaten yerleştirme ve font ile alakalı
-            newLevel.transform.GetChild(0).localScale = new Vector3(0.6f, 0.6f, 1);   // Burayı Doğa ile yaptık zaten yerleştirme ve font ile alakalı
-
-
-        }
-
-        for (int i = 0; i < levels.Length; i++)
-        {
-            GameObject btn = GameObject.Find((i + 1).ToString());
-            int levelName = i + 1;
-            btn.GetComponent<Button>().onClick.AddListener(delegate { OpenLevel(levelName); });
-        }
     }
 
-    void OpenLevel(int name)
+    void OpenLevel(int number)
     {
+        //this.currentLevel = new LevelModel(name);
+        currentLevel = GuideManager.Instance.CurrentPlayer.levels[number - 1];
+        print("current levell: " + currentLevel.number);
+        currentLevel.inventoryItems = GetInventoryItems();
+        currentLevel.mazeItems = GetMazeItems();
+        currentLevel.circuitItems = GetCircuitItems();
+        currentLevel.SetAttributes();
         SoundManager.Instance.Play("Button");
-        levelName = name;
         SceneManager.LoadScene(2);
     }
+
+    public Dictionary<int, int> GetInventoryItems()
+    {
+        Dictionary<int, int> items = new Dictionary<int, int>();
+
+        // 0 = bulb   1 = battery  2 = resistor, 3 = cable   itemsAdd(hangi item, sayısı) 
+
+        if (this.currentLevel.number == 1)
+        {
+            items.Add(1, 1);
+        }
+
+        else if (this.currentLevel.number == 2)
+        {
+            items.Add(2, 1);
+        }
+
+        else if (this.currentLevel.number == 3)
+        {
+            Debug.Log("There is no element in the inventory at level 3 !!");
+        }
+
+        else if (this.currentLevel.number == 4)
+        {
+            Debug.Log("There is no element in the inventory at level 4 !!");
+        }
+
+        else if (this.currentLevel.number == 5)
+        {
+            Debug.Log("There is no element in the inventory at level 5 !!");
+        }
+
+        else if (this.currentLevel.number == 6)
+        {
+            Debug.Log("There is no element in the inventory at level 6 !!");
+        }
+
+        else if (this.currentLevel.number == 7)
+        {
+            Debug.Log("There is no element in the inventory at level 7 !!");
+        }
+
+        else if (this.currentLevel.number == 8)
+        {
+            Debug.Log("There is no element in the inventory at level 8 !!");
+        }
+
+        else if (this.currentLevel.number == 9)
+        {
+            Debug.Log("There is no element in the inventory at level 9 !!");
+        }
+
+        else if (this.currentLevel.number == 10)
+        {
+            Debug.Log("There is no element in the inventory at level 10 !!");
+        }
+
+        return items;
+    }
+
+    public Dictionary<int, int> GetMazeItems()
+    {
+        Dictionary<int, int> items = new Dictionary<int, int>();
+
+        // 0 = bulb   1 = battery  2 = resistor, 3 = cable   itemsAdd(hangi item, sayısı) 
+
+        if (this.currentLevel.number == 1)
+        {
+            Debug.Log("There is no element in the maze at level 1 !!");
+        }
+
+        else if (this.currentLevel.number == 2)
+        {
+            Debug.Log("There is no element in the maze at level 2 !!");
+        }
+
+        else if (this.currentLevel.number == 3)
+        {
+            items.Add(1, 1);
+        }
+
+        else if (this.currentLevel.number == 4)
+        {
+            items.Add(2, 1);
+        }
+
+        else if (this.currentLevel.number == 5)
+        {
+            items.Add(0, 1);
+        }
+
+        else if (this.currentLevel.number == 6)
+        {
+            items.Add(0, 1);
+            items.Add(1, 1);
+        }
+
+        else if (this.currentLevel.number == 7)
+        {
+            items.Add(1, 3);
+        }
+
+        else if (this.currentLevel.number == 8)
+        {
+            items.Add(1, 1);
+        }
+
+        else if (this.currentLevel.number == 9)
+        {
+            items.Add(0, 1);
+        }
+
+        else if (this.currentLevel.number == 10)
+        {
+            items.Add(0, 1);
+            items.Add(1, 1);
+        }
+
+        return items;
+    }
+
+    public Dictionary<int, int> GetCircuitItems()
+    {
+        Dictionary<int, int> items = new Dictionary<int, int>();
+
+        // 0 = bulb   1 = battery  2 = resistor, 3 = cable   itemsAdd(hangi item, sayısı) 
+
+        if (this.currentLevel.number == 1)
+        {
+            items.Add(0, 1);
+            items.Add(2, 1);
+        }
+
+        else if (this.currentLevel.number == 2)
+        {
+            items.Add(0, 1);
+            items.Add(1, 1);
+        }
+
+        else if (this.currentLevel.number == 3)
+        {
+            items.Add(0, 1);
+            items.Add(1, 1);
+            items.Add(2, 1);
+        }
+
+        else if (this.currentLevel.number == 4)
+        {
+            items.Add(0, 1);
+            items.Add(1, 1);
+            items.Add(2, 1);
+        }
+
+        else if (this.currentLevel.number == 5)
+        {
+            items.Add(0, 1);
+            items.Add(1, 1);
+            items.Add(2, 1);
+        }
+
+        else if (this.currentLevel.number == 6)
+        {
+            items.Add(0, 1);
+            items.Add(1, 1);
+            items.Add(2, 1);
+        }
+
+        else if (this.currentLevel.number == 7)
+        {
+            items.Add(0, 1);
+            items.Add(1, 1);
+            items.Add(2, 1);
+        }
+
+        else if (this.currentLevel.number == 8)
+        {
+            items.Add(0, 1);
+            items.Add(1, 1);
+            items.Add(2, 1);
+        }
+
+        else if (this.currentLevel.number == 9)
+        {
+            items.Add(0, 1);
+            items.Add(1, 1);
+            items.Add(2, 1);
+        }
+
+        else if (this.currentLevel.number == 10)
+        {
+            items.Add(0, 1);
+            items.Add(1, 1);
+            items.Add(2, 1);
+        }
+
+        return items;
+    }
+
 
     // Update is called once per frame
     void Update()

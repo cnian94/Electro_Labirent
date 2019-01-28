@@ -20,6 +20,15 @@ TagManager:
   - Button
   - Parallel
   - CurrentRunner
+  - GuidePanel
+  - GuideImage
+  - GuideMessage
+  - LevelScrollBar
+  - LevelPanel
+  - LevelButton
+  - MemberPanel
+  - LevelUI
+  - btnPlay
   layers:
   - Default
   - TransparentFX

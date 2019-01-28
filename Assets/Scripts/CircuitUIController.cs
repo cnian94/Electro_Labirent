@@ -5,14 +5,20 @@ using UnityEngine.UI;
 
 public class CircuitUIController : MonoBehaviour
 {
+    public Camera MainCamera;
+    public Camera UICamera;
 
-    //public Camera MainCamera;
-    //public Camera UICamera;
+    public GameObject inGameGuide;
 
-    //public GameObject panelOpenButton;
-    //public GameObject circuitPanel;
+    //public GameObject Maze;
+    public GameObject CurrentRunner;
+    public GameObject ParallelRunner;
 
-    //public GameObject craftPanel;
+    public GameObject panelOpenButton;
+    Animator animator;
+    public GameObject circuitPanel;
+    public GameObject craftPanel;
+
 
     public GameObject inventoryContent;
     public GameObject inventoryDesk;
@@ -24,32 +30,93 @@ public class CircuitUIController : MonoBehaviour
     public GameObject ParallelDesk;
     public GameObject SeriesDesk;
     public Color offColor = new Color(0.38f, 0.42f, 0.35f, 1.0f);
-
-    //public GameObject DrawManager;
     public LineFactory lineFactory;
     private Line drawnLine;
 
-    
+
     public GameObject Parallel;
 
-    //public GameObject CurrentRenderer;
-    //public GameObject CurrentRunner;
 
 
     // Use this for initialization
     void Start()
     {
-        //Debug.Log("inventory length: " + GameManager.Instance.inventory.Count);
-        /*for (int i = 0; i < GameManager.Instance.inventory.Count; i++)
+        animator = panelOpenButton.GetComponent<Animator>();
+        GameManager.Instance.panelButtonEvent.AddListener(RevealPanelButton);
+        GameManager.Instance.parallelRunner.AddListener(AddParallelRunner);
+        for (int i = 0; i < GameManager.Instance.inventory.Count; i++)
         {
             GameObject desk = Instantiate(inventoryDesk, inventoryContent.transform);
             GameObject item = Instantiate(GameManager.Instance.inventory[i], desk.transform);
             desk.name = GameManager.Instance.inventory[i].name;
             item.name = GameManager.Instance.inventory[i].name;
-        }*/
+        }
         //CreateBasicCircuit();
         GameManager.Instance.drawEvent.AddListener(DrawEnabled);
         GameManager.Instance.itemCollected.AddListener(AddItem);
+    }
+
+    public void RunCurrent()
+    {
+        CurrentRunner.gameObject.SetActive(true);
+    }
+
+
+    void RevealPanelButton()
+    {
+        if (!panelOpenButton.activeSelf)
+        {
+            panelOpenButton.SetActive(true);
+        }
+
+        animator.SetBool("reveal", true);
+
+    }
+
+
+    public void SetCircuitPanel()
+    {
+        inGameGuide = GameObject.FindGameObjectWithTag("GuidePanel");
+        if (!GameManager.Instance.isCircuitPanelActive)
+        {
+            OpenCircuitPanel();
+        }
+        else
+        {
+            CloseCircuitPanel();
+        }
+    }
+
+    void OpenCircuitPanel()
+    {
+        GameManager.Instance.Maze.gameObject.SetActive(false);
+        inGameGuide.GetComponent<Animator>().SetBool("showGuide", false);
+        animator.SetBool("reveal", false);
+        MainCamera.gameObject.SetActive(false);
+        UICamera.gameObject.SetActive(true);
+        gameObject.GetComponent<Canvas>().worldCamera = UICamera;
+
+        GameManager.Instance.isCircuitPanelActive = true;
+        circuitPanel.gameObject.SetActive(true);
+        panelOpenButton.transform.Rotate(new Vector3(0, 0, 180));
+        panelOpenButton.transform.SetParent(circuitPanel.transform);
+        GameManager.Instance.ShowLevelTipMessageEvent.Invoke();
+    }
+
+
+    void CloseCircuitPanel()
+    {
+        GameManager.Instance.Maze.gameObject.SetActive(true);
+        panelOpenButton.GetComponent<Image>().color = Color.white;
+        animator.SetBool("reveal", false);
+        UICamera.gameObject.SetActive(false);
+        MainCamera.gameObject.SetActive(true);
+        gameObject.GetComponent<Canvas>().worldCamera = MainCamera;
+        GameManager.Instance.isCircuitPanelActive = false;
+        panelOpenButton.transform.SetParent(gameObject.transform);
+        circuitPanel.gameObject.SetActive(false);
+        panelOpenButton.transform.Rotate(new Vector3(0, 0, 180));
+        CurrentRunner.gameObject.SetActive(false);
     }
 
     void AddItem(GameObject item)
@@ -112,6 +179,15 @@ public class CircuitUIController : MonoBehaviour
             newParallel.name = wire.name + "Parallel";
             GameManager.Instance.parallels.Add(newParallel);
         }
+    }
+
+    void AddParallelRunner(Transform wire, GameObject currentWire)
+    {
+        GameObject newParallelRunner = Instantiate(ParallelRunner, craftPanel.transform);
+        newParallelRunner.gameObject.GetComponent<TrailRenderer>().widthMultiplier = 0.5f;
+        GameManager.Instance.runParallelRunner.Invoke(wire, newParallelRunner.gameObject.GetInstanceID());
+        GameManager.Instance.parallelRunners.Add(currentWire, newParallelRunner);
+        Debug.Log("CurrentWire: " + currentWire.gameObject.name);
     }
 
     // Update is called once per frame

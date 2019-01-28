@@ -42,6 +42,14 @@ void Start()
         beingDragged = false;
     }
 
+    void AddItems(GameObject draggingObject)
+    {
+        if (draggingObject.CompareTag("Battery"))
+        {
+            GameManager.Instance.batteries.Add(draggingObject.transform);
+        }
+    }
+
     void Update()
     {
 
@@ -172,6 +180,8 @@ void Start()
                             Debug.Log("Battery dropped !!");
                             draggingObject.transform.localEulerAngles = new Vector3(0, 0, 180);
 
+                            AddItems(draggingObject);
+
                             int startIndex = GameManager.Instance.wires.IndexOf(beforeParent.gameObject.transform);
                             int destIndex = GameManager.Instance.wires.IndexOf(hit.collider.gameObject.transform);
                             List<Transform> tempWires = new List<Transform>(new Transform[GameManager.Instance.wires.Count]);
@@ -236,6 +246,7 @@ void Start()
                         {
                             Debug.Log("Battery dropped !!");
                             draggingObject.transform.localEulerAngles = new Vector3(0, 0, 180);
+                            AddItems(draggingObject);
 
                             int startIndex = GameManager.Instance.wires.IndexOf(beforeParent.gameObject.transform);
                             int destIndex = GameManager.Instance.wires.IndexOf(hit.collider.gameObject.transform);
@@ -307,6 +318,7 @@ void Start()
                         {
                             Debug.Log("Battery dropped !!");
                             draggingObject.transform.localEulerAngles = new Vector3(0, 0, 180);
+                            AddItems(draggingObject);
 
                             int startIndex = GameManager.Instance.wires.IndexOf(beforeParent.gameObject.transform);
                             int destIndex = GameManager.Instance.wires.IndexOf(hit.collider.gameObject.transform);
@@ -379,6 +391,7 @@ void Start()
                         {
                             Debug.Log("Battery dropped !!");
                             draggingObject.transform.localEulerAngles = new Vector3(0, 0, 180);
+                            AddItems(draggingObject);
 
                             int startIndex = GameManager.Instance.wires.IndexOf(beforeParent.gameObject.transform);
                             int destIndex = GameManager.Instance.wires.IndexOf(hit.collider.gameObject.transform);

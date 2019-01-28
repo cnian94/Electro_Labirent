@@ -40,7 +40,7 @@ public class CurrentDrawer : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        lineDrawSpeed = 20;
+        lineDrawSpeed = 5;
     }
 
     private void OnEnable()
@@ -332,7 +332,8 @@ public class CurrentDrawer : MonoBehaviour
                             if (currentLapCount == 3)
                             {
                                 Debug.Log("Circuit Approved !!");
-                                circuitButton.GetComponent<Animator>().SetTrigger("Reveal");
+                                GameManager.Instance.adjustLevelLightEvent.Invoke(true);
+                                circuitButton.GetComponent<Animator>().SetBool("reveal", true);
                             }
                         }
                     }
