@@ -174,8 +174,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1619147706396324}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.16, z: 0}
-  m_LocalScale: {x: 0.1, y: 0.05, z: 0.1}
+  m_LocalPosition: {x: 0, y: 0.3333, z: 0}
+  m_LocalScale: {x: 0.1, y: 0.08, z: 0.1}
   m_Children: []
   m_Father: {fileID: 4518968124907444}
   m_RootOrder: 1
@@ -187,8 +187,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1368258917855342}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.1, y: 0.05, z: 0.1}
+  m_LocalPosition: {x: 0, y: 0.5, z: 0}
+  m_LocalScale: {x: 0.1, y: 0.08, z: 0.1}
   m_Children: []
   m_Father: {fileID: 4518968124907444}
   m_RootOrder: 0
@@ -200,8 +200,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1632266445688628}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.8, z: 0}
-  m_LocalScale: {x: 0.1, y: 0.05, z: 0.1}
+  m_LocalPosition: {x: 0, y: -0.333, z: 0}
+  m_LocalScale: {x: 0.1, y: 0.08, z: 0.1}
   m_Children: []
   m_Father: {fileID: 4518968124907444}
   m_RootOrder: 5
@@ -213,8 +213,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1257366950984074}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.64, z: 0}
-  m_LocalScale: {x: 0.1, y: 0.05, z: 0.1}
+  m_LocalPosition: {x: 0, y: -0.1666, z: 0}
+  m_LocalScale: {x: 0.1, y: 0.08, z: 0.1}
   m_Children: []
   m_Father: {fileID: 4518968124907444}
   m_RootOrder: 4
@@ -226,8 +226,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1197191410589038}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.48, z: 0}
-  m_LocalScale: {x: 0.1, y: 0.05, z: 0.1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.1, y: 0.08, z: 0.1}
   m_Children: []
   m_Father: {fileID: 4518968124907444}
   m_RootOrder: 3
@@ -239,8 +239,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1362136052467412}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.95, z: 0}
-  m_LocalScale: {x: 0.1, y: 0.05, z: 0.1}
+  m_LocalPosition: {x: 0, y: -0.5, z: 0}
+  m_LocalScale: {x: 0.1, y: 0.08, z: 0.1}
   m_Children: []
   m_Father: {fileID: 4518968124907444}
   m_RootOrder: 6
@@ -272,8 +272,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1495793076436808}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.32, z: 0}
-  m_LocalScale: {x: 0.1, y: 0.05, z: 0.1}
+  m_LocalPosition: {x: 0, y: 0.1666, z: 0}
+  m_LocalScale: {x: 0.1, y: 0.08, z: 0.1}
   m_Children: []
   m_Father: {fileID: 4518968124907444}
   m_RootOrder: 2
@@ -579,7 +579,7 @@ Rigidbody:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1197191410589038}
   serializedVersion: 2
-  m_Mass: 0.5
+  m_Mass: 1
   m_Drag: 0
   m_AngularDrag: 10000000
   m_UseGravity: 0
@@ -594,7 +594,7 @@ Rigidbody:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1495793076436808}
   serializedVersion: 2
-  m_Mass: 0.5
+  m_Mass: 1
   m_Drag: 0
   m_AngularDrag: 10000000
   m_UseGravity: 0
@@ -609,7 +609,7 @@ Rigidbody:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1619147706396324}
   serializedVersion: 2
-  m_Mass: 0.5
+  m_Mass: 1
   m_Drag: 0
   m_AngularDrag: 10000000
   m_UseGravity: 0
@@ -624,7 +624,7 @@ Rigidbody:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1257366950984074}
   serializedVersion: 2
-  m_Mass: 0.5
+  m_Mass: 1
   m_Drag: 0
   m_AngularDrag: 10000000
   m_UseGravity: 0
@@ -639,7 +639,7 @@ Rigidbody:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1368258917855342}
   serializedVersion: 2
-  m_Mass: 0.5
+  m_Mass: 1
   m_Drag: 0
   m_AngularDrag: 10000000
   m_UseGravity: 0
@@ -654,7 +654,7 @@ Rigidbody:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1632266445688628}
   serializedVersion: 2
-  m_Mass: 0.5
+  m_Mass: 1
   m_Drag: 0
   m_AngularDrag: 10000000
   m_UseGravity: 0
@@ -669,7 +669,7 @@ Rigidbody:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1362136052467412}
   serializedVersion: 2
-  m_Mass: 0.5
+  m_Mass: 1
   m_Drag: 0
   m_AngularDrag: 10000000
   m_UseGravity: 0
@@ -805,8 +805,8 @@ SpringJoint:
   m_AutoConfigureConnectedAnchor: 0
   m_ConnectedAnchor: {x: 0, y: -0.5, z: 0}
   serializedVersion: 2
-  m_Spring: 80
-  m_Damper: 0
+  m_Spring: 100
+  m_Damper: 100
   m_MinDistance: 0
   m_MaxDistance: 0
   m_Tolerance: 0.025
@@ -827,8 +827,8 @@ SpringJoint:
   m_AutoConfigureConnectedAnchor: 0
   m_ConnectedAnchor: {x: 0, y: -0.5, z: 0}
   serializedVersion: 2
-  m_Spring: 80
-  m_Damper: 0
+  m_Spring: 100
+  m_Damper: 100
   m_MinDistance: 0
   m_MaxDistance: 0
   m_Tolerance: 0.025
@@ -849,8 +849,8 @@ SpringJoint:
   m_AutoConfigureConnectedAnchor: 0
   m_ConnectedAnchor: {x: 0, y: -0.5, z: 0}
   serializedVersion: 2
-  m_Spring: 80
-  m_Damper: 0
+  m_Spring: 100
+  m_Damper: 100
   m_MinDistance: 0
   m_MaxDistance: 0
   m_Tolerance: 0.025
@@ -871,8 +871,8 @@ SpringJoint:
   m_AutoConfigureConnectedAnchor: 0
   m_ConnectedAnchor: {x: 0, y: -0.5, z: 0}
   serializedVersion: 2
-  m_Spring: 80
-  m_Damper: 0
+  m_Spring: 100
+  m_Damper: 100
   m_MinDistance: 0
   m_MaxDistance: 0
   m_Tolerance: 0.025
@@ -893,8 +893,8 @@ SpringJoint:
   m_AutoConfigureConnectedAnchor: 0
   m_ConnectedAnchor: {x: 0, y: -0.5, z: 0}
   serializedVersion: 2
-  m_Spring: 80
-  m_Damper: 0
+  m_Spring: 100
+  m_Damper: 100
   m_MinDistance: 0
   m_MaxDistance: 0
   m_Tolerance: 0.025
@@ -915,8 +915,8 @@ SpringJoint:
   m_AutoConfigureConnectedAnchor: 0
   m_ConnectedAnchor: {x: 0, y: -0.5, z: 0}
   serializedVersion: 2
-  m_Spring: 80
-  m_Damper: 0
+  m_Spring: 100
+  m_Damper: 100
   m_MinDistance: 0
   m_MaxDistance: 0
   m_Tolerance: 0.025

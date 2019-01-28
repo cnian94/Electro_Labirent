@@ -446,6 +446,7 @@ void Start()
                 else
                 {
                     Debug.Log("most probably drop to inventory panel !!");
+                    SetItemScale(draggingObject);
                     GameManager.Instance.inventory.Add(draggingObject);
                     GameObject desk = Instantiate(inventoryDesk, inventoryContent.transform);
                     desk.name = draggingObject.name;
@@ -509,36 +510,6 @@ void Start()
         return newScale;
     }
 
-    /*
-    Vector3 SetItemScale(GameObject item)
-    {
-        Vector3 newScale = item.transform.localScale;
-        if (item.CompareTag("Battery"))
-        {
-            newScale.x = item.transform.lossyScale.x;
-            newScale.y = item.transform.lossyScale.y;
-            DestroyImmediate(item.GetComponent<BoxCollider>(), true);
-            item.AddComponent<BoxCollider>();
-        }
-
-        if (item.CompareTag("Bulb"))
-        {
-            newScale.x = item.transform.lossyScale.x;
-            newScale.y = item.transform.lossyScale.y;
-            DestroyImmediate(item.GetComponent<SphereCollider>(), true);
-            item.AddComponent<SphereCollider>();
-        }
-
-        if (item.CompareTag("Resistor"))
-        {
-            newScale.x = item.transform.lossyScale.x;
-            newScale.y = item.transform.lossyScale.y;
-            DestroyImmediate(item.GetComponent<BoxCollider>(), true);
-            item.AddComponent<BoxCollider>();
-        }
-
-        return newScale;
-    }*/
 
 
 }
