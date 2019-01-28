@@ -24,6 +24,7 @@ public class LevelModel
         Dictionary<string, List<string>> levelMessages = new Dictionary<string, List<string>>();
         List<string> beginMessages = new List<string>();
         List<string> tipMessages = new List<string>();
+        List<string> finishMessages = new List<string>();
 
         if (this.number == 1)
         {
@@ -34,9 +35,14 @@ public class LevelModel
             tipMessages.Add("Hmmm ...");
             tipMessages.Add("Sanki devrende bir şeyler eksik");
 
+            finishMessages.Add("Aferin evlat !!");
+            finishMessages.Add("Artık devreye gücü pilin verdiğini biliyorsun");
+            finishMessages.Add("Hadi durma, daha öğrenecek çok şeyimiz var");
+
 
             levelMessages.Add("begin", beginMessages);
             levelMessages.Add("tip", tipMessages);
+            levelMessages.Add("finish", finishMessages);
             details.levelMessages = levelMessages;
         }
         if (this.number == 2)

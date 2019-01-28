@@ -35,6 +35,7 @@ public class GameManager : MonoBehaviour
     public UnityEvent ShowLevelTipMessageEvent;
 
     public UnityEvent panelButtonEvent;
+    public UnityEvent LevelFinishEvent;
 
 
     [System.Serializable]

@@ -9,6 +9,8 @@ public class InGameGuide : MonoBehaviour
     public Transform spawnPoint;
     public GameObject thingToSpawn;
 
+    public GameObject FadeOutPanel;
+
     GameObject guidePanel;
 
     public GuideManager guideManager;
@@ -24,6 +26,7 @@ public class InGameGuide : MonoBehaviour
     {
         GameManager.Instance.ShowLevelBeginMessageEvent.AddListener(ShowLevelBeginGuide);
         GameManager.Instance.ShowLevelTipMessageEvent.AddListener(ShowLevelTipGuide);
+        GameManager.Instance.LevelFinishEvent.AddListener(Finishlevel);
         guideManager.hideTipGuide.AddListener(HideTipGuide);
     }
 
@@ -49,8 +52,21 @@ public class InGameGuide : MonoBehaviour
         guideModal.NewChoice(guidePanelDetails, "tip");
     }
 
+    public void ShowLevelFinishGuide()
+    {
+        GuidePanelDetails guidePanelDetails = LevelSelector.instance.currentLevel.details;
+        guidePanel.GetComponent<Animator>().SetBool("showGuide", true);
+        guideModal.NewChoice(guidePanelDetails, "finish");
+    }
+
     void HideTipGuide()
     {
         guidePanel.GetComponent<Animator>().SetBool("showGuide", false);
+    }
+
+    void Finishlevel()
+    {
+        FadeOutPanel.GetComponent<Animator>().SetBool("fadeOut", true);
+        ShowLevelFinishGuide();
     }
 }
