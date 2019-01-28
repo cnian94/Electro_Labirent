@@ -306,7 +306,7 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
-    m_Font: {fileID: 12800000, guid: d93ef393d40749b4184e611f9bf1bdac, type: 3}
+    m_Font: {fileID: 12800000, guid: b06cc188a5d93ca46af80f4c2eac6d08, type: 3}
     m_FontSize: 120
     m_FontStyle: 2
     m_BestFit: 1
@@ -318,7 +318,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: name
+  m_Text: isim
 --- !u!222 &343174905
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1812,7 +1812,7 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
-    m_Font: {fileID: 12800000, guid: 6b7f9e6804e1436438de687f11371475, type: 3}
+    m_Font: {fileID: 12800000, guid: b06cc188a5d93ca46af80f4c2eac6d08, type: 3}
     m_FontSize: 65
     m_FontStyle: 0
     m_BestFit: 1
@@ -1824,7 +1824,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Get in
+  m_Text: "Giri\u015F Yap"
 --- !u!222 &1486111948
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2161,7 +2161,7 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
-    m_Font: {fileID: 12800000, guid: d93ef393d40749b4184e611f9bf1bdac, type: 3}
+    m_Font: {fileID: 12800000, guid: b06cc188a5d93ca46af80f4c2eac6d08, type: 3}
     m_FontSize: 120
     m_FontStyle: 0
     m_BestFit: 1
@@ -2417,7 +2417,7 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
-    m_Font: {fileID: 12800000, guid: 6b7f9e6804e1436438de687f11371475, type: 3}
+    m_Font: {fileID: 12800000, guid: b06cc188a5d93ca46af80f4c2eac6d08, type: 3}
     m_FontSize: 70
     m_FontStyle: 0
     m_BestFit: 1
@@ -2429,7 +2429,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Enter your name below
+  m_Text: Bir isim giriniz
 --- !u!222 &1993957851
 CanvasRenderer:
   m_ObjectHideFlags: 0

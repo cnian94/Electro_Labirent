@@ -32,12 +32,12 @@ public class LevelGuide : MonoBehaviour
         if (GuideManager.Instance.CurrentPlayer.isFirst)
         {
             Debug.Log("Firt Time User Guide !!");
-            guidePanelDetails.messages.Add("Here, our level selector");
-            guidePanelDetails.messages.Add("Feel free to start any time");
+            guidePanelDetails.messages.Add("Bölüm seçiciye hoşgeldin");
+            guidePanelDetails.messages.Add("istediğin zaman başla");
         }
         else
         {
-            guidePanelDetails.messages.Add("Hey, " + GuideManager.Instance.CurrentPlayer.name + " welcome back !");
+            guidePanelDetails.messages.Add("Tekrar Hoşgeldin " + GuideManager.Instance.CurrentPlayer.name );
             guidePanelDetails.iconImage = icon;
         }
 

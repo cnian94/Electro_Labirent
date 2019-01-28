@@ -31,14 +31,14 @@ public class MenuGuide : MonoBehaviour
         if (GuideManager.Instance.CurrentPlayer.isFirst)
         {
             Debug.Log("Firt Time User Guide !!");
-            guidePanelDetails.messages.Add("Hey, " + GuideManager.Instance.CurrentPlayer.name + " Welcome to the Electro Labrinth !");
-            guidePanelDetails.messages.Add("I am gonna try to help you in this journey");
-            guidePanelDetails.messages.Add("If you are ready too, hit the play button !!");
+            guidePanelDetails.messages.Add("Selam " + GuideManager.Instance.CurrentPlayer.name + " Elektro Labirente Hoşgeldin");
+            guidePanelDetails.messages.Add("Sana oyun boyunca yardım edeceğim");
+            guidePanelDetails.messages.Add("Eğer sen de hazırsan başlayalım");
         }
 
         else
         {
-            guidePanelDetails.messages.Add("Hey, " + GuideManager.Instance.CurrentPlayer.name + " welcome back !");
+            guidePanelDetails.messages.Add("Selam " + GuideManager.Instance.CurrentPlayer.name + " tekrar hoşgeldin");
         }
 
         //guidePanelDetails.iconImage = icon;

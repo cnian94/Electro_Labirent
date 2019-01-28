@@ -28,20 +28,142 @@ public class LevelModel
         if (this.number == 1)
         {
             isLocked = false;
-            beginMessages.Add("Oppps.., something wrong isn't it?");
-            beginMessages.Add("Let's check your inventory together");
+            beginMessages.Add("Oppps.., sanki bir problem var");
+            beginMessages.Add("istersen çantanı bir kontrol edelim");
 
             tipMessages.Add("Hmmm ...");
-            tipMessages.Add("Looks like something missing in your circuit");
+            tipMessages.Add("Sanki devrende bir şeyler eksik");
 
 
             levelMessages.Add("begin", beginMessages);
             levelMessages.Add("tip", tipMessages);
             details.levelMessages = levelMessages;
         }
-        else
+        if (this.number == 2)
         {
-            isLocked = true;
+            isLocked = false;
+            beginMessages.Add("Oppps.., sanki bir problem var");
+            beginMessages.Add("istersen çantanı bir kontrol edelim");
+
+            tipMessages.Add("Hmmm ...");
+            tipMessages.Add("Sanki devrende bir şeyler eksik");
+
+
+            levelMessages.Add("begin", beginMessages);
+            levelMessages.Add("tip", tipMessages);
+            details.levelMessages = levelMessages;
+        }
+        if (this.number == 3)
+        {
+            isLocked = false;
+            beginMessages.Add("Labirentte seni bir süpriz bekliyor");
+            //beginMessages.Add("Let's check your inventory together");
+
+            tipMessages.Add("Hmmm ...");
+            tipMessages.Add("Ampül parlaklığını arttırmanın bir yolu var sanki");
+
+
+            levelMessages.Add("begin", beginMessages);
+            levelMessages.Add("tip", tipMessages);
+            details.levelMessages = levelMessages;
+        }
+        if (this.number == 4)
+        {
+            isLocked = false;
+            beginMessages.Add("Labirentte nelerle karşılaşacaksın");
+            //beginMessages.Add("Let's check your inventory together");
+
+            tipMessages.Add("Hmmm ...");
+            tipMessages.Add("Direnci devreye ekle ve neler olduğunu gör");
+
+
+            levelMessages.Add("begin", beginMessages);
+            levelMessages.Add("tip", tipMessages);
+            details.levelMessages = levelMessages;
+        }
+        if (this.number == 5)
+        {
+            isLocked = false;
+            beginMessages.Add("Hmm ... labirentte bir ampül daha var");
+            beginMessages.Add("Bakalım 2 ampül ile neler yapabilirsin");
+
+            //tipMessages.Add("Hmmm ...");
+            tipMessages.Add("Bakalim parlaklik nasıl değişecek");
+
+
+            levelMessages.Add("begin", beginMessages);
+            levelMessages.Add("tip", tipMessages);
+            details.levelMessages = levelMessages;
+        }
+        if (this.number == 6)
+        {
+            isLocked = false;
+            beginMessages.Add("Orda birden fazla mi devre elemani var !");
+            //beginMessages.Add("Let's check your inventory together");
+
+            tipMessages.Add("Hmmm ...");
+            tipMessages.Add("Deneyerek öğrenme zamanı");
+
+
+            levelMessages.Add("begin", beginMessages);
+            levelMessages.Add("tip", tipMessages);
+            details.levelMessages = levelMessages;
+        }
+        if (this.number == 7)
+        {
+            isLocked = false;
+            beginMessages.Add("Labirent iyice büyümüş gibi");
+            beginMessages.Add("Ama sana yardim edeceğim");
+
+            tipMessages.Add("Burası çok aydınlık olucak gibi");
+            //tipMessages.Add("Looks like something missing in your circuit");
+
+
+            levelMessages.Add("begin", beginMessages);
+            levelMessages.Add("tip", tipMessages);
+            details.levelMessages = levelMessages;
+        }
+        if (this.number == 8)
+        {
+            isLocked = false;
+            beginMessages.Add("Yeni seyler öğrenmeye hazir misin?");
+            //beginMessages.Add("Let's check your inventory together");
+
+            tipMessages.Add("Hmmm ...");
+            tipMessages.Add("Paralel baglamak ister misin?");
+
+
+            levelMessages.Add("begin", beginMessages);
+            levelMessages.Add("tip", tipMessages);
+            details.levelMessages = levelMessages;
+        }
+        if (this.number == 9)
+        {
+            isLocked = false;
+            //beginMessages.Add("Labirent iyice büyümüş gibi");
+            //beginMessages.Add("Ama sana yardım edeceğim");
+
+            tipMessages.Add("Pili paralel baglayınca ne olacak");
+            tipMessages.Add("Ben cok merak ettim");
+
+
+            levelMessages.Add("begin", beginMessages);
+            levelMessages.Add("tip", tipMessages);
+            details.levelMessages = levelMessages;
+        }
+        if (this.number == 10)
+        {
+            isLocked = false;
+            beginMessages.Add("Hadi son bölüm");
+            beginMessages.Add("Yaparsin sen");
+
+            tipMessages.Add("Konuyu öğrendiğini düşünüyorum");
+            //tipMessages.Add("Looks like something missing in your circuit");
+
+
+            levelMessages.Add("begin", beginMessages);
+            levelMessages.Add("tip", tipMessages);
+            details.levelMessages = levelMessages;
         }
     }
 
@@ -74,31 +196,37 @@ public class LevelModel
 
         if (this.number == 5)
         {
-
+            lightIsOn = true;
+            hasParallel = false;
         }
         if (this.number == 6)
         {
-
+            lightIsOn = true;
+            hasParallel = false;
         }
 
         if (this.number == 7)
         {
-
+            lightIsOn = true;
+            hasParallel = false;
         }
 
         if (this.number == 8)
         {
-
+            lightIsOn = true;
+            hasParallel = true;
         }
 
         if (this.number == 9)
         {
-
+            lightIsOn = true;
+            hasParallel = true;
         }
 
         if (this.number == 10)
         {
-
+            lightIsOn = true;
+            hasParallel = true;
         }
     }
 

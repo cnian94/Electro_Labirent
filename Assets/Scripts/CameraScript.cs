@@ -68,7 +68,7 @@ public class CameraScript : MonoBehaviour
     IEnumerator ZoomToPlayer(Vector3 end, float seconds)
     {
         float elapsedTime = 0;
-        float x = (gameObject.GetComponent<Camera>().orthographicSize - 4) / seconds;
+        float x = (gameObject.GetComponent<Camera>().orthographicSize - 7) / seconds;
         Vector3 startingPos = transform.position;
         Color ambient = RenderSettings.ambientLight;
         float color_reduce = 1 / (seconds * 140);
@@ -83,6 +83,8 @@ public class CameraScript : MonoBehaviour
             RenderSettings.ambientLight = ambient;
             gameObject.transform.position = Vector3.Lerp(startingPos, end, (elapsedTime / seconds));
             gameObject.GetComponent<Camera>().orthographicSize = gameObject.GetComponent<Camera>().orthographicSize - x * Time.deltaTime;
+            Debug.Log("XXXXX:" + x);
+            Debug.Log("time" + Time.deltaTime);
             elapsedTime += Time.deltaTime;
             yield return new WaitForEndOfFrame();
         }

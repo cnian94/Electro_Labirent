@@ -54,5 +54,41 @@ public class PlayerLightController : MonoBehaviour
             light.enabled = true;
         }
 
+        if (currentLevel.number == 4)
+        {
+            //Debug.Log("Turning on the light !!");
+            light.enabled = true;
+        }
+        if (currentLevel.number == 5)
+        {
+            //Debug.Log("Turning on the light !!");
+            light.enabled = true;
+        }
+        if (currentLevel.number == 6)
+        {
+            //Debug.Log("Turning on the light !!");
+            light.enabled = true;
+        }
+        if (currentLevel.number == 7)
+        {
+            //Debug.Log("Turning on the light !!");
+            light.enabled = true;
+        }
+        if (currentLevel.number == 8)
+        {
+            //Debug.Log("Turning on the light !!");
+            light.enabled = true;
+        }
+        if (currentLevel.number == 9)
+        {
+            //Debug.Log("Turning on the light !!");
+            light.enabled = true;
+        }
+        if (currentLevel.number == 10)
+        {
+            //Debug.Log("Turning on the light !!");
+            light.enabled = true;
+        }
+
     }
 }
