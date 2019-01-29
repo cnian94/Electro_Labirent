@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Newtonsoft.Json;
 
 [Serializable]
 public class PlayerModel
@@ -21,11 +22,11 @@ public class PlayerModel
 
     public string ToJSON(PlayerModel player)
     {
-        return JsonUtility.ToJson(player);
+        return JsonConvert.SerializeObject(player);
     }
 
     public static PlayerModel CreateFromJSON(string jsonString)
     {
-        return JsonUtility.FromJson<PlayerModel>(jsonString);
+        return JsonConvert.DeserializeObject<PlayerModel>(jsonString);
     }
 }

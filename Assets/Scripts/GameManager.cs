@@ -14,6 +14,8 @@ public class GameManager : MonoBehaviour
     public List<GameObject> items = new List<GameObject>();
     public List<GameObject> inventory = new List<GameObject>();
     public List<Transform> batteries = new List<Transform>();
+    public List<Transform> bulbs = new List<Transform>();
+    public List<Transform> resistors = new List<Transform>();
     public List<Transform> wires = new List<Transform>();
     public List<GameObject> parallels = new List<GameObject>();
 
@@ -31,11 +33,13 @@ public class GameManager : MonoBehaviour
     //public GameObject CurrentRunner;
     //public GameObject ParallelRunner;
 
+    public UnityEvent ShowLevelErrorMessageEvent;
     public UnityEvent ShowLevelBeginMessageEvent;
     public UnityEvent ShowLevelTipMessageEvent;
 
     public UnityEvent panelButtonEvent;
     public UnityEvent LevelFinishEvent;
+    public UnityEvent ShowLevelFinishButtonsEvent;
 
 
     [System.Serializable]
@@ -90,6 +94,18 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
 
+    }
+
+    public bool IsCircuitApproved()
+    {
+        if(_instance.batteries.Count == 0 || _instance.resistors.Count == 0  || _instance.bulbs.Count == 0)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
     }
 
 

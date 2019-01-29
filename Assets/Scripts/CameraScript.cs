@@ -94,13 +94,13 @@ public class CameraScript : MonoBehaviour
 
         GameObject playerLight = Player.transform.GetChild(0).gameObject;
         GameManager.Instance.adjustLevelLightEvent.Invoke(false);
-        StartCoroutine(InvokeShowLevelBeginEvent());
+        InvokeShowLevelBeginEvent();
     }
 
-    IEnumerator InvokeShowLevelBeginEvent()
+    void InvokeShowLevelBeginEvent()
     {
-        QuestionMark.SetActive(true);
-        yield return new WaitForSeconds(3f);
+        //QuestionMark.SetActive(true);
+        //yield return new WaitForSeconds(3f);
         GameManager.Instance.ShowLevelBeginMessageEvent.Invoke();
     }
 

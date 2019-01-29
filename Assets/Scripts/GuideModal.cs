@@ -5,6 +5,7 @@ using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using System.Collections;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 
 public class EventButtonDetails
@@ -25,18 +26,27 @@ public class GuidePanelDetails
     public int sceneIndex;
     public List<string> messages;
     public Dictionary<string, List<string>> levelMessages;
-    public Sprite iconImage;
-    public Sprite panelBackgroundImage; // Not implemented
-    public EventButtonDetails button1Details;
-    public EventButtonDetails button2Details;
-    public EventButtonDetails button3Details;
-    public EventButtonDetails button4Details;
-    public EventSliderDetails sliderDetails;
+    //public Sprite panelBackgroundImage; // Not implemented
+    //public EventButtonDetails button1Details;
+    //public EventButtonDetails button2Details;
+    //public EventButtonDetails button3Details;
+    //public EventButtonDetails button4Details;
+    //public EventSliderDetails sliderDetails;
 
     public GuidePanelDetails()
     {
         this.messages = new List<string>();
         this.levelMessages = new Dictionary<string, List<string>>();
+    }
+
+    public string ToJSON(GuidePanelDetails details)
+    {
+        return JsonConvert.SerializeObject(details);
+    }
+
+    public static GuidePanelDetails CreateFromJSON(string jsonString)
+    {
+        return JsonConvert.DeserializeObject<GuidePanelDetails>(jsonString);
     }
 }
 
@@ -129,12 +139,6 @@ public class GuideModal : MonoBehaviour
         message = GameObject.FindGameObjectWithTag("GuideMessage").GetComponent<Text>();
         type_writer = message.gameObject.GetComponent<TypeWriterEffect>();
 
-        if (details.iconImage)
-        {
-            iconImage.sprite = details.iconImage;
-            iconImage.gameObject.SetActive(true);
-        }
-
 
         if (details.sceneIndex == 0)
         {
@@ -152,10 +156,14 @@ public class GuideModal : MonoBehaviour
         }
 
 
-
-
-
         /*
+        if (details.iconImage)
+        {
+            iconImage.sprite = details.iconImage;
+            iconImage.gameObject.SetActive(true);
+        }
+
+
         button1.gameObject.SetActive(false);
         button2.gameObject.SetActive(false);
         button3.gameObject.SetActive(false);

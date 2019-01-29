@@ -5,7 +5,7 @@ using UnityEngine;
 public class LevelGuide : MonoBehaviour
 {
 
-    public Sprite icon;
+    //public Sprite icon;
     public Transform spawnPoint;
     public GameObject thingToSpawn;
     public GuideManager guideManager;
@@ -34,11 +34,12 @@ public class LevelGuide : MonoBehaviour
             Debug.Log("Firt Time User Guide !!");
             guidePanelDetails.messages.Add("Bölüm seçiciye hoşgeldin");
             guidePanelDetails.messages.Add("istediğin zaman başla");
+            GuideManager.Instance.CurrentPlayer.isFirst = false;
+            PlayerPrefs.SetString("player", GuideManager.Instance.CurrentPlayer.ToJSON(GuideManager.Instance.CurrentPlayer));
         }
         else
         {
             guidePanelDetails.messages.Add("Tekrar Hoşgeldin " + GuideManager.Instance.CurrentPlayer.name );
-            guidePanelDetails.iconImage = icon;
         }
 
         //guidePanelDetails.iconImage = icon;

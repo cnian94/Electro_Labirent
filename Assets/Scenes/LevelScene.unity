@@ -218,11 +218,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 224780776778984348, guid: 2d7064c40fee4ae479577edbfe3656d3,
     type: 2}
   m_PrefabInternal: {fileID: 316189631}
---- !u!95 &316189633 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 95079874342708186, guid: 2d7064c40fee4ae479577edbfe3656d3,
-    type: 2}
-  m_PrefabInternal: {fileID: 316189631}
 --- !u!1 &619979946
 GameObject:
   m_ObjectHideFlags: 0
@@ -691,7 +686,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 779b7d2f4347dec478753d7c659a9796, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  icon: {fileID: 21300000, guid: 444d3ed65eb13d64797f7dcbf532d583, type: 3}
   spawnPoint: {fileID: 0}
   thingToSpawn: {fileID: 0}
   guideManager: {fileID: 0}
@@ -706,11 +700,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ee95d324758dac4caa78d95d1cf6bc7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animator: {fileID: 316189633}
   LevelContent: {fileID: 2121119595}
   StarHolder: {fileID: 1049873629326222, guid: 9b8f00fc864e88b45a79952521407229, type: 2}
   LevelButton: {fileID: 114431651489058528, guid: 9803b7747d9df0c49ae01fc6cdf1455b,
     type: 2}
+  filled_star: {fileID: 21300000, guid: 8c82a88b5431cf448b525d2d5f79730c, type: 3}
 --- !u!1 &1987719656
 GameObject:
   m_ObjectHideFlags: 0
@@ -835,6 +829,11 @@ MonoBehaviour:
     isLocked: 0
     lightIsOn: 0
     hasParallel: 0
+    starTimes: []
+    stars: 0
+    details:
+      sceneIndex: 0
+      messages: []
   levelName: 0
   base_size: 0
 --- !u!1 &2071579947

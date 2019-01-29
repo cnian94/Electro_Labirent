@@ -44,6 +44,7 @@ public class CircuitUIController : MonoBehaviour
         animator = panelOpenButton.GetComponent<Animator>();
         GameManager.Instance.panelButtonEvent.AddListener(RevealPanelButton);
         GameManager.Instance.parallelRunner.AddListener(AddParallelRunner);
+        GameManager.Instance.LevelFinishEvent.AddListener(LevelFinish);
         for (int i = 0; i < GameManager.Instance.inventory.Count; i++)
         {
             GameObject desk = Instantiate(inventoryDesk, inventoryContent.transform);
@@ -54,6 +55,13 @@ public class CircuitUIController : MonoBehaviour
         //CreateBasicCircuit();
         GameManager.Instance.drawEvent.AddListener(DrawEnabled);
         GameManager.Instance.itemCollected.AddListener(AddItem);
+    }
+
+    void LevelFinish()
+    {
+        Debug.Log("Level Finish From Circuit UI");
+        GameManager.Instance.Maze.gameObject.SetActive(false);
+        gameObject.SetActive(false);
     }
 
     public void RunCurrent()

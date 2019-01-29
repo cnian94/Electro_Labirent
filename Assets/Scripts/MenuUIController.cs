@@ -30,7 +30,18 @@ public class MenuUIController : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-
+        Debug.Log("Saved Player:" + PlayerPrefs.GetString("player"));
+        if (PlayerPrefs.GetString("player") == null || PlayerPrefs.GetString("player") == "")
+        {
+            Debug.Log("First Time User !!");
+            GuideManager.Instance.firstTimeEvent.Invoke();
+        }
+        else
+        {
+            GuideManager.Instance.CurrentPlayer = PlayerModel.CreateFromJSON(PlayerPrefs.GetString("player"));
+            Debug.Log("Registered User !!");
+            GuideManager.Instance.memberPanelEvent.Invoke();
+        }
     }
 
     private IEnumerator ShowPanelAFterTransition(int panelIndex)
@@ -80,8 +91,9 @@ public class MenuUIController : MonoBehaviour
         GuideManager.Instance.registerEvent.Invoke(name);
     }
 
-    void OpenMemberPanel(bool isFirst)
+    void OpenMemberPanel()
     {
+        Debug.Log("OpeningMemberPanel !!");
         StartCoroutine(ShowPanelAFterTransition(1));
     }
 

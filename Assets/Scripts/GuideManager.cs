@@ -34,9 +34,9 @@ public class GuideManager : MonoBehaviour
     public class RegisterEvent : UnityEngine.Events.UnityEvent<string> { }
     public RegisterEvent registerEvent;
 
-    [System.Serializable]
-    public class OpenMemberPanelEvent : UnityEngine.Events.UnityEvent<bool> { }
-    public OpenMemberPanelEvent memberPanelEvent;
+    //[System.Serializable]
+    //public class OpenMemberPanelEvent : UnityEngine.Events.UnityEvent<bool> { }
+    public UnityEvent memberPanelEvent;
 
     public UnityEvent hideTipGuide;
 
@@ -66,14 +66,8 @@ public class GuideManager : MonoBehaviour
 
     void Start()
     {
+        //PlayerPrefs.DeleteAll();
         registerEvent.AddListener(CreateUser);
-
-        Debug.Log("Saved Player:" + PlayerPrefs.GetString("player"));
-        if (PlayerPrefs.GetString("player") == null || PlayerPrefs.GetString("player") == "")
-        {
-            Debug.Log("First Time User !!");
-            firstTimeEvent.Invoke();
-        }
     }
 
     void CreateUser(string name)
@@ -87,8 +81,9 @@ public class GuideManager : MonoBehaviour
         }
         Debug.Log("Player's Levels:" + CurrentPlayer.levels.Count);
         Debug.Log("New Player Model:" + CurrentPlayer.ToJSON(CurrentPlayer));
-        memberPanelEvent.Invoke(true);
-        
+        PlayerPrefs.SetString("player", CurrentPlayer.ToJSON(CurrentPlayer));
+        memberPanelEvent.Invoke();
+
     }
 
     public void DisplayMessage(string message)

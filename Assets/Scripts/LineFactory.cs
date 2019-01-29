@@ -181,6 +181,7 @@ public class LineFactory : MonoBehaviour
             bulb.transform.localPosition = newPos;
             bulb.transform.localScale = SetItemScale(bulb);
             bulb.name = GameManager.Instance.items[0].name;
+            GameManager.Instance.bulbs.Add(bulb.transform);
         }
         else
         {
@@ -224,6 +225,7 @@ public class LineFactory : MonoBehaviour
             resistor.transform.localPosition = newPos;
             resistor.transform.localScale = SetItemScale(resistor);
             resistor.name = GameManager.Instance.items[2].name;
+            GameManager.Instance.resistors.Add(resistor.transform);
         }
         else
         {

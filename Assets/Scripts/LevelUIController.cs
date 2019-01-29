@@ -9,6 +9,8 @@ public class LevelUIController : MonoBehaviour
     public GameObject StarHolder;
     public Button LevelButton;
 
+    public Sprite filled_star;
+
     //private int[] levels = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
     List<LevelModel> levels;
 
@@ -24,6 +26,12 @@ public class LevelUIController : MonoBehaviour
         {
             Button newLevel = Instantiate(LevelButton, LevelContent.transform);
             GameObject newStarHolder = Instantiate(StarHolder, newLevel.transform);
+
+            for (int z = 0; z < levels[i].stars; z++)
+            {
+                newStarHolder.transform.GetChild(z).GetComponent<Image>().sprite = filled_star;
+            }
+
             newLevel.name = levels[i].number.ToString();
             newLevel.transform.GetChild(0).GetComponent<Text>().text = "" + levels[i].number.ToString();  // Burayı Doğa ile yaptık zaten yerleştirme ve font ile alakalı
 
@@ -59,6 +67,5 @@ public class LevelUIController : MonoBehaviour
     void OpenLevel(int name)
     {
         LevelSelector.instance.openLevelEvent.Invoke(name);
-
     }
 }

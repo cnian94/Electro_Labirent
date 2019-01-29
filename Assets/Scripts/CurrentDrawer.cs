@@ -52,52 +52,59 @@ public class CurrentDrawer : MonoBehaviour
 
     public void ResetRunnerPos()
     {
-        float toEndDist = 0f;
-        startWire = GameManager.Instance.batteries[0].transform.parent.transform;
-        currentWire = GameManager.Instance.batteries[0].transform.parent.transform;
-        stationIndex = 0;
-        origin = GameManager.Instance.batteries[0].transform.GetChild(0).transform;
-        destination = GameManager.Instance.batteries[0].transform.GetChild(1).transform;
-        stationA = origin.position;
-        Vector3 newStationPosB = origin.position;
+        if (GameManager.Instance.IsCircuitApproved()) {
+            float toEndDist = 0f;
+            startWire = GameManager.Instance.batteries[0].transform.parent.transform;
+            currentWire = GameManager.Instance.batteries[0].transform.parent.transform;
+            stationIndex = 0;
+            origin = GameManager.Instance.batteries[0].transform.GetChild(0).transform;
+            destination = GameManager.Instance.batteries[0].transform.GetChild(1).transform;
+            stationA = origin.position;
+            Vector3 newStationPosB = origin.position;
 
-        // left wire
-        if (startWire.eulerAngles.z == 90)
+            // left wire
+            if (startWire.eulerAngles.z == 90)
+            {
+                //Debug.Log("Start Wire: " + startWire.gameObject.name);
+                toEndDist = startWire.position.y + (startWire.gameObject.GetComponent<Renderer>().bounds.size.y / 2);
+                newStationPosB.y = toEndDist;
+            }
+
+            // wire top
+            if (startWire.eulerAngles.z == 0)
+            {
+                toEndDist = startWire.position.x + (startWire.gameObject.GetComponent<Renderer>().bounds.size.x / 2);
+                newStationPosB.x = toEndDist;
+            }
+
+            //right wire
+            if (startWire.eulerAngles.z == 270)
+            {
+                toEndDist = startWire.position.y - (startWire.gameObject.GetComponent<Renderer>().bounds.size.y / 2);
+                newStationPosB.y = toEndDist;
+            }
+
+            //bottom wire
+            if (startWire.eulerAngles.z == 180)
+            {
+                toEndDist = startWire.position.x - (startWire.gameObject.GetComponent<Renderer>().bounds.size.x / 2);
+                newStationPosB.x = toEndDist;
+            }
+
+            stationB = newStationPosB;
+            //Debug.Log("first start pos : " + stationA);
+            //Debug.Log("first end pos : " + stationB);
+
+            gameObject.transform.position = origin.position;
+            dist = Vector3.Distance(stationA, stationB);
+            counter = 0.0f;
+            currentAllowed = true;
+        }
+        else
         {
-            //Debug.Log("Start Wire: " + startWire.gameObject.name);
-            toEndDist = startWire.position.y + (startWire.gameObject.GetComponent<Renderer>().bounds.size.y / 2);
-            newStationPosB.y = toEndDist;
+            GameManager.Instance.ShowLevelErrorMessageEvent.Invoke();
         }
 
-        // wire top
-        if (startWire.eulerAngles.z == 0)
-        {
-            toEndDist = startWire.position.x + (startWire.gameObject.GetComponent<Renderer>().bounds.size.x / 2);
-            newStationPosB.x = toEndDist;
-        }
-
-        //right wire
-        if (startWire.eulerAngles.z == 270)
-        {
-            toEndDist = startWire.position.y - (startWire.gameObject.GetComponent<Renderer>().bounds.size.y / 2);
-            newStationPosB.y = toEndDist;
-        }
-
-        //bottom wire
-        if (startWire.eulerAngles.z == 180)
-        {
-            toEndDist = startWire.position.x - (startWire.gameObject.GetComponent<Renderer>().bounds.size.x / 2);
-            newStationPosB.x = toEndDist;
-        }
-
-        stationB = newStationPosB;
-        //Debug.Log("first start pos : " + stationA);
-        //Debug.Log("first end pos : " + stationB);
-
-        gameObject.transform.position = origin.position;
-        dist = Vector3.Distance(stationA, stationB);
-        counter = 0.0f;
-        currentAllowed = true;
     }
 
     Vector3 SetStationB(Transform newWire)
@@ -329,7 +336,7 @@ public class CurrentDrawer : MonoBehaviour
                             currentLapCount++;
                             ResetRunnerPos();
 
-                            if (currentLapCount == 3)
+                            if (currentLapCount == 1 && GameManager.Instance.IsCircuitApproved())
                             {
                                 Debug.Log("Circuit Approved !!");
                                 GameManager.Instance.adjustLevelLightEvent.Invoke(true);
