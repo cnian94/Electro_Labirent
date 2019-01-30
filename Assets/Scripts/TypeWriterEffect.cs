@@ -47,9 +47,18 @@ public class TypeWriterEffect : MonoBehaviour
             }
         }
 
-        if (key.Equals("tip") || key.Equals("error"))
+        GuideManager.Instance.hideTipGuide.Invoke();
+        yield return new WaitForSeconds(1f);
+
+        if (LevelSelector.instance.currentLevel.number > 2 && key.Equals("begin"))
         {
-            GuideManager.Instance.hideTipGuide.Invoke();
+            //GameManager.Instance.setBatteryBarFillAmount.Invoke(GameManager.Instance.CalculateTotalLifeTime());
+            //GameManager.Instance.isBatteryLifeTimePaused = false;
+            GameManager.Instance.setBatteryLifeTimePausedEvent.Invoke(false);
+            Image imageComp = GameObject.FindGameObjectWithTag("vica").GetComponent<Image>();
+            //GameManager.Instance.CalculateTotalLifeTime();
+            //imageComp.fillAmount = GameManager.Instance.totalLifeTime;
+            GameManager.Instance.activateBatteryLifeBarEvent.Invoke();
         }
 
         if (key.Equals("begin") && LevelSelector.instance.currentLevel.number <= 2)

@@ -43,12 +43,15 @@ public class CircuitUIController : MonoBehaviour
 
     public GameObject runCurrentButton;
 
+    public GameObject batteryBar;
+
 
 
     // Use this for initialization
     void Start()
     {
         animator = panelOpenButton.GetComponent<Animator>();
+        GameManager.Instance.setPanelButtonEvent.AddListener(SetPanelButton);
         GameManager.Instance.panelButtonEvent.AddListener(RevealPanelButton);
         GameManager.Instance.parallelRunner.AddListener(AddParallelRunner);
         GameManager.Instance.LevelFinishEvent.AddListener(LevelFinish);
@@ -141,6 +144,11 @@ public class CircuitUIController : MonoBehaviour
         }
     }
 
+    void SetPanelButton(bool val)
+    {
+        panelOpenButton.SetActive(val);
+    }
+
 
     void RevealPanelButton()
     {
@@ -171,6 +179,8 @@ public class CircuitUIController : MonoBehaviour
 
     void OpenCircuitPanel()
     {
+        GameManager.Instance.isBatteryLifeTimePaused = true;
+        GameManager.Instance.setBatteryLifeTimePausedEvent.Invoke(true);
         GameManager.Instance.Maze.gameObject.SetActive(false);
         inGameGuide.GetComponent<Animator>().SetBool("showGuide", false);
         animator.SetBool("reveal", false);
@@ -182,6 +192,7 @@ public class CircuitUIController : MonoBehaviour
         circuitPanel.gameObject.SetActive(true);
         panelOpenButton.transform.Rotate(new Vector3(0, 0, 180));
         panelOpenButton.transform.SetParent(circuitPanel.transform);
+        GameManager.Instance.setPanelButtonEvent.Invoke(false);
         GameManager.Instance.ShowLevelTipMessageEvent.Invoke();
     }
 
@@ -196,11 +207,21 @@ public class CircuitUIController : MonoBehaviour
         gameObject.GetComponent<Canvas>().worldCamera = MainCamera;
         GameManager.Instance.isCircuitPanelActive = false;
         panelOpenButton.transform.SetParent(gameObject.transform);
-        circuitPanel.gameObject.SetActive(false);
+        //circuitPanel.gameObject.SetActive(false);
         panelOpenButton.transform.Rotate(new Vector3(0, 0, 180));
+        GameManager.Instance.setPanelButtonEvent.Invoke(true);
         CurrentRunner.gameObject.SetActive(false);
-        GameManager.Instance.isBatteryLifeTimePaused = false;
-        GameManager.Instance.ActivateBatteryLifeBarEvent.Invoke();
+        if(GameManager.Instance.batteries.Count > 0)
+        {
+            GameManager.Instance.isBatteryLifeTimePaused = false;
+            GameManager.Instance.setBatteryLifeTimePausedEvent.Invoke(false);
+            //GameManager.Instance.setBatteryBarFillAmount.Invoke(GameManager.Instance.CalculateTotalLifeTime());
+            Image imageComp = batteryBar.GetComponent<Image>();
+            //GameManager.Instance.CalculateTotalLifeTime();
+            //imageComp.fillAmount = GameManager.Instance.totalLifeTime;
+            GameManager.Instance.activateBatteryLifeBarEvent.Invoke();
+        }
+
     }
 
     Vector3 SetItemScale(GameObject item)

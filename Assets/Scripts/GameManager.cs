@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using System.Linq;
 
 public class GameManager : MonoBehaviour
 {
-
     public UnityEvent FindPlayer;
 
     public bool isCircuitPanelActive = false;
@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     public List<GameObject> items = new List<GameObject>();
     public List<GameObject> inventory = new List<GameObject>();
     public List<Transform> batteries = new List<Transform>();
+    public List<float> batteriesLifeTimes = new List<float>();
     public List<Transform> bulbs = new List<Transform>();
     public List<Transform> resistors = new List<Transform>();
     public List<Transform> wires = new List<Transform>();
@@ -37,16 +38,37 @@ public class GameManager : MonoBehaviour
     public UnityEvent ShowLevelBeginMessageEvent;
     public UnityEvent ShowLevelTipMessageEvent;
 
+
+    [System.Serializable]
+    public class SetPanelButtonEvent : UnityEngine.Events.UnityEvent<bool> { }
+    public SetPanelButtonEvent setPanelButtonEvent;
+
     public UnityEvent panelButtonEvent;
     public UnityEvent LevelFinishEvent;
     public UnityEvent ShowLevelFinishButtonsEvent;
-    public UnityEvent SetBatteryBarFillAmount;
-    public UnityEvent ActivateBatteryLifeBarEvent;
+
+    /*
+    [System.Serializable]
+    public class SetBatteryBarFillAmount : UnityEngine.Events.UnityEvent<float> { }
+    public SetBatteryBarFillAmount setBatteryBarFillAmount;
+        */
+
+    [System.Serializable]
+    public class SetBatteryLifeTimePausedEvent : UnityEngine.Events.UnityEvent<bool> { }
+    public SetBatteryLifeTimePausedEvent setBatteryLifeTimePausedEvent;
+
+    public bool isBatteryLifeTimePaused = true;
+    public float totalLifeTime;
+    public UnityEvent activateBatteryLifeBarEvent;
 
 
     [System.Serializable]
     public class AdjustLevelLightEvent : UnityEngine.Events.UnityEvent<bool> { }
     public AdjustLevelLightEvent adjustLevelLightEvent;
+
+    [System.Serializable]
+    public class SetLevelLightEvent : UnityEngine.Events.UnityEvent<bool> { }
+    public SetLevelLightEvent setLevelLightEvent;
 
     [System.Serializable]
     public class ChangeLightRangeEvent : UnityEngine.Events.UnityEvent<float> { }
@@ -74,8 +96,6 @@ public class GameManager : MonoBehaviour
     [System.Serializable]
     public class DragManagerEvent : UnityEngine.Events.UnityEvent<bool> { }
     public DragManagerEvent dragManagerEvent;
-
-    public bool isBatteryLifeTimePaused = false;
 
     public bool isDrawingAllowed = false;
     public int maxLines = 50;
@@ -109,6 +129,48 @@ public class GameManager : MonoBehaviour
 
     }
 
+    public IEnumerator ReduceBatteriesLife()
+    {
+        Debug.Log("is Paused 0:" + isBatteryLifeTimePaused);
+        while (!isBatteryLifeTimePaused)
+        {
+            Debug.Log("Reducing life times for:" + _instance.batteriesLifeTimes[0]);
+            //_instance.batteriesLifeTimes.ForEach(i => i = i - 1.0f);
+            for (int i = 0; i < _instance.batteriesLifeTimes.Count; i++)
+            {
+                if (_instance.batteriesLifeTimes[i] > 0.0f)
+                {
+                    _instance.batteriesLifeTimes[i] -= 1.0f;
+                }
+            }
+            Debug.Log("life time important: " + _instance.batteriesLifeTimes[0]);
+            yield return new WaitForSeconds(1f);
+            /*
+            for (int i = 0; i < _instance.batteriesLifeTimes.Count; i++)
+            {
+                if (_instance.batteriesLifeTimes[i] > 0.0f)
+                {
+                    _instance.batteriesLifeTimes[i] -= 1.0f;
+                    yield return new WaitForSeconds(1f);
+                }
+            }*/
+        }
+    }
+
+
+    public void CalculateTotalLifeTime()
+    {
+        _instance.totalLifeTime = 0;
+
+        foreach (float time in _instance.batteriesLifeTimes)
+        {
+            Debug.Log("life time:" + time);
+            _instance.totalLifeTime += time;
+        }
+
+        Debug.Log("Total lifeeee:" + _instance.totalLifeTime);
+    }
+
     public bool IsCircuitApproved()
     {
 
@@ -118,7 +180,6 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            _instance.SetBatteryBarFillAmount.Invoke();
 
             if (_instance.batteries.Count == 1 && _instance.resistors.Count == 1 && _instance.bulbs.Count == 1)
             {
@@ -130,7 +191,7 @@ public class GameManager : MonoBehaviour
                 //light*2
                 _instance.changeLightRangeEvent.Invoke(8);
             }
-            if(_instance.batteries.Count == 1 && _instance.resistors.Count == 2 && _instance.bulbs.Count == 1)
+            if (_instance.batteries.Count == 1 && _instance.resistors.Count == 2 && _instance.bulbs.Count == 1)
             {
                 // light/2
                 _instance.changeLightRangeEvent.Invoke(2);

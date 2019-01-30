@@ -333,6 +333,7 @@ public class CurrentDrawer : MonoBehaviour
                             {
                                 Debug.Log("Circuit Approved !!");
                                 GameManager.Instance.adjustLevelLightEvent.Invoke(true);
+                                GameManager.Instance.setPanelButtonEvent.Invoke(true);
                                 circuitButton.GetComponent<Animator>().SetBool("reveal", true);
                             }
                         }

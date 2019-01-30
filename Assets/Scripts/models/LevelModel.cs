@@ -41,9 +41,9 @@ public class LevelModel
 
             tipMessages.Add("Hmmm ...");
             tipMessages.Add("Sanki devrende bir şeyler eksik");
-            tipMessages.Add("Devreyi kurmak için ayar tuşuna bas");
-            tipMessages.Add("Kurduktan sonra ayar tuşuna tekrar bas");
-            tipMessages.Add("Son olarak devreyi kontrol tuşuna bas");
+            tipMessages.Add("Devreyi kurmak için tamir tuşuna bas");
+            tipMessages.Add("Kurduktan sonra tamir tuşuna tekrar bas");
+            tipMessages.Add("Son olarak devreye güç ver");
 
             finishMessages.Add("Aferin evlat !!");
             finishMessages.Add("Artık devreye gücü pilin verdiğini biliyorsun");

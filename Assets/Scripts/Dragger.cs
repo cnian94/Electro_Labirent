@@ -49,6 +49,7 @@ public class Dragger : MonoBehaviour
         if (draggingObject.CompareTag("Battery"))
         {
             GameManager.Instance.batteries.Add(draggingObject.transform);
+            GameManager.Instance.batteriesLifeTimes.Add(LevelSelector.instance.GetBatteryLifeTimeForLevel());
         }
 
         if (draggingObject.CompareTag("Bulb"))
@@ -350,6 +351,13 @@ public class Dragger : MonoBehaviour
                         {
                             Debug.Log("Battery dropped !!");
                             draggingObject.transform.localEulerAngles = new Vector3(0, 0, 180);
+
+                            int counter = 1;
+                            foreach (float lifeTime in GameManager.Instance.batteriesLifeTimes)
+                            {
+                                Debug.Log("Battery " + counter + " lifetime:" + lifeTime);
+                                counter++;
+                            }
                             //AddItems(draggingObject);
 
                             int startIndex = GameManager.Instance.wires.IndexOf(beforeParent.gameObject.transform);

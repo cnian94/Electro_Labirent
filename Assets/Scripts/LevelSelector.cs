@@ -67,6 +67,63 @@ public class LevelSelector : MonoBehaviour
         SceneManager.LoadScene(2);
     }
 
+    public float GetBatteryLifeTimeForLevel()
+    {
+        float lifeTime = 0;
+
+        if (this.currentLevel.number == 1)
+        {
+            lifeTime = 10.0f;
+        }
+
+        else if (this.currentLevel.number == 2)
+        {
+            lifeTime = 10.0f;
+        }
+
+        else if (this.currentLevel.number == 3)
+        {
+            lifeTime = 10.0f;
+        }
+
+        else if (this.currentLevel.number == 4)
+        {
+            lifeTime = 10.0f;
+        }
+
+        else if (this.currentLevel.number == 5)
+        {
+            lifeTime = 10.0f;
+        }
+
+        else if (this.currentLevel.number == 6)
+        {
+            lifeTime = 10.0f;
+        }
+
+        else if (this.currentLevel.number == 7)
+        {
+            lifeTime = 10.0f;
+        }
+
+        else if (this.currentLevel.number == 8)
+        {
+            lifeTime = 10.0f;
+        }
+
+        else if (this.currentLevel.number == 9)
+        {
+            lifeTime = 10.0f;
+        }
+
+        else if (this.currentLevel.number == 10)
+        {
+            lifeTime = 10.0f;
+        }
+        return lifeTime;
+    }
+
+
     public Dictionary<int, int> GetInventoryItems()
     {
         Dictionary<int, int> items = new Dictionary<int, int>();

@@ -29,6 +29,7 @@ TagManager:
   - MemberPanel
   - LevelUI
   - btnPlay
+  - vica
   layers:
   - Default
   - TransparentFX
