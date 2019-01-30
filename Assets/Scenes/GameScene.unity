@@ -144,7 +144,7 @@ RectTransform:
   - {fileID: 1132164825}
   - {fileID: 336795410}
   m_Father: {fileID: 535948128}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -257,6 +257,11 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
+  setPanelButtonEvent:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: GameManager+SetPanelButtonEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
   panelButtonEvent:
     m_PersistentCalls:
       m_Calls: []
@@ -272,20 +277,25 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  SetBatteryBarFillAmount:
+  setBatteryBarFillAmount:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+    m_TypeName: GameManager+SetBatteryBarFillAmount, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  ActivateBatteryLifeBarEvent:
+  activateBatteryLifeBarEvent:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+    m_TypeName: GameManager+ActivateBatteryLifeBarEvent, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   adjustLevelLightEvent:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: GameManager+AdjustLevelLightEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  setLevelLightEvent:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: GameManager+SetLevelLightEvent, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   changeLightRangeEvent:
     m_PersistentCalls:
@@ -1403,7 +1413,7 @@ GameObject:
   - component: {fileID: 476649485}
   m_Layer: 5
   m_Name: vica
-  m_TagString: Untagged
+  m_TagString: vica
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1420,6 +1430,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 268e9fdde9a570d4c9faa92b50494e8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isBatteryPlugged: 0
 --- !u!224 &476649486
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1562,10 +1573,10 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 476649483}
-  - {fileID: 2031095585}
   - {fileID: 1094089256}
-  - {fileID: 1496629359}
+  - {fileID: 2031095585}
   - {fileID: 23598888}
+  - {fileID: 1496629359}
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1878,6 +1889,7 @@ MonoBehaviour:
   Parallel: {fileID: 1234278816809358, guid: 1c5f589a373b61645963c14698757966, type: 2}
   joyStick: {fileID: 2031095581}
   runCurrentButton: {fileID: 2015712096}
+  batteryBar: {fileID: 476649484}
 --- !u!1 &939923937
 GameObject:
   m_ObjectHideFlags: 0
@@ -2200,7 +2212,7 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 535948128}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -3065,7 +3077,7 @@ Prefab:
     - target: {fileID: 224780776778984348, guid: 2d7064c40fee4ae479577edbfe3656d3,
         type: 2}
       propertyPath: m_RootOrder
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 224780776778984348, guid: 2d7064c40fee4ae479577edbfe3656d3,
         type: 2}
@@ -3349,7 +3361,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 22400000, guid: 9529ecc3d479da5499993355e6c2cb4f, type: 2}
       propertyPath: m_RootOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 22400000, guid: 9529ecc3d479da5499993355e6c2cb4f, type: 2}
       propertyPath: m_AnchoredPosition.x
@@ -4158,7 +4170,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 225523246}
   m_HandleRect: {fileID: 225523245}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 0.9999999
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -4862,7 +4874,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.000015258789}
+  m_AnchoredPosition: {x: 0, y: -0.000045776367}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2092210598

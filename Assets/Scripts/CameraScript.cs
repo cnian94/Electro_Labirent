@@ -99,8 +99,6 @@ public class CameraScript : MonoBehaviour
 
     void InvokeShowLevelBeginEvent()
     {
-        //QuestionMark.SetActive(true);
-        //yield return new WaitForSeconds(3f);
         GameManager.Instance.ShowLevelBeginMessageEvent.Invoke();
     }
 

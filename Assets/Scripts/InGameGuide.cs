@@ -45,7 +45,7 @@ public class InGameGuide : MonoBehaviour
         guidePanel = Instantiate(guideModal.inGameGuideObject, gameObject.transform);
         guidePanel.GetComponent<Animator>().SetBool("showGuide", true);
         guideModal.NewChoice(guidePanelDetails, "begin");
-        StartCoroutine(DisableQuestionMark());
+        //StartCoroutine(DisableQuestionMark());
     }
 
     IEnumerator DisableQuestionMark()

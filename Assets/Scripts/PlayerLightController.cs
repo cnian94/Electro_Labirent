@@ -12,6 +12,7 @@ public class PlayerLightController : MonoBehaviour
     {
         Debug.Log("Player light start !!");
         GameManager.Instance.adjustLevelLightEvent.AddListener(AdjustLevelLight);
+        GameManager.Instance.setLevelLightEvent.AddListener(SetLevelLight);
         currentLevel = LevelSelector.instance.currentLevel;
         light = gameObject.GetComponent<Light>();
         GameManager.Instance.changeLightRangeEvent.AddListener(changeLightRange);
@@ -31,6 +32,19 @@ public class PlayerLightController : MonoBehaviour
 
     }
 
+    void SetLevelLight(bool val)
+    {
+
+        if (val)
+        {
+            light.enabled = true;
+        }
+        else
+        {
+            light.enabled = false;
+        }
+    }
+
 
 
     void AdjustLevelLight(bool circuitApproved)
@@ -45,17 +59,12 @@ public class PlayerLightController : MonoBehaviour
             {
                 light.enabled = false;
             }
-
         }
         if (currentLevel.number == 2)
         {
             if (circuitApproved)
             {
                 light.enabled = true;
-            }
-            else
-            {
-                // no light
             }
         }
 

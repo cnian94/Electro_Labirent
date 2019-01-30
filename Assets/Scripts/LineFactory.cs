@@ -202,7 +202,9 @@ public class LineFactory : MonoBehaviour
             battery.transform.localScale = SetItemScale(battery);
             battery.transform.localEulerAngles = parentWire.transform.eulerAngles;
             battery.name = GameManager.Instance.items[1].name;
+            Debug.Log("ADDING BATTERY TO CIRCUIT !!!!!!");
             GameManager.Instance.batteries.Add(battery.transform);
+            GameManager.Instance.batteriesLifeTimes.Add(LevelSelector.instance.GetBatteryLifeTimeForLevel());
             endPoint = battery.transform.GetChild(1).gameObject.transform;
         }
         else
