@@ -298,7 +298,8 @@ public class Maze : MonoBehaviour
 
     }
 
-    void CreateCells()
+
+        void CreateCells()
     {
         lastCells = new List<int>();
         lastCells.Clear();

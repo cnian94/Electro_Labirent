@@ -34,19 +34,49 @@ public class Dragger : MonoBehaviour
     public GameObject inventoryContent;
     public GameObject inventoryDesk;
 
+    
+
     //Transform[] tempWires = { };
 
-void Start()
+    void Start()
     {
         cam = GameObject.FindGameObjectWithTag("UICamera").GetComponent<Camera>();
         beingDragged = false;
     }
 
-    void AddItems(GameObject draggingObject)
+    void AddItemToCircuit(GameObject draggingObject)
     {
         if (draggingObject.CompareTag("Battery"))
         {
             GameManager.Instance.batteries.Add(draggingObject.transform);
+        }
+
+        if (draggingObject.CompareTag("Bulb"))
+        {
+            GameManager.Instance.bulbs.Add(draggingObject.transform);
+        }
+
+        if (draggingObject.CompareTag("Resistor"))
+        {
+            GameManager.Instance.resistors.Add(draggingObject.transform);
+        }
+    }
+
+    void RemoveItemFromCircuit(GameObject draggingObject)
+    {
+        if (draggingObject.CompareTag("Battery"))
+        {
+            GameManager.Instance.batteries.Remove(draggingObject.transform);
+        }
+
+        if (draggingObject.CompareTag("Bulb"))
+        {
+            GameManager.Instance.bulbs.Remove(draggingObject.transform);
+        }
+
+        if (draggingObject.CompareTag("Resistor"))
+        {
+            GameManager.Instance.resistors.Remove(draggingObject.transform);
         }
     }
 
@@ -142,6 +172,8 @@ void Start()
                 if (hit.collider.gameObject.CompareTag("Line"))
                 {
 
+                    AddItemToCircuit(draggingObject);
+
                     // wire top 0
                     if (hit.collider.transform.rotation.eulerAngles.z == 0.0)
                     {
@@ -180,7 +212,7 @@ void Start()
                             Debug.Log("Battery dropped !!");
                             draggingObject.transform.localEulerAngles = new Vector3(0, 0, 180);
 
-                            AddItems(draggingObject);
+                            //AddItems(draggingObject);
 
                             int startIndex = GameManager.Instance.wires.IndexOf(beforeParent.gameObject.transform);
                             int destIndex = GameManager.Instance.wires.IndexOf(hit.collider.gameObject.transform);
@@ -246,7 +278,7 @@ void Start()
                         {
                             Debug.Log("Battery dropped !!");
                             draggingObject.transform.localEulerAngles = new Vector3(0, 0, 180);
-                            AddItems(draggingObject);
+                            //AddItems(draggingObject);
 
                             int startIndex = GameManager.Instance.wires.IndexOf(beforeParent.gameObject.transform);
                             int destIndex = GameManager.Instance.wires.IndexOf(hit.collider.gameObject.transform);
@@ -318,7 +350,7 @@ void Start()
                         {
                             Debug.Log("Battery dropped !!");
                             draggingObject.transform.localEulerAngles = new Vector3(0, 0, 180);
-                            AddItems(draggingObject);
+                            //AddItems(draggingObject);
 
                             int startIndex = GameManager.Instance.wires.IndexOf(beforeParent.gameObject.transform);
                             int destIndex = GameManager.Instance.wires.IndexOf(hit.collider.gameObject.transform);
@@ -391,7 +423,7 @@ void Start()
                         {
                             Debug.Log("Battery dropped !!");
                             draggingObject.transform.localEulerAngles = new Vector3(0, 0, 180);
-                            AddItems(draggingObject);
+                            //AddItems(draggingObject);
 
                             int startIndex = GameManager.Instance.wires.IndexOf(beforeParent.gameObject.transform);
                             int destIndex = GameManager.Instance.wires.IndexOf(hit.collider.gameObject.transform);
@@ -401,7 +433,7 @@ void Start()
                             {
                                 int x = (i - (destIndex - startIndex));
                                 int newIndex = Mod(x, GameManager.Instance.wires.Count);
-                                Debug.Log("New index for " + GameManager.Instance.wires[i].name + " : "  + newIndex);
+                                Debug.Log("New index for " + GameManager.Instance.wires[i].name + " : " + newIndex);
                                 tempWires[newIndex] = GameManager.Instance.wires[i];
 
                             }
@@ -438,9 +470,7 @@ void Start()
                     Debug.Log("drop to craft panel !!");
                     draggingObject.gameObject.transform.SetParent(CraftPanel.gameObject.transform);
                     draggingObject.gameObject.transform.rotation = new Quaternion(0, 0, 0, 0);
-                    //Vector3 newPos = draggingObject.transform.localPosition;
-                    //newPos.z = -1;
-                    //draggingObject.transform.localPosition = newPos;
+                    RemoveItemFromCircuit(draggingObject);
 
                 }
                 else
@@ -453,6 +483,7 @@ void Start()
                     draggingObject.gameObject.transform.SetParent(desk.transform);
                     draggingObject.gameObject.transform.localPosition = Vector3.zero;
                     draggingObject.gameObject.transform.rotation = new Quaternion(0, 0, 0, 0);
+                    RemoveItemFromCircuit(draggingObject);
 
                 }
             }

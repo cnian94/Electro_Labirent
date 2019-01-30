@@ -52,7 +52,6 @@ public class CurrentDrawer : MonoBehaviour
 
     public void ResetRunnerPos()
     {
-        if (GameManager.Instance.IsCircuitApproved()) {
             float toEndDist = 0f;
             startWire = GameManager.Instance.batteries[0].transform.parent.transform;
             currentWire = GameManager.Instance.batteries[0].transform.parent.transform;
@@ -99,12 +98,6 @@ public class CurrentDrawer : MonoBehaviour
             dist = Vector3.Distance(stationA, stationB);
             counter = 0.0f;
             currentAllowed = true;
-        }
-        else
-        {
-            GameManager.Instance.ShowLevelErrorMessageEvent.Invoke();
-        }
-
     }
 
     Vector3 SetStationB(Transform newWire)

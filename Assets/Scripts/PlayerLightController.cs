@@ -14,6 +14,7 @@ public class PlayerLightController : MonoBehaviour
         GameManager.Instance.adjustLevelLightEvent.AddListener(AdjustLevelLight);
         currentLevel = LevelSelector.instance.currentLevel;
         light = gameObject.GetComponent<Light>();
+        GameManager.Instance.changeLightRangeEvent.AddListener(changeLightRange);
     }
 
     // Update is called once per frame
@@ -21,6 +22,16 @@ public class PlayerLightController : MonoBehaviour
     {
 
     }
+
+    void changeLightRange(float number)
+    {
+        Debug.Log("Before Range: " + gameObject.GetComponent<Light>().range);
+        Debug.Log("Number: " + number);
+        gameObject.GetComponent<Light>().range = number;
+
+    }
+
+
 
     void AdjustLevelLight(bool circuitApproved)
     {
@@ -32,7 +43,7 @@ public class PlayerLightController : MonoBehaviour
             }
             else
             {
-                // no light
+                light.enabled = false;
             }
 
         }

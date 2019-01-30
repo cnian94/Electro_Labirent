@@ -46,18 +46,16 @@ public class TypeWriterEffect : MonoBehaviour
                 }
             }
         }
-        if (!key.Equals("tip") && LevelSelector.instance.currentLevel.number <= 2)
-        {
-            GameManager.Instance.panelButtonEvent.Invoke();
-        }
+
         if (key.Equals("tip") || key.Equals("error"))
         {
             GuideManager.Instance.hideTipGuide.Invoke();
         }
 
-        if (key.Equals("begin"))
+        if (key.Equals("begin") && LevelSelector.instance.currentLevel.number <= 2)
         {
             //GuideManager.Instance.hideTipGuide.Invoke();
+            GameManager.Instance.panelButtonEvent.Invoke();
         }
 
         if (key.Equals("finish"))

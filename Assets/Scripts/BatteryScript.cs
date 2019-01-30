@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class BatteryScript : MonoBehaviour {
 
-    //public GameObject panelOpenButton;
+    public float lifeTime;
 
     // Use this for initialization
     void Start () {
-		
+        lifeTime = 10f;
 	}
 
     void OnTriggerEnter(Collider col)

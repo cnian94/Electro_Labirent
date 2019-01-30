@@ -83,8 +83,8 @@ public class CameraScript : MonoBehaviour
             RenderSettings.ambientLight = ambient;
             gameObject.transform.position = Vector3.Lerp(startingPos, end, (elapsedTime / seconds));
             gameObject.GetComponent<Camera>().orthographicSize = gameObject.GetComponent<Camera>().orthographicSize - x * Time.deltaTime;
-            Debug.Log("XXXXX:" + x);
-            Debug.Log("time" + Time.deltaTime);
+            //Debug.Log("XXXXX:" + x);
+            //Debug.Log("time" + Time.deltaTime);
             elapsedTime += Time.deltaTime;
             yield return new WaitForEndOfFrame();
         }

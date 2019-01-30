@@ -25,6 +25,9 @@ public class CircuitUIController : MonoBehaviour
 
     public GameObject scrollbar;
 
+    public GameObject circuitDesigner;
+
+
 
     public GameObject CableDesk;
     public GameObject ParallelDesk;
@@ -37,6 +40,8 @@ public class CircuitUIController : MonoBehaviour
     public GameObject Parallel;
 
     public GameObject joyStick;
+
+    public GameObject runCurrentButton;
 
 
 
@@ -55,8 +60,50 @@ public class CircuitUIController : MonoBehaviour
             item.name = GameManager.Instance.inventory[i].name;
         }
         //CreateBasicCircuit();
-        GameManager.Instance.drawEvent.AddListener(DrawEnabled);
+        //GameManager.Instance.drawEvent.AddListener(DrawEnabled);
         GameManager.Instance.itemCollected.AddListener(AddItem);
+    }
+
+    public void AddParallelCable()
+    {
+
+        if(LevelSelector.instance.currentLevel.number == 8)
+        {
+            Transform existing_battery = GameManager.Instance.batteries[0];
+            GameObject newParallel = Instantiate(Parallel, existing_battery.parent.transform);
+            newParallel.name = existing_battery.parent.name + "Parallel";
+            GameManager.Instance.parallels.Add(newParallel);
+        }
+
+        if (LevelSelector.instance.currentLevel.number == 9)
+        {
+            Transform existing_bulb = GameManager.Instance.bulbs[0];
+            GameObject newParallel = Instantiate(Parallel, existing_bulb.parent.transform);
+            newParallel.name = existing_bulb.parent.name + "Parallel";
+            GameManager.Instance.parallels.Add(newParallel);
+        }
+
+        if (LevelSelector.instance.currentLevel.number == 10)
+        {
+            Transform existing_bulb = GameManager.Instance.bulbs[0];
+            GameObject newParallel = Instantiate(Parallel, existing_bulb.parent.transform);
+            newParallel.name = existing_bulb.parent.name + "Parallel";
+            GameManager.Instance.parallels.Add(newParallel);
+        }
+    }
+
+
+    public void Draw()
+    {
+        if (GameManager.Instance.isDrawingAllowed)
+        {
+            GameManager.Instance.isDrawingAllowed = false;
+        }
+        else
+        {
+            GameManager.Instance.isDrawingAllowed = true;
+        }
+
     }
 
     void LevelFinish()
@@ -66,9 +113,32 @@ public class CircuitUIController : MonoBehaviour
         gameObject.SetActive(false);
     }
 
+    public void CircuitMakerButton()
+    {
+        if (circuitDesigner.GetComponent<Image>().color != Color.white)
+        {
+            circuitDesigner.GetComponent<Image>().color = Color.white;
+            GameManager.Instance.dragManagerEvent.Invoke(true);
+            runCurrentButton.SetActive(false);
+        }
+        else
+        {
+            circuitDesigner.GetComponent<Image>().color = Color.grey;
+            GameManager.Instance.dragManagerEvent.Invoke(false);
+            runCurrentButton.SetActive(true);
+        }
+    }
+
     public void RunCurrent()
     {
-        CurrentRunner.gameObject.SetActive(true);
+        if (GameManager.Instance.IsCircuitApproved())
+        {
+            CurrentRunner.gameObject.SetActive(true);
+        }
+        else
+        {
+            GameManager.Instance.ShowLevelErrorMessageEvent.Invoke();
+        }
     }
 
 
@@ -129,6 +199,8 @@ public class CircuitUIController : MonoBehaviour
         circuitPanel.gameObject.SetActive(false);
         panelOpenButton.transform.Rotate(new Vector3(0, 0, 180));
         CurrentRunner.gameObject.SetActive(false);
+        GameManager.Instance.isBatteryLifeTimePaused = false;
+        GameManager.Instance.ActivateBatteryLifeBarEvent.Invoke();
     }
 
     Vector3 SetItemScale(GameObject item)
@@ -147,7 +219,7 @@ public class CircuitUIController : MonoBehaviour
         if (item.CompareTag("Bulb"))
         {
             newScale.x = 75f;
-            newScale.y = 100f;
+            newScale.y = 80f;
             float tmpRadius = item.GetComponent<SphereCollider>().radius;
             DestroyImmediate(item.GetComponent<SphereCollider>(), true);
             item.AddComponent<SphereCollider>();
@@ -180,56 +252,6 @@ public class CircuitUIController : MonoBehaviour
         scrollbar.GetComponent<Scrollbar>().value = 1.0f;
     }
 
-
-    public void DrawEnabled(bool val)
-    {
-        if (val)
-        {
-            CableDesk.GetComponent<Image>().color = Color.white;
-            CableDesk.transform.GetChild(0).transform.GetChild(0).gameObject.SetActive(false);
-            ParallelDesk.gameObject.SetActive(true);
-            SeriesDesk.gameObject.SetActive(true);
-            //DrawManager.gameObject.SetActive(true);
-        }
-        else
-        {
-            CableDesk.GetComponent<Image>().color = offColor;
-            //DrawManager.gameObject.SetActive(false);
-        }
-
-    }
-
-    public void AddParallelCable()
-    {
-
-        foreach (Transform wire in GameManager.Instance.wires)
-        {
-            GameObject newParallel = Instantiate(Parallel, wire.transform);
-            //parallel.GetComponent<SpriteRenderer>().color = new Color(1, 0.43f, 0, 0.153f);
-
-            /*if (wire.name.Equals("WireBottom"))
-            {
-                Vector3 newLocalRotation = newParallel.transform.localRotation.eulerAngles;
-                newLocalRotation.y = 180.0f;
-                newParallel.transform.Rotate(newLocalRotation);
-            }
-
-            if (wire.name.Equals("WireLeft"))
-            {
-                Debug.Log("Rotating WireLeftParallel !!");
-                //Vector3 newLocalRotation = newParallel.transform.localRotation.eulerAngles;
-                //newLocalRotation.x = 180.0f;
-                //newLocalRotation.y = 180.0f;
-                //newLocalRotation.z = 180.0f;
-                //newParallel.transform.localRotation = Quaternion.Euler(180.0f, 180.0f, 270.0f);
-                //newParallel.transform.Ro
-                //burdayımmm
-            }*/
-
-            newParallel.name = wire.name + "Parallel";
-            GameManager.Instance.parallels.Add(newParallel);
-        }
-    }
 
     void AddParallelRunner(Transform wire, GameObject currentWire)
     {

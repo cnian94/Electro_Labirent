@@ -40,11 +40,17 @@ public class GameManager : MonoBehaviour
     public UnityEvent panelButtonEvent;
     public UnityEvent LevelFinishEvent;
     public UnityEvent ShowLevelFinishButtonsEvent;
+    public UnityEvent SetBatteryBarFillAmount;
+    public UnityEvent ActivateBatteryLifeBarEvent;
 
 
     [System.Serializable]
     public class AdjustLevelLightEvent : UnityEngine.Events.UnityEvent<bool> { }
     public AdjustLevelLightEvent adjustLevelLightEvent;
+
+    [System.Serializable]
+    public class ChangeLightRangeEvent : UnityEngine.Events.UnityEvent<float> { }
+    public ChangeLightRangeEvent changeLightRangeEvent;
 
 
     [System.Serializable]
@@ -52,9 +58,10 @@ public class GameManager : MonoBehaviour
     public ItemCollectedEvent itemCollected;
 
 
+    /*
     [System.Serializable]
     public class DrawEvent : UnityEngine.Events.UnityEvent<bool> { }
-    public DrawEvent drawEvent;
+    public DrawEvent drawEvent;*/
 
     [System.Serializable]
     public class ParallelRunnerEvent : UnityEngine.Events.UnityEvent<Transform, GameObject> { }
@@ -64,9 +71,15 @@ public class GameManager : MonoBehaviour
     public class RunParallelRunner : UnityEngine.Events.UnityEvent<Transform, int> { }
     public RunParallelRunner runParallelRunner;
 
+    [System.Serializable]
+    public class DragManagerEvent : UnityEngine.Events.UnityEvent<bool> { }
+    public DragManagerEvent dragManagerEvent;
+
+    public bool isBatteryLifeTimePaused = false;
 
     public bool isDrawingAllowed = false;
     public int maxLines = 50;
+
 
     //public int level;
 
@@ -98,30 +111,52 @@ public class GameManager : MonoBehaviour
 
     public bool IsCircuitApproved()
     {
-        if(_instance.batteries.Count == 0 || _instance.resistors.Count == 0  || _instance.bulbs.Count == 0)
+
+        if (_instance.batteries.Count == 0 || _instance.resistors.Count == 0 || _instance.bulbs.Count == 0)
         {
             return false;
         }
         else
         {
+            _instance.SetBatteryBarFillAmount.Invoke();
+
+            if (_instance.batteries.Count == 1 && _instance.resistors.Count == 1 && _instance.bulbs.Count == 1)
+            {
+                //light
+                _instance.changeLightRangeEvent.Invoke(4);
+            }
+            if (_instance.batteries.Count == 2 && _instance.resistors.Count == 1 && _instance.bulbs.Count == 1)
+            {
+                //light*2
+                _instance.changeLightRangeEvent.Invoke(8);
+            }
+            if(_instance.batteries.Count == 1 && _instance.resistors.Count == 2 && _instance.bulbs.Count == 1)
+            {
+                // light/2
+                _instance.changeLightRangeEvent.Invoke(2);
+            }
+            if (_instance.batteries.Count == 1 && _instance.resistors.Count == 1 && _instance.bulbs.Count == 2)
+            {
+                // light/2
+                _instance.changeLightRangeEvent.Invoke(2);
+            }
+            if (_instance.batteries.Count == 2 && _instance.resistors.Count == 1 && _instance.bulbs.Count == 2)
+            {
+                // light
+                _instance.changeLightRangeEvent.Invoke(4);
+            }
+            if (_instance.batteries.Count == 3 && _instance.resistors.Count == 1 && _instance.bulbs.Count == 1)
+            {
+                // light*3
+                _instance.changeLightRangeEvent.Invoke(12);
+            }
+            if (_instance.batteries.Count == 4 && _instance.resistors.Count == 1 && _instance.bulbs.Count == 1)
+            {
+                // light*4
+                _instance.changeLightRangeEvent.Invoke(16);
+            }
             return true;
         }
-    }
-
-
-    public void Draw()
-    {
-        if (isDrawingAllowed)
-        {
-            isDrawingAllowed = false;
-            drawEvent.Invoke(false);
-        }
-        else
-        {
-            isDrawingAllowed = true;
-            drawEvent.Invoke(true);
-        }
-
     }
 
 }

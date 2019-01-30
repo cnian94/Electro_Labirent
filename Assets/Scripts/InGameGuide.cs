@@ -108,6 +108,8 @@ public class InGameGuide : MonoBehaviour
         GameManager.Instance.inventory.Clear();
         GameManager.Instance.wires.Clear();
         GameManager.Instance.batteries.Clear();
+        GameManager.Instance.resistors.Clear();
+        GameManager.Instance.bulbs.Clear();
         GameManager.Instance.parallels.Clear();
         StartCoroutine(FinishThelevel());
 
