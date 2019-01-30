@@ -36,6 +36,8 @@ public class CircuitUIController : MonoBehaviour
 
     public GameObject Parallel;
 
+    public GameObject joyStick;
+
 
 
     // Use this for initialization
@@ -87,10 +89,12 @@ public class CircuitUIController : MonoBehaviour
         inGameGuide = GameObject.FindGameObjectWithTag("GuidePanel");
         if (!GameManager.Instance.isCircuitPanelActive)
         {
+            joyStick.SetActive(false);
             OpenCircuitPanel();
         }
         else
         {
+            joyStick.SetActive(true);
             CloseCircuitPanel();
         }
     }
